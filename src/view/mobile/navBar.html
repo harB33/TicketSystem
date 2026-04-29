@@ -109,7 +109,8 @@
     .outer-layer svg.pie-svg line,
     .outer-layer svg.pie-svg circle {
         stroke: #222;
-        stroke-width: 1.5; /* consistent border thickness across all pie elements */
+        stroke-width: 1.5;
+        /* consistent border thickness across all pie elements */
     }
 
     /* The clickable toggle button — sized to match SVG inner circle (r=52, cx=140, cy=140)
@@ -142,6 +143,7 @@
         transform: scale(1);
         opacity: 1;
     }
+
     .inner-button svg {
         transform: translateX(5px);
     }
@@ -157,7 +159,7 @@
         opacity: 0;
         top: var(--arrow-top, 140px);
         transform: translate(-50%, -50%) rotate(var(--arrow-rotate, 0deg)) scale(0);
-        transition: 
+        transition:
             top 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275),
             left 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275),
             transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275),
@@ -174,14 +176,16 @@
 </style>
 
 <div class="menu-container">
-    <button class="inner-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="48" height="48" color="currentColor" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M15 6C15 6 9.00001 10.4189 9 12C8.99999 13.5812 15 18 15 18" />
-    </svg></button>
-    
+    <button class="inner-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="48" height="48"
+            color="currentColor" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round"
+            stroke-linejoin="round">
+            <path d="M15 6C15 6 9.00001 10.4189 9 12C8.99999 13.5812 15 18 15 18" />
+        </svg></button>
+
     <div class="selection-arrow">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#ff6699" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="4" y1="12" x2="20" y2="12"></line>
-            <polyline points="14 6 20 12 14 18"></polyline>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" fill="none" stroke="#ff6699"
+            stroke-width="3" stroke-linecap="round">
+            <path d="M 22 4 A 150 150 0 0 0 22 28" />
         </svg>
     </div>
 
@@ -278,12 +282,12 @@
     let activeSlice = null;
     let activeLink = null;
     const arrow = document.querySelector('.selection-arrow');
-    
+
     // Radial alignment: Centers perfectly on lines from (140, 140)
     const arrowConfig = {
-        'slice1': { top: -16, left: 50, rotate: 60 },   // Aligned with 120° radial line
-        'slice2': { top: 140, left: -40, rotate: 0 },   // Aligned with 180° radial line
-        'slice3': { top: 296, left: 50, rotate: -60 }   // Aligned with 240° radial line
+        'slice1': { top: 10, left: 66, rotate: 60 },   // Aligned with 120° radial line
+        'slice2': { top: 140, left: -10, rotate: 0 },   // Aligned with 180° radial line
+        'slice3': { top: 270, left: 66, rotate: -60 }   // Aligned with 240° radial line
     };
 
     function highlightSlice(slice) {
@@ -291,7 +295,7 @@
         clearSlice();
         if (slice) {
             slice.classList.add('hovered');
-            
+
             // Update arrow position and rotation
             const config = arrowConfig[slice.id];
             if (config) {

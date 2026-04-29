@@ -7,6 +7,7 @@
       "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
       "Courier New", monospace;
+    --spacing: 0.25rem;
     --default-transition-duration: 150ms;
     --default-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     --default-font-family: var(--font-sans);
@@ -165,6 +166,9 @@
   .collapse {
     visibility: collapse !important;
   }
+  .visible {
+    visibility: visible !important;
+  }
   .container {
     width: 100% !important;
     @media (width >= 40rem) {
@@ -186,11 +190,53 @@
   .block {
     display: block !important;
   }
+  .flex {
+    display: flex !important;
+  }
   .hidden {
     display: none !important;
   }
   .table {
     display: table !important;
+  }
+  .h-16 {
+    height: calc(var(--spacing) * 16) !important;
+  }
+  .h-\[0\%\] {
+    height: 0% !important;
+  }
+  .h-\[40\%\] {
+    height: 40% !important;
+  }
+  .h-\[50\%\] {
+    height: 50% !important;
+  }
+  .h-\[60\%\] {
+    height: 60% !important;
+  }
+  .h-full {
+    height: 100% !important;
+  }
+  .h-screen {
+    height: 100vh !important;
+  }
+  .min-h-screen {
+    min-height: 100vh !important;
+  }
+  .w-1 {
+    width: calc(var(--spacing) * 1) !important;
+  }
+  .w-1\/2 {
+    width: calc(1 / 2 * 100%) !important;
+  }
+  .w-16 {
+    width: calc(var(--spacing) * 16) !important;
+  }
+  .w-\[80\%\] {
+    width: 80% !important;
+  }
+  .w-full {
+    width: 100% !important;
   }
   .border-collapse {
     border-collapse: collapse !important;
@@ -201,12 +247,57 @@
   .resize {
     resize: both !important;
   }
+  .flex-col {
+    flex-direction: column !important;
+  }
+  .items-center {
+    align-items: center !important;
+  }
+  .justify-between {
+    justify-content: space-between !important;
+  }
+  .justify-center {
+    justify-content: center !important;
+  }
+  .justify-start {
+    justify-content: flex-start !important;
+  }
+  .gap-4 {
+    gap: calc(var(--spacing) * 4) !important;
+  }
+  .overflow-auto {
+    overflow: auto !important;
+  }
+  .overflow-clip {
+    overflow: clip !important;
+  }
+  .overflow-hidden {
+    overflow: hidden !important;
+  }
+  .overflow-x-clip {
+    overflow-x: clip !important;
+  }
+  .overflow-x-hidden {
+    overflow-x: hidden !important;
+  }
+  .rounded-full {
+    border-radius: calc(infinity * 1px) !important;
+  }
   .border {
     border-style: var(--tw-border-style) !important;
     border-width: 1px !important;
   }
+  .border-\[\#ff6699\] {
+    border-color: #ff6699 !important;
+  }
+  .p-4 {
+    padding: calc(var(--spacing) * 4) !important;
+  }
   .underline {
     text-decoration-line: underline !important;
+  }
+  .accent-\[\#ff6699\] {
+    accent-color: #ff6699 !important;
   }
   .ring {
     --tw-ring-shadow: var(--tw-ring-inset,) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor) !important;
@@ -220,11 +311,6 @@
     transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to, opacity, box-shadow, transform, translate, scale, rotate, filter, -webkit-backdrop-filter, backdrop-filter, display, content-visibility, overlay, pointer-events !important;
     transition-timing-function: var(--tw-ease, var(--default-transition-timing-function)) !important;
     transition-duration: var(--tw-duration, var(--default-transition-duration)) !important;
-  }
-  .sm\:block {
-    @media (width >= 40rem) {
-      display: block !important;
-    }
   }
   .lg\:hidden {
     @media (width >= 64rem) {

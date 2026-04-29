@@ -3,15 +3,15 @@
 </logo>
 <form action="post" class="flex flex-col h-[50%] w-full justify-center items-center">
     <div class="flex flex-col items-center justify-start h-full w-[80%] gap-4">
-        <input type="text" placeholder="email" class="px-6 py-4 border border-primary rounded-full w-full text-xl font-bold">
-        <input type="password" placeholder="password" class="px-6 py-4 border border-primary rounded-full w-full text-xl font-bold">
+        <input type="text" placeholder="email" class="px-6 py-4 rounded-full w-full text-xl text-[#525252] font-bold bg-[#919191]">
+        <input type="password" placeholder="password" class="px-6 py-4 rounded-full w-full text-xl text-[#525252] font-bold bg-[#919191]">
         <div class="flex items-center justify-between w-full">
             <div class="flex items-center">
                 <input type="checkbox" checked="checked" class="checkbox border checkbox-primary" />
-                <span class="ml-2 text-sm ">Remember me</span>
+                <span class="ml-2 text-sm opacity-75">Remember me</span>
             </div>
-            <button type="submit" class="p-4 max-h-15.5 border border-primary rounded-full w-1/2 font-ballmer text-2xl">sign in</button>
+            <button type="submit" class=" p-2 border border-primary rounded-full w-1/2 bg-primary"><p class="font-ballmer text-2xl translate-y-1">sign in</p></button>
         </div>
-        <p>Don't have an account? <a href="./register.php" class="text-primary">Sign up</a></p>
+        <p class="opacity-75">Don't have an account? <a href="./register.php" class="text-primary">Sign up</a></p>
     </div>
 </form>

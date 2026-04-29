@@ -1,4 +1,6 @@
-@import "tailwindcss";
+@import "tailwindcss" important;
+@source inline("../**/*.php");
+@source inline("../**/*.html");
 
 .primary-color {
     color: #ff6699;

@@ -8,6 +8,6 @@
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
 <body class="w-full h-screen">
-    <?php include './view/mobile/register.php'; ?>
+    <?php include './view/mobile/code.php'; ?>
 </body>
 </html>

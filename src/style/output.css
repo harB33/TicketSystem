@@ -1902,6 +1902,94 @@
     --tw-translate-y: calc(px * -1) !important;
     translate: var(--tw-translate-x) var(--tw-translate-y) !important;
   }
+  .translate-y-1 {
+    --tw-translate-y: calc(var(--spacing) * 1) !important;
+    translate: var(--tw-translate-x) var(--tw-translate-y) !important;
+  }
+  .translate-y-1\/2 {
+    --tw-translate-y: calc(1 / 2 * 100%) !important;
+    translate: var(--tw-translate-x) var(--tw-translate-y) !important;
+  }
+  .translate-y-\[0px\] {
+    --tw-translate-y: 0px !important;
+    translate: var(--tw-translate-x) var(--tw-translate-y) !important;
+  }
+  .translate-y-\[00px\] {
+    --tw-translate-y: 00px !important;
+    translate: var(--tw-translate-x) var(--tw-translate-y) !important;
+  }
+  .translate-y-\[1\] {
+    --tw-translate-y: 1 !important;
+    translate: var(--tw-translate-x) var(--tw-translate-y) !important;
+  }
+  .translate-y-\[2\] {
+    --tw-translate-y: 2 !important;
+    translate: var(--tw-translate-x) var(--tw-translate-y) !important;
+  }
+  .translate-y-\[3\] {
+    --tw-translate-y: 3 !important;
+    translate: var(--tw-translate-x) var(--tw-translate-y) !important;
+  }
+  .translate-y-\[8px\] {
+    --tw-translate-y: 8px !important;
+    translate: var(--tw-translate-x) var(--tw-translate-y) !important;
+  }
+  .translate-y-\[10\] {
+    --tw-translate-y: 10 !important;
+    translate: var(--tw-translate-x) var(--tw-translate-y) !important;
+  }
+  .translate-y-\[10px\] {
+    --tw-translate-y: 10px !important;
+    translate: var(--tw-translate-x) var(--tw-translate-y) !important;
+  }
+  .translate-y-\[20\] {
+    --tw-translate-y: 20 !important;
+    translate: var(--tw-translate-x) var(--tw-translate-y) !important;
+  }
+  .translate-y-\[30\] {
+    --tw-translate-y: 30 !important;
+    translate: var(--tw-translate-x) var(--tw-translate-y) !important;
+  }
+  .translate-y-\[78px\] {
+    --tw-translate-y: 78px !important;
+    translate: var(--tw-translate-x) var(--tw-translate-y) !important;
+  }
+  .translate-y-\[80px\] {
+    --tw-translate-y: 80px !important;
+    translate: var(--tw-translate-x) var(--tw-translate-y) !important;
+  }
+  .translate-y-\[100px\] {
+    --tw-translate-y: 100px !important;
+    translate: var(--tw-translate-x) var(--tw-translate-y) !important;
+  }
+  .translate-y-\[200\] {
+    --tw-translate-y: 200 !important;
+    translate: var(--tw-translate-x) var(--tw-translate-y) !important;
+  }
+  .translate-y-\[200px\] {
+    --tw-translate-y: 200px !important;
+    translate: var(--tw-translate-x) var(--tw-translate-y) !important;
+  }
+  .translate-y-\[300\] {
+    --tw-translate-y: 300 !important;
+    translate: var(--tw-translate-x) var(--tw-translate-y) !important;
+  }
+  .translate-y-\[300p\] {
+    --tw-translate-y: 300p !important;
+    translate: var(--tw-translate-x) var(--tw-translate-y) !important;
+  }
+  .translate-y-\[300px\] {
+    --tw-translate-y: 300px !important;
+    translate: var(--tw-translate-x) var(--tw-translate-y) !important;
+  }
+  .translate-y-\[2100px\] {
+    --tw-translate-y: 2100px !important;
+    translate: var(--tw-translate-x) var(--tw-translate-y) !important;
+  }
+  .translate-y-\[px\] {
+    --tw-translate-y: px !important;
+    translate: var(--tw-translate-x) var(--tw-translate-y) !important;
+  }
   .transform {
     transform: var(--tw-rotate-x,) var(--tw-rotate-y,) var(--tw-rotate-z,) var(--tw-skew-x,) var(--tw-skew-y,) !important;
   }

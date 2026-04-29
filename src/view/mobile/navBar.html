@@ -173,6 +173,10 @@
         opacity: 1;
         transform: translate(-50%, -50%) rotate(var(--arrow-rotate, 0deg)) scale(1);
     }
+
+    .selection-arrow.dragging {
+        transition: none !important;
+    }
 </style>
 
 <div class="menu-container">
@@ -185,7 +189,7 @@
     <div class="selection-arrow">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" fill="none" stroke="#ff6699"
             stroke-width="3" stroke-linecap="round">
-            <path d="M 22 4 A 150 150 0 0 0 22 28" />
+            <path d="M 22 4 A 145 145 0 0 0 22 28" />
         </svg>
     </div>
 
@@ -283,26 +287,65 @@
     let activeLink = null;
     const arrow = document.querySelector('.selection-arrow');
 
-    // Radial alignment: Centers perfectly on lines from (140, 140)
+    // Radial alignment: Updated for 151px distance (140 radius + 5 gap + 6 offset)
     const arrowConfig = {
-        'slice1': { top: 10, left: 66, rotate: 60 },   // Aligned with 120° radial line
-        'slice2': { top: 140, left: -10, rotate: 0 },   // Aligned with 180° radial line
-        'slice3': { top: 270, left: 66, rotate: -60 }   // Aligned with 240° radial line
+        'slice1': { top: 9.2, left: 64.5, rotate: 60 },
+        'slice2': { top: 140, left: -11, rotate: 0 },
+        'slice3': { top: 270.8, left: 64.5, rotate: -60 }
     };
 
-    function highlightSlice(slice) {
+    function updateArrow(clientX, clientY, isDragging = false) {
+        const rect = container.getBoundingClientRect();
+        const cx = rect.left + 140; // Fan center is at the right edge of 140px container
+        const cy = rect.top + 140;
+
+        const dx = clientX - cx;
+        const dy = clientY - cy;
+
+        let angleRad = Math.atan2(dy, dx);
+
+        // Clamp to the left half-circle (90deg to 270deg)
+        if (Math.abs(angleRad) < Math.PI / 2) {
+            angleRad = angleRad > 0 ? Math.PI / 2 : -Math.PI / 2;
+        }
+
+        const dist = 156; // 140 (radius) + 5 (gap) + 6 (arrow offset from center)
+        const x = 140 + dist * Math.cos(angleRad);
+        const y = 140 + dist * Math.sin(angleRad);
+
+        const angleDeg = angleRad * 180 / Math.PI;
+        const rotation = angleDeg - 180;
+
+        if (isDragging) {
+            arrow.classList.add('dragging');
+        } else {
+            arrow.classList.remove('dragging');
+        }
+
+        arrow.style.setProperty('--arrow-top', `${y}px`);
+        arrow.style.setProperty('--arrow-left', `${x}px`);
+        arrow.style.setProperty('--arrow-rotate', `${rotation}deg`);
+        arrow.classList.add('visible');
+    }
+
+    function highlightSlice(slice, isDragging = false) {
         if (slice === activeSlice) return;
-        clearSlice();
+
+        if (activeSlice) activeSlice.classList.remove('hovered');
+        if (activeLink) activeLink.classList.remove('icon-hovered');
+
         if (slice) {
             slice.classList.add('hovered');
 
-            // Update arrow position and rotation
-            const config = arrowConfig[slice.id];
-            if (config) {
-                arrow.style.setProperty('--arrow-top', `${config.top}px`);
-                arrow.style.setProperty('--arrow-left', `${config.left}px`);
-                arrow.style.setProperty('--arrow-rotate', `${config.rotate}deg`);
-                arrow.classList.add('visible');
+            // Update arrow position and rotation — only if not manually dragging
+            if (!isDragging) {
+                const config = arrowConfig[slice.id];
+                if (config) {
+                    arrow.style.setProperty('--arrow-top', `${config.top}px`);
+                    arrow.style.setProperty('--arrow-left', `${config.left}px`);
+                    arrow.style.setProperty('--arrow-rotate', `${config.rotate}deg`);
+                    arrow.classList.add('visible');
+                }
             }
 
             // Also scale the icon in the matching link
@@ -311,6 +354,9 @@
                 entry.link.classList.add('icon-hovered');
                 activeLink = entry.link;
             }
+        } else if (!isDragging) {
+            // Only hide arrow if not dragging
+            arrow.classList.remove('visible');
         }
         activeSlice = slice;
     }
@@ -319,6 +365,7 @@
         if (activeSlice) activeSlice.classList.remove('hovered');
         if (activeLink) activeLink.classList.remove('icon-hovered');
         arrow.classList.remove('visible');
+        arrow.classList.remove('dragging');
         activeSlice = null;
         activeLink = null;
     }
@@ -384,7 +431,8 @@
         if (!container.classList.contains('active')) return;
         e.preventDefault();
         const t = e.touches[0];
-        highlightSlice(sliceFromPoint(t.clientX, t.clientY));
+        updateArrow(t.clientX, t.clientY, true);
+        highlightSlice(sliceFromPoint(t.clientX, t.clientY), true);
     }, { passive: false });
 
     // Touch events (mobile)

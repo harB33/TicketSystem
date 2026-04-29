@@ -12,6 +12,7 @@
     --color-gray-300: oklch(87.2% 0.01 258.338);
     --color-gray-400: oklch(70.7% 0.022 261.325);
     --color-gray-500: oklch(55.1% 0.027 264.364);
+    --color-black: #000;
     --color-white: #fff;
     --spacing: 0.25rem;
     --container-xs: 20rem;
@@ -1455,6 +1456,9 @@
   .sticky {
     position: sticky !important;
   }
+  .inset-0 {
+    inset: calc(var(--spacing) * 0) !important;
+  }
   .start {
     inset-inline-start: var(--spacing) !important;
   }
@@ -1535,6 +1539,24 @@
   }
   .isolate {
     isolation: isolate !important;
+  }
+  .-z-1 {
+    z-index: calc(1 * -1) !important;
+  }
+  .-z-10 {
+    z-index: calc(10 * -1) !important;
+  }
+  .z-0 {
+    z-index: 0 !important;
+  }
+  .z-1 {
+    z-index: 1 !important;
+  }
+  .z-5 {
+    z-index: 5 !important;
+  }
+  .z-10 {
+    z-index: 10 !important;
   }
   .container {
     width: 100% !important;
@@ -1934,8 +1956,68 @@
   .bg-\[\#919191\] {
     background-color: #919191 !important;
   }
+  .bg-black {
+    background-color: var(--color-black) !important;
+  }
+  .bg-black\/0 {
+    background-color: color-mix(in srgb, #000 0%, transparent) !important;
+    @supports (color: color-mix(in lab, red, red)) {
+      background-color: color-mix(in oklab, var(--color-black) 0%, transparent) !important;
+    }
+  }
+  .bg-black\/1 {
+    background-color: color-mix(in srgb, #000 1%, transparent) !important;
+    @supports (color: color-mix(in lab, red, red)) {
+      background-color: color-mix(in oklab, var(--color-black) 1%, transparent) !important;
+    }
+  }
+  .bg-black\/2 {
+    background-color: color-mix(in srgb, #000 2%, transparent) !important;
+    @supports (color: color-mix(in lab, red, red)) {
+      background-color: color-mix(in oklab, var(--color-black) 2%, transparent) !important;
+    }
+  }
+  .bg-black\/10 {
+    background-color: color-mix(in srgb, #000 10%, transparent) !important;
+    @supports (color: color-mix(in lab, red, red)) {
+      background-color: color-mix(in oklab, var(--color-black) 10%, transparent) !important;
+    }
+  }
+  .bg-black\/20 {
+    background-color: color-mix(in srgb, #000 20%, transparent) !important;
+    @supports (color: color-mix(in lab, red, red)) {
+      background-color: color-mix(in oklab, var(--color-black) 20%, transparent) !important;
+    }
+  }
+  .bg-black\/25 {
+    background-color: color-mix(in srgb, #000 25%, transparent) !important;
+    @supports (color: color-mix(in lab, red, red)) {
+      background-color: color-mix(in oklab, var(--color-black) 25%, transparent) !important;
+    }
+  }
+  .bg-black\/50 {
+    background-color: color-mix(in srgb, #000 50%, transparent) !important;
+    @supports (color: color-mix(in lab, red, red)) {
+      background-color: color-mix(in oklab, var(--color-black) 50%, transparent) !important;
+    }
+  }
+  .bg-black\/75 {
+    background-color: color-mix(in srgb, #000 75%, transparent) !important;
+    @supports (color: color-mix(in lab, red, red)) {
+      background-color: color-mix(in oklab, var(--color-black) 75%, transparent) !important;
+    }
+  }
   .bg-primary {
     background-color: var(--color-primary) !important;
+  }
+  .bg-transparent {
+    background-color: transparent !important;
+  }
+  .bg-none {
+    background-image: none !important;
+  }
+  .object-cover {
+    object-fit: cover !important;
   }
   .p-2 {
     padding: calc(var(--spacing) * 2) !important;

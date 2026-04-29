@@ -1,4 +1,4 @@
-<mobile-view class="block lg:hidden w-full h-screen">
+<mobile-view class="relative z-10 block lg:hidden w-full h-screen bg-transparent">
     <nav class="hidden">
         <?php include __DIR__ . '/mobile/navBar.html'; ?>
     </nav>

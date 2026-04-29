@@ -1,17 +1,25 @@
 /*! tailwindcss v4.2.4 | MIT License | https://tailwindcss.com */
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Sekuya&family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap');
 @layer properties;
 @layer theme, base, components, utilities;
 @layer theme {
   :root, :host {
-    --font-sans: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
-      "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    --font-sans: "Poppins", sans-serif;
     --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
       "Courier New", monospace;
+    --color-black: #000;
     --spacing: 0.25rem;
+    --text-xl: 1.25rem;
+    --text-xl--line-height: calc(1.75 / 1.25);
+    --text-2xl: 1.5rem;
+    --text-2xl--line-height: calc(2 / 1.5);
+    --font-weight-bold: 700;
     --default-transition-duration: 150ms;
     --default-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     --default-font-family: var(--font-sans);
     --default-mono-font-family: var(--font-mono);
+    --font-aubette: "Aubette", sans-serif;
+    --font-ballmer: "Ballmer", sans-serif;
   }
 }
 @layer base {
@@ -199,26 +207,35 @@
   .table {
     display: table !important;
   }
-  .h-16 {
-    height: calc(var(--spacing) * 16) !important;
-  }
-  .h-\[0\%\] {
-    height: 0% !important;
-  }
-  .h-\[40\%\] {
-    height: 40% !important;
-  }
   .h-\[50\%\] {
     height: 50% !important;
-  }
-  .h-\[60\%\] {
-    height: 60% !important;
   }
   .h-full {
     height: 100% !important;
   }
   .h-screen {
     height: 100vh !important;
+  }
+  .max-h-15\.5 {
+    max-height: calc(var(--spacing) * 15.5) !important;
+  }
+  .max-h-\[5px\] {
+    max-height: 5px !important;
+  }
+  .max-h-\[6px\] {
+    max-height: 6px !important;
+  }
+  .max-h-\[50px\] {
+    max-height: 50px !important;
+  }
+  .max-h-\[62px\] {
+    max-height: 62px !important;
+  }
+  .max-h-\[63px\] {
+    max-height: 63px !important;
+  }
+  .max-h-\[px\] {
+    max-height: px !important;
   }
   .min-h-screen {
     min-height: 100vh !important;
@@ -228,9 +245,6 @@
   }
   .w-1\/2 {
     width: calc(1 / 2 * 100%) !important;
-  }
-  .w-16 {
-    width: calc(var(--spacing) * 16) !important;
   }
   .w-\[80\%\] {
     width: 80% !important;
@@ -265,21 +279,6 @@
   .gap-4 {
     gap: calc(var(--spacing) * 4) !important;
   }
-  .overflow-auto {
-    overflow: auto !important;
-  }
-  .overflow-clip {
-    overflow: clip !important;
-  }
-  .overflow-hidden {
-    overflow: hidden !important;
-  }
-  .overflow-x-clip {
-    overflow-x: clip !important;
-  }
-  .overflow-x-hidden {
-    overflow-x: hidden !important;
-  }
   .rounded-full {
     border-radius: calc(infinity * 1px) !important;
   }
@@ -290,8 +289,47 @@
   .border-\[\#ff6699\] {
     border-color: #ff6699 !important;
   }
+  .p-2 {
+    padding: calc(var(--spacing) * 2) !important;
+  }
+  .p-3 {
+    padding: calc(var(--spacing) * 3) !important;
+  }
   .p-4 {
     padding: calc(var(--spacing) * 4) !important;
+  }
+  .p-23 {
+    padding: calc(var(--spacing) * 23) !important;
+  }
+  .px-6 {
+    padding-inline: calc(var(--spacing) * 6) !important;
+  }
+  .py-4 {
+    padding-block: calc(var(--spacing) * 4) !important;
+  }
+  .font-aubette {
+    font-family: var(--font-aubette) !important;
+  }
+  .font-ballmer {
+    font-family: var(--font-ballmer) !important;
+  }
+  .text-2xl {
+    font-size: var(--text-2xl) !important;
+    line-height: var(--tw-leading, var(--text-2xl--line-height)) !important;
+  }
+  .text-xl {
+    font-size: var(--text-xl) !important;
+    line-height: var(--tw-leading, var(--text-xl--line-height)) !important;
+  }
+  .font-bold {
+    --tw-font-weight: var(--font-weight-bold) !important;
+    font-weight: var(--font-weight-bold) !important;
+  }
+  .text-\[\#ff6699\] {
+    color: #ff6699 !important;
+  }
+  .text-black {
+    color: var(--color-black) !important;
   }
   .underline {
     text-decoration-line: underline !important;
@@ -317,6 +355,20 @@
       display: none !important;
     }
   }
+}
+@font-face {
+  font-family: 'Aubette';
+  src: url('../font/Architype-Aubette.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Ballmer';
+  src: url('../font/Architype-Ballmer.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
 }
 .primary-color {
   color: #ff6699;
@@ -345,6 +397,10 @@
   syntax: "*";
   inherits: false;
   initial-value: solid;
+}
+@property --tw-font-weight {
+  syntax: "*";
+  inherits: false;
 }
 @property --tw-shadow {
   syntax: "*";
@@ -425,6 +481,7 @@
       --tw-skew-x: initial;
       --tw-skew-y: initial;
       --tw-border-style: solid;
+      --tw-font-weight: initial;
       --tw-shadow: 0 0 #0000;
       --tw-shadow-color: initial;
       --tw-shadow-alpha: 100%;

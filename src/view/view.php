@@ -1,5 +1,5 @@
 <mobile-view class="block lg:hidden w-full h-screen">
-    <nav class="">
+    <nav class="hidden">
         <?php include __DIR__ . '/mobile/navBar.html'; ?>
     </nav>
     <login class="w-full h-screen flex flex-col">

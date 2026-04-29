@@ -142,10 +142,49 @@
         transform: scale(1);
         opacity: 1;
     }
+    .inner-button svg {
+        transform: translateX(5px);
+    }
+
+    /* Selection Arrow Indicator */
+    .selection-arrow {
+        position: absolute;
+        left: var(--arrow-left, -40px);
+        width: 32px;
+        height: 32px;
+        pointer-events: none;
+        z-index: 20;
+        opacity: 0;
+        top: var(--arrow-top, 140px);
+        transform: translate(-50%, -50%) rotate(var(--arrow-rotate, 0deg)) scale(0);
+        transition: 
+            top 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+            left 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+            transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+            opacity 0.2s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .selection-arrow.visible {
+        opacity: 1;
+        transform: translate(-50%, -50%) rotate(var(--arrow-rotate, 0deg)) scale(1);
+    }
 </style>
 
 <div class="menu-container">
-    <button class="inner-button"></button>
+    <button class="inner-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="48" height="48" color="currentColor" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M15 6C15 6 9.00001 10.4189 9 12C8.99999 13.5812 15 18 15 18" />
+    </svg></button>
+    
+    <div class="selection-arrow">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#ff6699" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="4" y1="12" x2="20" y2="12"></line>
+            <polyline points="14 6 20 12 14 18"></polyline>
+        </svg>
+    </div>
+
     <div class="outer-layer">
 
         <!--
@@ -227,7 +266,7 @@
     const container = document.querySelector('.menu-container');
 
     let holdTimer = null;
-    const HOLD_DELAY = 150; // ms before menu opens
+    const HOLD_DELAY = 10; // ms before menu opens
 
     // Slice map — used by both mouse hover and touch drag
     const linkSliceMap = [
@@ -238,12 +277,30 @@
 
     let activeSlice = null;
     let activeLink = null;
+    const arrow = document.querySelector('.selection-arrow');
+    
+    // Radial alignment: Centers perfectly on lines from (140, 140)
+    const arrowConfig = {
+        'slice1': { top: -16, left: 50, rotate: 60 },   // Aligned with 120° radial line
+        'slice2': { top: 140, left: -40, rotate: 0 },   // Aligned with 180° radial line
+        'slice3': { top: 296, left: 50, rotate: -60 }   // Aligned with 240° radial line
+    };
 
     function highlightSlice(slice) {
         if (slice === activeSlice) return;
         clearSlice();
         if (slice) {
             slice.classList.add('hovered');
+            
+            // Update arrow position and rotation
+            const config = arrowConfig[slice.id];
+            if (config) {
+                arrow.style.setProperty('--arrow-top', `${config.top}px`);
+                arrow.style.setProperty('--arrow-left', `${config.left}px`);
+                arrow.style.setProperty('--arrow-rotate', `${config.rotate}deg`);
+                arrow.classList.add('visible');
+            }
+
             // Also scale the icon in the matching link
             const entry = linkSliceMap.find(m => m.slice === slice);
             if (entry) {
@@ -257,6 +314,7 @@
     function clearSlice() {
         if (activeSlice) activeSlice.classList.remove('hovered');
         if (activeLink) activeLink.classList.remove('icon-hovered');
+        arrow.classList.remove('visible');
         activeSlice = null;
         activeLink = null;
     }

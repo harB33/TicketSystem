@@ -16,7 +16,6 @@
             justify-content: center;
             z-index: 100;
             pointer-events: all;
-            cursor: pointer;
             animation: dropInScreen 0.8s ease-in-out forwards;
         }
 
@@ -108,7 +107,7 @@
     </style>
 </head>
 <body class="w-full h-screen">
-    <div id="loading-screen" title="Click to dismiss">
+    <div id="loading-screen">
         <div id="loader-pop-container" class="loader-pop-circle">
             <div id="loader-shape" class="loader-morph-and-rotate"></div>
         </div>
@@ -117,10 +116,30 @@
     <?php include './view/view.php'; ?>
 
     <script>
+        // Check for pageTransition in sessionStorage immediately
+        const isTransition = sessionStorage.getItem('pageTransition') === 'true';
+        if (isTransition) {
+            sessionStorage.removeItem('pageTransition');
+            // Ensure #loading-screen starts at translateY(0) without any initial slide-in delay
+            const style = document.createElement('style');
+            style.id = 'transition-loader-override';
+            style.innerHTML = `
+                #loading-screen {
+                    animation: none !important;
+                    transform: translateY(0) !important;
+                }
+            `;
+            document.head.appendChild(style);
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
             const loader = document.getElementById('loading-screen');
             if (loader) {
-                // Morph the square back into a circle at 6.0 seconds
+                const morphTime = isTransition ? 2500 : 6000;
+                const popOutTime = isTransition ? 3000 : 6500;
+                const slideTime = isTransition ? 3500 : 7000;
+
+                // Morph the square back into a circle
                 setTimeout(() => {
                     const shape = document.getElementById('loader-shape');
                     if (shape) {
@@ -131,53 +150,96 @@
                             shape.style.borderRadius = '50%';
                         }, 20);
                     }
-                }, 6000);
+                }, morphTime);
 
-                // Pop out that circle at 6.5 seconds (reverse of popIn)
+                // Pop out that circle at the reverse of popIn
                 setTimeout(() => {
                     const container = document.getElementById('loader-pop-container');
                     if (container) {
                         container.style.animation = 'popOut 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards';
                     }
-                }, 6500);
+                }, popOutTime);
 
-                // Then slide down the loading screen after 7 seconds
+                // Then slide down the loading screen
                 setTimeout(() => {
                     if (loader && loader.parentNode) {
+                        const styleOverride = document.getElementById('transition-loader-override');
+                        if (styleOverride) styleOverride.remove();
+                        
                         loader.style.animation = 'none';
                         loader.offsetHeight; // Force reflow
                         loader.style.transition = 'transform 0.8s ease-in-out';
                         loader.style.transform = 'translateY(100%)';
-                        setTimeout(() => loader.remove(), 800);
+                        // Keep loader in the DOM so it can be reused on navigation
                     }
-                }, 7000);
-
-                // Clicking anywhere on the loading screen will dismiss it immediately
-                loader.addEventListener('click', () => {
-                    const shape = document.getElementById('loader-shape');
-                    const container = document.getElementById('loader-pop-container');
-                    if (shape) {
-                        shape.style.animation = 'none';
-                        shape.style.borderRadius = '0%';
-                        setTimeout(() => {
-                            shape.style.transition = 'border-radius 0.25s ease-in-out';
-                            shape.style.borderRadius = '50%';
-                        }, 20);
-                    }
-                    setTimeout(() => {
-                        if (container) {
-                            container.style.animation = 'popOut 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) forwards';
-                        }
-                    }, 250);
-                    setTimeout(() => {
-                        loader.style.animation = 'none';
-                        loader.offsetHeight; // Force reflow
-                        loader.style.transition = 'transform 0.5s ease-in-out';
-                        loader.style.transform = 'translateY(100%)';
-                        setTimeout(() => loader.remove(), 500);
-                    }, 500);
-                });
+                }, slideTime);
             }
+
+            // Function to show loader before navigating or submitting
+            const showLoaderAndThen = (callback) => {
+                sessionStorage.setItem('pageTransition', 'true');
+                let currentLoader = document.getElementById('loading-screen');
+                if (!currentLoader) {
+                    const newLoader = document.createElement('div');
+                    newLoader.id = 'loading-screen';
+                    newLoader.style.animation = 'none';
+                    newLoader.style.transform = 'translateY(100%)';
+                    newLoader.style.transition = 'transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+                    
+                    const newPopContainer = document.createElement('div');
+                    newPopContainer.id = 'loader-pop-container';
+                    newPopContainer.className = 'loader-pop-circle';
+                    
+                    const newShape = document.createElement('div');
+                    newShape.id = 'loader-shape';
+                    newShape.className = 'loader-morph-and-rotate';
+                    
+                    newPopContainer.appendChild(newShape);
+                    newLoader.appendChild(newPopContainer);
+                    document.body.appendChild(newLoader);
+                    
+                    currentLoader = newLoader;
+                    
+                    setTimeout(() => {
+                        currentLoader.style.transform = 'translateY(0)';
+                    }, 20);
+                } else {
+                    currentLoader.style.animation = 'none';
+                    currentLoader.style.transition = 'none';
+                    currentLoader.style.transform = 'translateY(-100%)';
+                    currentLoader.offsetHeight; // force reflow
+                    
+                    currentLoader.style.transition = 'transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+                    currentLoader.style.transform = 'translateY(0)';
+                }
+
+                // Wait for the loader animation to finish completely before invoking the callback
+                setTimeout(callback, 600);
+            };
+
+            // Intercept navigation links to trigger the loading screen before navigating
+            document.addEventListener('click', (e) => {
+                const link = e.target.closest('a');
+                if (link && link.href && (link.href.includes('?page=') || link.getAttribute('href').startsWith('?page='))) {
+                    e.preventDefault();
+                    showLoaderAndThen(() => {
+                        window.location.href = link.href;
+                    });
+                }
+            });
+
+            // Intercept form submissions to trigger the loading screen before navigating
+            let formSubmitted = false;
+            document.addEventListener('submit', (e) => {
+                if (formSubmitted) return;
+                e.preventDefault();
+                const form = e.target;
+                
+                showLoaderAndThen(() => {
+                    formSubmitted = true;
+                    form.submit();
+                });
+            });
         });
     </script>
 </body>

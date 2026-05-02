@@ -72,15 +72,15 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm
     <div class="flex flex-col items-center justify-start h-full w-[80%] gap-4">
         <input type="text" name="email" placeholder="email" class="px-6 py-4 rounded-full w-full text-lg font-bold text-[#525252] bg-[#919191]">
         <input type="password" name="password" id="passwordInput" placeholder="password" class="px-6 py-4 rounded-full w-full text-lg font-bold text-[#525252] bg-[#919191]">
-        <div class="grid grid-cols-3 gap-4 w-[94%] h-5">
-            <div class="h-full w-full flex items-center justify-start border border-primary rounded-full p-0.5 transition-all duration-200">
-                <div id="strengthBar1" class="h-full w-0 bg-[#ff6b9d] rounded-full transition-all duration-500"></div>
+        <div class="grid grid-cols-3 gap-4 w-[94%]" style="height: 18px;">
+            <div class="border border-primary rounded-full flex items-center justify-start transition-all duration-200" style="height: 100%; width: 100%; padding: 2px; box-sizing: border-box;">
+                <div id="strengthBar1" class="rounded-full" style="height: 100%; width: 0%; background-color: #ff6b9d; transition: width 0.4s ease-in-out;"></div>
             </div>
-            <div class="h-full w-full flex items-center justify-start border border-[#ffde59] rounded-full p-0.5 transition-all duration-200">
-                <div id="strengthBar2" class="h-full w-0 bg-[#ffde59] rounded-full transition-all duration-500"></div>
+            <div class="border border-[#ffde59] rounded-full flex items-center justify-start transition-all duration-200" style="height: 100%; width: 100%; padding: 2px; box-sizing: border-box;">
+                <div id="strengthBar2" class="rounded-full" style="height: 100%; width: 0%; background-color: #ffde59; transition: width 0.4s ease-in-out;"></div>
             </div>
-            <div class="h-full w-full flex items-center justify-start border border-[#7ed957] rounded-full p-0.5 transition-all duration-200">
-                <div id="strengthBar3" class="h-full w-0 bg-[#7ed957] rounded-full transition-all duration-500"></div>
+            <div class="border border-[#7ed957] rounded-full flex items-center justify-start transition-all duration-200" style="height: 100%; width: 100%; padding: 2px; box-sizing: border-box;">
+                <div id="strengthBar3" class="rounded-full" style="height: 100%; width: 0%; background-color: #7ed957; transition: width 0.4s ease-in-out;"></div>
             </div>
         </div>
         <p id="strengthMessage" class="text-center text-sm font-bold text-gray-500 absolute"></p>
@@ -125,36 +125,54 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm
         
         const strength = checkPasswordStrength(passwordInput.value);
         
-        // Reset all bars
-        bar1.style.width = '0%';
-        bar2.style.width = '0%';
-        bar3.style.width = '0%';
+        // Count before vs after
+        const before1 = bar1.style.width === '100%' ? 1 : 0;
+        const before2 = bar2.style.width === '100%' ? 1 : 0;
+        const before3 = bar3.style.width === '100%' ? 1 : 0;
+        const beforeCount = before1 + before2 + before3;
+        
+        let target1 = '0%';
+        let target2 = '0%';
+        let target3 = '0%';
+        
+        if (passwordInput.value !== '') {
+            if (strength > 1) target1 = '100%';
+            if (strength > 3) target2 = '100%';
+            if (strength > 4) target3 = '100%';
+        }
+        
+        const afterCount = (target1 === '100%' ? 1 : 0) + (target2 === '100%' ? 1 : 0) + (target3 === '100%' ? 1 : 0);
+        
+        // Determine transition delays based on direction (Filling vs Emptying)
+        if (afterCount >= beforeCount) {
+            // Forward (Filling): Pink first, then Yellow, then Green
+            bar1.style.transition = 'width 0.3s ease-in-out 0s';
+            bar2.style.transition = 'width 0.3s ease-in-out 0.15s';
+            bar3.style.transition = 'width 0.3s ease-in-out 0.3s';
+        } else {
+            // Reverse (Emptying): Green first, then Yellow, then Pink
+            bar1.style.transition = 'width 0.3s ease-in-out 0.3s';
+            bar2.style.transition = 'width 0.3s ease-in-out 0.15s';
+            bar3.style.transition = 'width 0.3s ease-in-out 0s';
+        }
+        
+        // Set widths
+        bar1.style.width = target1;
+        bar2.style.width = target2;
+        bar3.style.width = target3;
+        
+        // Message & Colors
         message.textContent = '';
         message.style.color = '';
         
-        if (passwordInput.value === '') {
-            return;
-        }
-        
-        // Weak (1-2)
-        if (strength > 1) {
-            bar1.style.width = '100%';
-            bar1.style.backgroundColor = '#ff6b9d';
-            message.style.color = '#ff6b9d';
-        }
-        
-        // Medium (3-4)
-        if (strength > 3) {
-            bar2.style.width = '100%';
-            bar2.style.backgroundColor = '#ffde59';
-            message.style.color = '#ffde59';
-        }
-        
-        // Strong (5+)
-        if (strength > 4) {
-            bar3.style.width = '100%';
-            bar3.style.backgroundColor = '#7ed957';
-            message.style.color = '#7ed957';
+        if (passwordInput.value !== '') {
+            if (strength > 4) {
+                message.style.color = '#7ed957';
+            } else if (strength > 3) {
+                message.style.color = '#ffde59';
+            } else if (strength > 1) {
+                message.style.color = '#ff6b9d';
+            }
         }
     }
     

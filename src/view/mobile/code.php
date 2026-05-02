@@ -1,5 +1,5 @@
 <logo class="h-[50%] w-full flex flex-col items-center justify-center">
-    <img src="./logo/logo.png" alt="" class="w-1/2">
+    <img src="./asset/logo/logo.png" alt="" class="w-1/2">
 </logo>
 <form action="post" class="flex flex-col h-[50%] w-full justify-center items-center translate-y-8">
     <div class="flex flex-col items-center justify-start h-full w-[80%] gap-4">

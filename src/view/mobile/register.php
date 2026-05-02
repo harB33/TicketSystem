@@ -66,7 +66,7 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm
 ?>
 
 <logo class="h-[50%] w-full flex flex-col items-center justify-center">
-    <img src="./logo/register.png" alt="" class="w-2/3">
+    <img src="./asset/logo/register.png" alt="" class="w-2/3">
 </logo>
 <form action="" method="post" class="flex flex-col h-[50%] w-full justify-center items-center -translate-y-27.5">
     <div class="flex flex-col items-center justify-start h-full w-[80%] gap-4">

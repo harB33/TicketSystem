@@ -20,10 +20,14 @@ if (isset($_POST['email']) && isset($_POST['password'])) {
     }
 }
 ?>
-<logo class="h-[50%] w-full flex flex-col items-center justify-center">
-    <img src="./logo/logo.png" alt="" class="w-1/2">
+<video autoplay muted loop playsinline class="absolute inset-0 w-full h-screen object-cover z-0">
+    <source src="./asset/image/login.mp4" type="video/mp4">
+</video>
+<div class="absolute inset-0 bg-black/75 z-5"></div>
+<logo class="relative z-10 h-[50%] w-full flex flex-col items-center justify-center">
+    <img src="./asset/logo/logo.png" alt="" class="w-1/2">
 </logo>
-<form action="" method="post" class="flex flex-col h-[50%] w-full justify-center items-center">
+<form action="" method="post" class="relative z-10 flex flex-col h-[50%] w-full justify-center items-center">
     <div class="flex flex-col items-center justify-start h-full w-[80%] gap-4">
         <input type="text" name="email" placeholder="email" class="px-6 py-4 rounded-full w-full text-lg text-[#525252] font-bold bg-[#919191]">
         <input type="password" name="password" placeholder="password" class="px-6 py-4 rounded-full w-full text-lg text-[#525252] font-bold bg-[#919191]">

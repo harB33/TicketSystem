@@ -4,7 +4,7 @@
     </div>
     <div class="grid grid-cols-3 gap-4 p-4 z-10">
         <label class="relative border border-white/10 rounded-xl aspect-square mt-32 overflow-hidden cursor-pointer select-none bg-white/5 block">
-            <img src="/src/logo/logo.png" alt="">
+            <img src="./asset/logo/logo.png" alt="">
             <input type="checkbox" name="artists[]" value="artist_1" class="sr-only peer">
             <div class="absolute inset-0 bg-primary opacity-0 peer-checked:opacity-50 transition-opacity duration-200"></div>
             <div class="absolute inset-0 opacity-0 peer-checked:opacity-100 flex items-center justify-center transition-opacity duration-200">

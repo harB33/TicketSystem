@@ -33,21 +33,21 @@
 
 @font-face {
     font-family: 'Aubette';
-    src: url('../font/Architype-Aubette.ttf') format('truetype');
+    src: url('../asset/font/Architype-Aubette.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
     font-display: swap;
 }
 @font-face {
     font-family: 'Ballmer';
-    src: url('../font/Architype-Ballmer.ttf') format('truetype');
+    src: url('../asset/font/Architype-Ballmer.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
     font-display: swap;
 }
 @font-face {
     font-family: 'Tschichold';
-    src: url('../font/Architype-Tschichold.ttf') format('truetype');
+    src: url('../asset/font/Architype-Tschichold.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
     font-display: swap;

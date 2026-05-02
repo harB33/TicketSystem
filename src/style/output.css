@@ -7,8 +7,6 @@
     --font-sans: "Poppins", sans-serif;
     --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
       "Courier New", monospace;
-    --color-pink-50: oklch(97.1% 0.014 343.198);
-    --color-pink-200: oklch(89.9% 0.061 343.231);
     --color-pink-500: oklch(65.6% 0.241 354.308);
     --color-gray-500: oklch(55.1% 0.027 264.364);
     --color-gray-800: oklch(27.8% 0.033 256.848);
@@ -36,8 +34,8 @@
     --tracking-tight: -0.025em;
     --radius-lg: 0.5rem;
     --radius-xl: 0.75rem;
-    --radius-2xl: 1rem;
     --radius-3xl: 1.5rem;
+    --ease-in: cubic-bezier(0.4, 0, 1, 1);
     --ease-out: cubic-bezier(0, 0, 0.2, 1);
     --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
     --default-transition-duration: 150ms;
@@ -640,6 +638,20 @@
           --btn-fg: color-mix(in oklch, var(--color-base-content) 20%, #0000) !important;
         }
       }
+    }
+  }
+  .loading {
+    @layer daisyui.l1.l2.l3 {
+      pointer-events: none !important;
+      display: inline-block !important;
+      aspect-ratio: 1 / 1 !important;
+      background-color: currentcolor !important;
+      vertical-align: middle !important;
+      width: calc(var(--size-selector, 0.25rem) * 6) !important;
+      mask-size: 100% !important;
+      mask-repeat: no-repeat !important;
+      mask-position: center !important;
+      mask-image: url("data:image/svg+xml,%3Csvg width='24' height='24' stroke='black' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cg transform-origin='center'%3E%3Ccircle cx='12' cy='12' r='9.5' fill='none' stroke-width='3' stroke-linecap='round'%3E%3CanimateTransform attributeName='transform' type='rotate' from='0 12 12' to='360 12 12' dur='2s' repeatCount='indefinite'/%3E%3Canimate attributeName='stroke-dasharray' values='0,150;42,150;42,150' keyTimes='0;0.475;1' dur='1.5s' repeatCount='indefinite'/%3E%3Canimate attributeName='stroke-dashoffset' values='0;-16;-59' keyTimes='0;0.475;1' dur='1.5s' repeatCount='indefinite'/%3E%3C/circle%3E%3C/g%3E%3C/svg%3E") !important;
     }
   }
   .collapse {
@@ -1489,9 +1501,6 @@
   .top-0 {
     top: calc(var(--spacing) * 0) !important;
   }
-  .top-4 {
-    top: calc(var(--spacing) * 4) !important;
-  }
   .top-6 {
     top: calc(var(--spacing) * 6) !important;
   }
@@ -1500,9 +1509,6 @@
   }
   .bottom-0 {
     bottom: calc(var(--spacing) * 0) !important;
-  }
-  .left-4 {
-    left: calc(var(--spacing) * 4) !important;
   }
   .textarea {
     @layer daisyui.l1.l2.l3 {
@@ -1861,9 +1867,6 @@
   .w-\[80\%\] {
     width: 80% !important;
   }
-  .w-\[90\%\] {
-    width: 90% !important;
-  }
   .w-\[94\%\] {
     width: 94% !important;
   }
@@ -1875,9 +1878,6 @@
   }
   .flex-shrink {
     flex-shrink: 1 !important;
-  }
-  .flex-shrink-0 {
-    flex-shrink: 0 !important;
   }
   .shrink-0 {
     flex-shrink: 0 !important;
@@ -1970,9 +1970,6 @@
   .items-end {
     align-items: flex-end !important;
   }
-  .items-start {
-    align-items: flex-start !important;
-  }
   .justify-between {
     justify-content: space-between !important;
   }
@@ -1997,9 +1994,6 @@
   .overflow-x-auto {
     overflow-x: auto !important;
   }
-  .rounded-2xl {
-    border-radius: var(--radius-2xl) !important;
-  }
   .rounded-3xl {
     border-radius: var(--radius-3xl) !important;
   }
@@ -2011,10 +2005,6 @@
   }
   .rounded-xl {
     border-radius: var(--radius-xl) !important;
-  }
-  .rounded-l {
-    border-top-left-radius: 0.25rem !important;
-    border-bottom-left-radius: 0.25rem !important;
   }
   .border {
     border-style: var(--tw-border-style) !important;
@@ -2145,8 +2135,8 @@
     --tw-gradient-to: var(--color-zinc-900) !important;
     --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position)) !important;
   }
-  .object-contain {
-    object-fit: contain !important;
+  .mask-repeat {
+    mask-repeat: repeat !important;
   }
   .object-cover {
     object-fit: cover !important;
@@ -2174,9 +2164,6 @@
   }
   .text-center {
     text-align: center !important;
-  }
-  .text-right {
-    text-align: right !important;
   }
   .font-aubette {
     font-family: var(--font-aubette) !important;
@@ -2248,17 +2235,8 @@
   .text-\[\#919191\] {
     color: #919191 !important;
   }
-  .text-black {
-    color: var(--color-black) !important;
-  }
   .text-gray-500 {
     color: var(--color-gray-500) !important;
-  }
-  .text-pink-50 {
-    color: var(--color-pink-50) !important;
-  }
-  .text-pink-200 {
-    color: var(--color-pink-200) !important;
   }
   .text-pink-500 {
     color: var(--color-pink-500) !important;
@@ -2327,6 +2305,10 @@
   .duration-300 {
     --tw-duration: 300ms !important;
     transition-duration: 300ms !important;
+  }
+  .ease-in {
+    --tw-ease: var(--ease-in) !important;
+    transition-timing-function: var(--ease-in) !important;
   }
   .ease-in-out {
     --tw-ease: var(--ease-in-out) !important;
@@ -2418,21 +2400,21 @@
 }
 @font-face {
   font-family: 'Aubette';
-  src: url('../font/Architype-Aubette.ttf') format('truetype');
+  src: url('../asset/font/Architype-Aubette.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'Ballmer';
-  src: url('../font/Architype-Ballmer.ttf') format('truetype');
+  src: url('../asset/font/Architype-Ballmer.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'Tschichold';
-  src: url('../font/Architype-Tschichold.ttf') format('truetype');
+  src: url('../asset/font/Architype-Tschichold.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
   font-display: swap;

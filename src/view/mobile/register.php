@@ -13,7 +13,8 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm
         mysqli_stmt_bind_param($stmt, "ss", $email, $hashed_password);
 
         if (mysqli_stmt_execute($stmt)) {
-            echo "<script>alert('Registration successful!'); showPage('login');</script>";
+            echo "<script>alert('Registration successful! Please log in.');</script>";
+            header('Location: ?page=login');
             exit();
         } else {
             echo "Error: " . mysqli_error($conn);
@@ -44,7 +45,7 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm
         <div class="flex items-center justify-end w-full">
             <button type="submit" class=" p-2 border border-primary rounded-full w-1/2 bg-primary"><p class="font-ballmer text-lg translate-y-1">sign up</p></button>
         </div>
-        <p class="opacity-75">Already have an account? <a href="#" onclick="showPage('login'); return false;" class="text-primary">Sign in</a></p>
+        <p class="opacity-75">Already have an account? <a href="?page=login" class="text-primary">Sign in</a></p>
         </div>
     </div>
 </form>

@@ -75,6 +75,6 @@
     </div>
 
     <div class="p-10 fixed bottom-0 bg-linear-to-t from-black to-black/0 h-[25%] w-full flex flex-col justify-end items-center z-20">
-        <button class="bg-primary max-w-2xl max-h-13 text-white p-2 rounded-full w-1/2" onclick="showPage('login'); return false;"><p class="font-ballmer text-2xl translate-y-1">next</p></button>
+        <button onclick=\"window.location.href='?page=login';\" class=\"bg-primary max-w-2xl max-h-13 text-white p-2 rounded-full w-1/2\"><p class=\"font-ballmer text-2xl translate-y-1\">next</p></button>
     </div>
 </div>

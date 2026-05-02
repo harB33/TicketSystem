@@ -4,7 +4,7 @@ $page = isset($_GET['page']) ? $_GET['page'] : 'login';
 ?>
 
 <mobile-view class="relative z-10 block lg:hidden w-full h-screen bg-transparent">
-    <div class="w-full h-screen flex flex-col">
+    <div class="w-full h-screen flex flex-col relative overflow-hidden">
         <?php
             switch($page) {
                 case 'register':
@@ -22,6 +22,11 @@ $page = isset($_GET['page']) ? $_GET['page'] : 'login';
                 default:
                     include __DIR__ . '/mobile/login.php';
                     break;
+            }
+            
+            // Only show navbar on specific pages if needed, but here we'll show it if it's not login/register
+            if (!in_array($page, ['login', 'register'])) {
+                include __DIR__ . '/mobile/navBar.html';
             }
         ?>
     </div>

@@ -37,4 +37,6 @@ if ($conn === null) {
     die("<h1 style='color: red;'>Error</h1><p>Connection failed. Please check server status and configuration.</p>");
 }
 
+mysqli_close($conn); 
+
 ?>

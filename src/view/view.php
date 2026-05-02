@@ -23,13 +23,20 @@
         </div>
     </pickanartist>
 
+    <!-- Pick an Arena Page -->
+    <pickanarena id="pickAnArenaPage" class="hidden">
+        <div class="w-full h-screen flex flex-col">
+            <?php include __DIR__ . '/mobile/pickanarena.php'; ?>
+        </div>
+    </pickanarena>
+
 </mobile-view>
 <desktop-view>
 
 </desktop-view>
 
 <style>
-    login, register, pickanartist {
+    login, register, pickanartist, pickanarena {
         position: absolute;
         top: 0;
         left: 0;
@@ -37,11 +44,11 @@
         height: 100%;
     }
     
-    login.hidden, register.hidden, pickanartist.hidden {
+    login.hidden, register.hidden, pickanartist.hidden, pickanarena.hidden {
         display: none !important;
     }
     
-    login.active, register.active, pickanartist.active {
+    login.active, register.active, pickanartist.active, pickanarena.active {
         display: flex !important;
     }
 </style>
@@ -51,6 +58,7 @@
         const loginPage = document.getElementById('loginPage');
         const registerPage = document.getElementById('registerPage');
         const pickAnArtistPage = document.getElementById('pickAnArtistPage');
+        const pickAnArenaPage = document.getElementById('pickAnArenaPage');
 
         if (pageName === 'login') {
             loginPage.classList.remove('hidden');
@@ -59,6 +67,8 @@
             registerPage.classList.remove('active');
             pickAnArtistPage.classList.add('hidden');
             pickAnArtistPage.classList.remove('active');
+            pickAnArenaPage.classList.add('hidden');
+            pickAnArenaPage.classList.remove('active');
             window.history.replaceState({ page: 'login' }, 'Login', window.location.pathname.split('/').slice(0, -1).join('/') + '/login');
         } else if (pageName === 'register') {
             registerPage.classList.remove('hidden');
@@ -67,6 +77,8 @@
             loginPage.classList.remove('active');
             pickAnArtistPage.classList.add('hidden');
             pickAnArtistPage.classList.remove('active');
+            pickAnArenaPage.classList.add('hidden');
+            pickAnArenaPage.classList.remove('active');
             window.history.replaceState({ page: 'register' }, 'Register', window.location.pathname.split('/').slice(0, -1).join('/') + '/register');
         } else if (pageName === 'pickAnArtist') {
             pickAnArtistPage.classList.remove('hidden');
@@ -75,7 +87,19 @@
             loginPage.classList.remove('active');
             registerPage.classList.add('hidden');
             registerPage.classList.remove('active');
+            pickAnArenaPage.classList.add('hidden');
+            pickAnArenaPage.classList.remove('active');
             window.history.replaceState({ page: 'pickAnArtist' }, 'Pick an Artist', window.location.pathname.split('/').slice(0, -1).join('/') + '/pick-an-artist');
+        } else if (pageName === 'pickAnArena') {
+            pickAnArenaPage.classList.remove('hidden');
+            pickAnArenaPage.classList.add('active');
+            loginPage.classList.add('hidden');
+            loginPage.classList.remove('active');
+            registerPage.classList.add('hidden');
+            registerPage.classList.remove('active');
+            pickAnArtistPage.classList.add('hidden');
+            pickAnArtistPage.classList.remove('active');
+            window.history.replaceState({ page: 'pickAnArena' }, 'Pick an Arena', window.location.pathname.split('/').slice(0, -1).join('/') + '/pick-an-arena');
         }
     }
     

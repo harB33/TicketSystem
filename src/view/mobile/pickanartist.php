@@ -72,7 +72,7 @@ if ($res) {
                         </div>
                     <?php endif; ?>
 
-                    <div class="absolute bottom-0 w-full bg-gradient-to-t from-black/90 to-transparent p-2 text-center">
+                    <div class="absolute bottom-0 w-full bg-linear-to-t from-black/90 to-transparent p-2 text-center">
                         <span class="text-white text-xs font-bold truncate block drop-shadow-md"><?= htmlspecialchars($artist['name']) ?></span>
                     </div>
 
@@ -91,7 +91,7 @@ if ($res) {
             <?php endforeach; ?>
         </div>
 
-        <div class="p-10 fixed bottom-0 bg-gradient-to-t from-black via-black/80 to-transparent h-[25%] w-full flex flex-col justify-end items-center z-20 pointer-events-none">
+        <div class="p-10 fixed bottom-0 bg-linear-to-t from-black via-black/80 to-transparent h-[25%] w-full flex flex-col justify-end items-center z-20 pointer-events-none">
             <button type="submit" name="submit_artists" class="bg-primary max-w-2xl max-h-13 text-white p-2 rounded-full w-1/2 pointer-events-auto hover:scale-105 active:scale-95 transition">
                 <p class="font-ballmer text-2xl translate-y-1">next</p>
             </button>

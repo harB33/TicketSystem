@@ -136,21 +136,18 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm
         // Weak (1-2)
         if (strength > 1) {
             bar1.style.backgroundColor = '#ff6b9d';
-            message.textContent = 'Weak Password';
             message.style.color = '#ff6b9d';
         }
         
         // Medium (3-4)
         if (strength > 3) {
             bar2.style.backgroundColor = '#ffde59';
-            message.textContent = 'Medium Password';
             message.style.color = '#ffde59';
         }
         
         // Strong (5+)
         if (strength > 4) {
             bar3.style.backgroundColor = '#7ed957';
-            message.textContent = 'Strong Password';
             message.style.color = '#7ed957';
         }
     }

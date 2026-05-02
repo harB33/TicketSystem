@@ -72,12 +72,15 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm
     <div class="flex flex-col items-center justify-start h-full w-[80%] gap-4">
         <input type="text" name="email" placeholder="email" class="px-6 py-4 rounded-full w-full text-lg font-bold text-[#525252] bg-[#919191]">
         <input type="password" name="password" id="passwordInput" placeholder="password" class="px-6 py-4 rounded-full w-full text-lg font-bold text-[#525252] bg-[#919191]">
-        <div class="grid grid-cols-3 gap-4 w-[94%]">
-            <div id="strengthBar1" class="h-full w-full flex items-center justify-center border border-primary rounded-full p-2 transition-all duration-200">
+        <div class="grid grid-cols-3 gap-4 w-[94%] h-5">
+            <div class="h-full w-full flex items-center justify-start border border-primary rounded-full p-0.5 transition-all duration-200">
+                <div id="strengthBar1" class="h-full w-0 bg-[#ff6b9d] rounded-full transition-all duration-500"></div>
             </div>
-            <div id="strengthBar2" class="h-full w-full flex items-center justify-center border border-[#ffde59] rounded-full p-2 transition-all duration-200">
+            <div class="h-full w-full flex items-center justify-start border border-[#ffde59] rounded-full p-0.5 transition-all duration-200">
+                <div id="strengthBar2" class="h-full w-0 bg-[#ffde59] rounded-full transition-all duration-500"></div>
             </div>
-            <div id="strengthBar3" class="h-full w-full flex items-center justify-center border border-[#7ed957] rounded-full p-2 transition-all duration-200">
+            <div class="h-full w-full flex items-center justify-start border border-[#7ed957] rounded-full p-0.5 transition-all duration-200">
+                <div id="strengthBar3" class="h-full w-0 bg-[#7ed957] rounded-full transition-all duration-500"></div>
             </div>
         </div>
         <p id="strengthMessage" class="text-center text-sm font-bold text-gray-500 absolute"></p>
@@ -123,9 +126,9 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm
         const strength = checkPasswordStrength(passwordInput.value);
         
         // Reset all bars
-        bar1.style.backgroundColor = '';
-        bar2.style.backgroundColor = '';
-        bar3.style.backgroundColor = '';
+        bar1.style.width = '0%';
+        bar2.style.width = '0%';
+        bar3.style.width = '0%';
         message.textContent = '';
         message.style.color = '';
         
@@ -135,18 +138,21 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm
         
         // Weak (1-2)
         if (strength > 1) {
+            bar1.style.width = '100%';
             bar1.style.backgroundColor = '#ff6b9d';
             message.style.color = '#ff6b9d';
         }
         
         // Medium (3-4)
         if (strength > 3) {
+            bar2.style.width = '100%';
             bar2.style.backgroundColor = '#ffde59';
             message.style.color = '#ffde59';
         }
         
         // Strong (5+)
         if (strength > 4) {
+            bar3.style.width = '100%';
             bar3.style.backgroundColor = '#7ed957';
             message.style.color = '#7ed957';
         }

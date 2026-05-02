@@ -77,7 +77,7 @@ $colors = [
                 <label class="relative block w-full rounded-3xl h-36 cursor-pointer select-none overflow-hidden border border-zinc-700/50 <?= $c['hover'] ?> bg-zinc-900/40 transition-colors duration-200">
                     <input type="checkbox" name="arenas[]" value="<?= $venue['venue_id'] ?>" class="sr-only peer" <?= $isChecked ?>>
                     
-                    <div class="absolute inset-0 bg-gradient-to-br <?= $c['from'] ?> to-zinc-900 opacity-0 peer-checked:opacity-100 peer-checked:border-2 <?= $c['border'] ?> rounded-3xl transition-all duration-300"></div>
+                    <div class="absolute inset-0 bg-linear-to-br <?= $c['from'] ?> to-zinc-900 opacity-0 peer-checked:opacity-100 peer-checked:border-2 <?= $c['border'] ?> rounded-3xl transition-all duration-300"></div>
                     
                     <div class="absolute top-6 right-6 w-8 h-8 rounded-full border-4 border-white bg-transparent <?= $c['bg'] ?> transition-colors duration-200 z-20"></div>
                     

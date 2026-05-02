@@ -212,11 +212,11 @@ if ($e_res) {
                         </div>
                         <div class="flex flex-col gap-2">
                             <label class="font-bold text-zinc-300 ml-2">Start Date & Time</label>
-                            <input type="datetime-local" name="event_start_datetime" id="event_start_datetime" required class="px-6 py-4 rounded-2xl w-full text-lg text-white font-bold bg-zinc-800 border border-zinc-700 focus:border-primary focus:outline-none transition [color-scheme:dark]">
+                            <input type="datetime-local" name="event_start_datetime" id="event_start_datetime" required class="px-6 py-4 rounded-2xl w-full text-lg text-white font-bold bg-zinc-800 border border-zinc-700 focus:border-primary focus:outline-none transition">
                         </div>
                         <div class="flex flex-col gap-2">
                             <label class="font-bold text-zinc-300 ml-2">End Date & Time</label>
-                            <input type="datetime-local" name="event_end_datetime" id="event_end_datetime" required class="px-6 py-4 rounded-2xl w-full text-lg text-white font-bold bg-zinc-800 border border-zinc-700 focus:border-primary focus:outline-none transition [color-scheme:dark]">
+                            <input type="datetime-local" name="event_end_datetime" id="event_end_datetime" required class="px-6 py-4 rounded-2xl w-full text-lg text-white font-bold bg-zinc-800 border border-zinc-700 focus:border-primary focus:outline-none transition">
                         </div>
                     </div>
 

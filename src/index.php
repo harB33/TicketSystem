@@ -132,7 +132,7 @@
             document.head.appendChild(style);
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
+        const initLoader = () => {
             const loader = document.getElementById('loading-screen');
             if (loader) {
                 const morphTime = isTransition ? 2500 : 6000;
@@ -217,13 +217,26 @@
                 setTimeout(callback, 600);
             };
 
-            // Intercept navigation links to trigger the loading screen before navigating
+            // Intercept navigation links and buttons to trigger the loading screen before navigating
             document.addEventListener('click', (e) => {
-                const link = e.target.closest('a');
-                if (link && link.href && (link.href.includes('?page=') || link.getAttribute('href').startsWith('?page='))) {
+                const element = e.target.closest('a, button');
+                if (!element) return;
+
+                let href = '';
+                if (element.tagName.toLowerCase() === 'a') {
+                    href = element.getAttribute('href') || '';
+                } else if (element.tagName.toLowerCase() === 'button' && element.getAttribute('onclick')) {
+                    const onclickStr = element.getAttribute('onclick');
+                    const match = onclickStr.match(/window\.location\.href\s*=\s*['"]([^'"]+)['"]/);
+                    if (match) {
+                        href = match[1];
+                    }
+                }
+
+                if (href && (href.includes('?page=') || href.startsWith('?page='))) {
                     e.preventDefault();
                     showLoaderAndThen(() => {
-                        window.location.href = link.href;
+                        window.location.href = href;
                     });
                 }
             });
@@ -240,7 +253,13 @@
                     form.submit();
                 });
             });
-        });
+        };
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initLoader);
+        } else {
+            initLoader();
+        }
     </script>
 </body>
 </html>

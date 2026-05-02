@@ -18,7 +18,14 @@ if (isset($_POST['email']) && isset($_POST['password'])) {
         header('Location: ?page=pickanartist');
         exit();
     } else {
-        echo "<script>alert('Invalid email or password!');</script>";
+        echo "<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const passwordInput = document.getElementById('password');
+            if (passwordInput) {
+                passwordInput.style.outline = '2px solid #ef4444';
+            }
+        });
+        </script>";
     }
 }
 ?>

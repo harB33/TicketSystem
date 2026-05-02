@@ -7,26 +7,114 @@
     </div>
     <div>
         <div class="p-4 flex flex-col gap-2">
-            <p class="font-tschichold text-white">ara coloseum</p>
+            <p class="font-tschichold text-white text-3xl font-bold">araneta coloseum</p>
             <div class="flex gap-4 z-10 w-full overflow-x-auto">
-                <div class="bg-gray-800 rounded-3xl h-36 w-2/3 flex-shrink-0"></div>
-                <div class="bg-gray-800 rounded-3xl h-36 w-2/3 flex-shrink-0"></div>
-                <div class="bg-gray-800 rounded-3xl h-36 w-2/3 flex-shrink-0"></div>
-        </div>
-        <div>
-            <p class="font-tschichold text-white">araneta coloseum</p>
-            <div class="flex gap-4 z-10 w-full overflow-x-auto">
-                <div class="bg-gray-800 rounded-3xl h-36 w-2/3 flex-shrink-0"></div>
-                <div class="bg-gray-800 rounded-3xl h-36 w-2/3 flex-shrink-0"></div>
-                <div class="bg-gray-800 rounded-3xl h-36 w-2/3 flex-shrink-0"></div>
+                <div class="bg-gray-800 rounded-xl h-36 w-2/3 shrink-0 relative">
+                    <div class="absolute inset-0 p-2 flex items-end justify-between text-pink-500 z-10">
+                        <div>
+                            <p class="text-white text-xl font-bold font-aubette">01 02 26</p>
+                            <p class="text-white text-xl font-aubette">YOASOBI</p>
+                        </div>
+                        <div class="p-3 bg-primary rounded-lg">
+                            <p class="text-white text-2xl font-bold font-aubette">04:22</p>
+                        </div>
+                    </div>
+                    <img src="" alt="" class="w-full h-full object-cover rounded-3xl">
+                </div>
+                <div class="bg-gray-800 rounded-xl h-36 w-2/3 shrink-0 relative">
+                    <div class="absolute inset-0 p-2 flex items-end justify-between text-pink-500 z-10">
+                        <div>
+                            <p class="text-white text-xl font-bold font-aubette">01 02 26</p>
+                            <p class="text-white text-xl font-aubette">YOASOBI</p>
+                        </div>
+                        <div class="p-3 bg-primary rounded-lg">
+                            <p class="text-white text-2xl font-bold font-aubette">04:22</p>
+                        </div>
+                    </div>
+                    <img src="" alt="" class="w-full h-full object-cover rounded-3xl">
+                </div>
+                <div class="bg-gray-800 rounded-xl h-36 w-2/3 shrink-0 relative">
+                    <div class="absolute inset-0 p-2 flex items-end justify-between text-pink-500 z-10">
+                        <div>
+                            <p class="text-white text-xl font-bold font-aubette">01 02 26</p>
+                            <p class="text-white text-xl font-aubette">YOASOBI</p>
+                        </div>
+                        <div class="p-3 bg-primary rounded-lg">
+                            <p class="text-white text-2xl font-bold font-aubette">04:22</p>
+                        </div>
+                    </div>
+                    <img src="" alt="" class="w-full h-full object-cover rounded-3xl">
+                </div>
             </div>
         </div>
-        <div>
-            <p class="font-tschichold text-white">araneta coloseum</p>
+        <div class="p-4 flex flex-col gap-2">
+            <p class="font-tschichold text-white text-3xl font-bold">mall of asia arena</p>
             <div class="flex gap-4 z-10 w-full overflow-x-auto">
-                <div class="bg-gray-800 rounded-3xl h-36 w-2/3 flex-shrink-0"></div>
-                <div class="bg-gray-800 rounded-3xl h-36 w-2/3 flex-shrink-0"></div>
-                <div class="bg-gray-800 rounded-3xl h-36 w-2/3 flex-shrink-0"></div>
+                <div class="bg-gray-800 rounded-xl h-36 w-2/3 shrink-0 relative">
+                    <div class="absolute inset-0 p-2 flex items-end justify-between text-pink-500 z-10">
+                        <div>
+                            <p class="text-white text-xl font-bold font-aubette">01 02 26</p>
+                            <p class="text-white text-xl font-aubette">YOASOBI</p>
+                        </div>
+                        <div class="p-3 bg-primary rounded-lg">
+                            <p class="text-white text-2xl font-bold font-aubette">04:22</p>
+                        </div>
+                    </div>
+                    <img src="" alt="" class="w-full h-full object-cover rounded-3xl">
+                </div>
+                <div class="bg-gray-800 rounded-xl h-36 w-2/3 shrink-0 relative">
+                    <div class="absolute inset-0 p-2 flex items-end justify-between text-pink-500 z-10">
+                        <div>
+                            <p class="text-white text-xl font-bold font-aubette">01 02 26</p>
+                            <p class="text-white text-xl font-aubette">YOASOBI</p>
+                        </div>
+                        <div class="p-3 bg-primary rounded-lg">
+                            <p class="text-white text-2xl font-bold font-aubette">04:22</p>
+                        </div>
+                    </div>
+                    <img src="" alt="" class="w-full h-full object-cover rounded-3xl">
+                </div>
+                <div class="bg-gray-800 rounded-xl h-36 w-2/3 shrink-0 relative">
+                    <div class="absolute inset-0 p-2 flex items-end justify-between text-pink-500 z-10">
+                        <div>
+                            <p class="text-white text-xl font-bold font-aubette">01 02 26</p>
+                            <p class="text-white text-xl font-aubette">YOASOBI</p>
+                        </div>
+                        <div class="p-3 bg-primary rounded-lg">
+                            <p class="text-white text-2xl font-bold font-aubette">04:22</p>
+                        </div>
+                    </div>
+                    <img src="" alt="" class="w-full h-full object-cover rounded-3xl">
+                </div>
+            </div>
+        </div>
+        <div class="p-4 flex flex-col gap-2">
+            <p class="font-tschichold text-white text-3xl font-bold">philippine arena</p>
+            <div class="flex gap-4 z-10 w-full overflow-x-auto">
+                <div class="bg-gray-800 rounded-xl h-36 w-2/3 shrink-0 relative">
+                    <div class="absolute inset-0 p-2 flex items-end justify-between text-pink-500 z-10">
+                        <div>
+                            <p class="text-white text-xl font-bold font-aubette">01 02 26</p>
+                            <p class="text-white text-xl font-aubette">YOASOBI</p>
+                        </div>
+                        <div class="p-3 bg-primary rounded-lg">
+                            <p class="text-white text-2xl font-bold font-aubette">04:22</p>
+                        </div>
+                    </div>
+                    <img src="" alt="" class="w-full h-full object-cover rounded-3xl">
+                </div>
+                <div class="bg-gray-800 rounded-xl h-36 w-2/3 shrink-0 relative">
+                    <div class="absolute inset-0 p-2 flex items-end justify-between text-pink-500 z-10">
+                        <div>
+                            <p class="text-white text-xl font-bold font-aubette">01 02 26</p>
+                            <p class="text-white text-xl font-aubette">YOASOBI</p>
+                        </div>
+                        <div class="p-3 bg-primary rounded-lg">
+                            <p class="text-white text-2xl font-bold font-aubette">04:22</p>
+                        </div>
+                    </div>
+                    <img src="" alt="" class="w-full h-full object-cover rounded-3xl">
+                </div>
             </div>
         </div>
     </div>

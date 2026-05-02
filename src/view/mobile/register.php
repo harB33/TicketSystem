@@ -1,3 +1,8 @@
+<?php
+include __DIR__ . '/../ticket_db/connectdb.php';
+
+?>
+
 <logo class="h-[50%] w-full flex flex-col items-center justify-center">
     <img src="./logo/register.png" alt="" class="w-2/3">
 </logo>

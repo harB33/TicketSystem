@@ -81,11 +81,11 @@ if ($res) {
                             $formatted_time = $date->format('H:i');
                         ?>
                         <div class="bg-zinc-900 rounded-[2.5rem] h-56 w-[80%] shrink-0 relative overflow-hidden border border-primary/20 shadow-[0_0_20px_rgba(255,102,153,0.1)]">
-                            <div class="absolute inset-0 p-6 flex items-end justify-between z-10 bg-gradient-to-t from-black via-black/40 to-transparent">
+                            <div class="absolute inset-0 p-6 flex items-end justify-between z-10 bg-liniear-to-t from-black via-black/40 to-transparent">
                                 <div>
                                     <p class="text-primary text-sm font-bold uppercase tracking-widest mb-1">Your Favorite</p>
                                     <p class="text-white text-2xl font-bold font-aubette leading-tight"><?= $formatted_date ?></p>
-                                    <p class="text-white text-xl font-aubette opacity-80 truncate max-w-[200px]"><?= htmlspecialchars($event['headliner_name'] ?? 'TBA') ?></p>
+                                    <p class="text-white text-xl font-aubette opacity-80 truncate max-w-50"><?= htmlspecialchars($event['headliner_name'] ?? 'TBA') ?></p>
                                 </div>
                                 <div class="p-4 bg-primary rounded-3xl shadow-xl shadow-primary/30">
                                     <p class="text-white text-3xl font-bold font-aubette"><?= $formatted_time ?></p>
@@ -123,10 +123,10 @@ if ($res) {
                                 $formatted_time = $date->format('H:i');
                             ?>
                             <div class="bg-zinc-900 rounded-3xl h-40 w-[70%] shrink-0 relative overflow-hidden border border-white/5">
-                                <div class="absolute inset-0 p-4 flex items-end justify-between z-10 bg-gradient-to-t from-black/90 via-black/20 to-transparent">
+                                <div class="absolute inset-0 p-4 flex items-end justify-between z-10 bg-linear-to-t from-black/90 via-black/20 to-transparent">
                                     <div>
                                         <p class="text-white text-lg font-bold font-aubette"><?= $formatted_date ?></p>
-                                        <p class="text-white text-lg font-aubette opacity-70 truncate max-w-[140px]"><?= htmlspecialchars($event['headliner_name'] ?? 'TBA') ?></p>
+                                        <p class="text-white text-lg font-aubette opacity-70 truncate max-w-35"><?= htmlspecialchars($event['headliner_name'] ?? 'TBA') ?></p>
                                     </div>
                                     <div class="p-2.5 bg-zinc-800 border border-white/10 rounded-2xl">
                                         <p class="text-white text-xl font-bold font-aubette"><?= $formatted_time ?></p>

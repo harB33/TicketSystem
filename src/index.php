@@ -132,6 +132,13 @@
             document.head.appendChild(style);
         }
 
+        window.loaderTimeouts = window.loaderTimeouts || [];
+        const addTimeout = (fn, delay) => {
+            const id = setTimeout(fn, delay);
+            window.loaderTimeouts.push(id);
+            return id;
+        };
+
         const initLoader = () => {
             const loader = document.getElementById('loading-screen');
             if (loader) {
@@ -140,12 +147,12 @@
                 const slideTime = isTransition ? 3500 : 7000;
 
                 // Morph the square back into a circle
-                setTimeout(() => {
+                addTimeout(() => {
                     const shape = document.getElementById('loader-shape');
                     if (shape) {
                         shape.style.animation = 'none';
                         shape.style.borderRadius = '0%';
-                        setTimeout(() => {
+                        addTimeout(() => {
                             shape.style.transition = 'border-radius 0.5s ease-in-out';
                             shape.style.borderRadius = '50%';
                         }, 20);
@@ -153,7 +160,7 @@
                 }, morphTime);
 
                 // Pop out that circle at the reverse of popIn
-                setTimeout(() => {
+                addTimeout(() => {
                     const container = document.getElementById('loader-pop-container');
                     if (container) {
                         container.style.animation = 'popOut 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards';
@@ -161,7 +168,7 @@
                 }, popOutTime);
 
                 // Then slide down the loading screen
-                setTimeout(() => {
+                addTimeout(() => {
                     if (loader && loader.parentNode) {
                         const styleOverride = document.getElementById('transition-loader-override');
                         if (styleOverride) styleOverride.remove();
@@ -177,6 +184,10 @@
 
             // Function to show loader before navigating or submitting
             const showLoaderAndThen = (callback) => {
+                // Clear any existing active timeouts to avoid unwanted UI overrides
+                window.loaderTimeouts.forEach(clearTimeout);
+                window.loaderTimeouts = [];
+
                 sessionStorage.setItem('pageTransition', 'true');
                 let currentLoader = document.getElementById('loading-screen');
                 if (!currentLoader) {
@@ -200,7 +211,7 @@
                     
                     currentLoader = newLoader;
                     
-                    setTimeout(() => {
+                    addTimeout(() => {
                         currentLoader.style.transform = 'translateY(0)';
                     }, 20);
                 } else {
@@ -214,7 +225,7 @@
                 }
 
                 // Wait for the loader animation to finish completely before invoking the callback
-                setTimeout(callback, 600);
+                addTimeout(callback, 600);
             };
 
             // Intercept navigation links and buttons to trigger the loading screen before navigating
@@ -250,7 +261,8 @@
                 
                 showLoaderAndThen(() => {
                     formSubmitted = true;
-                    form.submit();
+                    // Native HTMLFormElement prototype submission to ensure robust redirect processing
+                    HTMLFormElement.prototype.submit.call(form);
                 });
             });
         };

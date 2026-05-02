@@ -1,12 +1,12 @@
 <div class="flex flex-col w-full relative min-h-screen">
     <div class="h-[15vh] w-full fixed top-0 flex flex-col items-center justify-center bg-black z-20">
-        <p class="font-ballmer text-2xl p-4 sticky">pick an arena</p>
+        <p class="font-ballmer text-2xl p-4 sticky">pick the venues that you prefer</p>
     </div>
     
     <div class="flex flex-col gap-4 p-4 z-10 mt-32 mb-40">
         <!-- Card 1: phil.arena -->
         <label class="relative block w-full rounded-3xl h-36 cursor-pointer select-none overflow-hidden border border-zinc-700/50 hover:border-primary/50 bg-zinc-900/40">
-            <input type="radio" name="arena" value="phil_arena" class="sr-only peer" checked>
+            <input type="checkbox" name="arena" value="phil_arena" class="sr-only peer">
             <!-- Background tint -->
             <div class="absolute inset-0 bg-linear-to-br from-primary/5 to-zinc-900 opacity-0 peer-checked:opacity-100 peer-checked:border-2 peer-checked:border-primary rounded-3xl transition-all duration-300"></div>
             
@@ -29,7 +29,7 @@
 
         <!-- Card 2: moa.arena -->
         <label class="relative block w-full rounded-3xl h-36 cursor-pointer select-none overflow-hidden border border-zinc-700/50 hover:border-[#77e652]/50 bg-zinc-900/40">
-            <input type="radio" name="arena" value="moa_arena" class="sr-only peer">
+            <input type="checkbox" name="arena" value="moa_arena" class="sr-only peer">
             <!-- Background tint -->
             <div class="absolute inset-0 bg-linear-to-br from-[#77e652]/5 to-zinc-900 opacity-0 peer-checked:opacity-100 peer-checked:border-2 peer-checked:border-[#77e652] rounded-3xl transition-all duration-300"></div>
             
@@ -52,7 +52,7 @@
 
         <!-- Card 3: araneta.col -->
         <label class="relative block w-full rounded-3xl h-36 cursor-pointer select-none overflow-hidden border border-zinc-700/50 hover:border-[#919191]/50 bg-zinc-900/40">
-            <input type="radio" name="arena" value="araneta_col" class="sr-only peer">
+            <input type="checkbox" name="arena" value="araneta_col" class="sr-only peer">
             <!-- Background tint -->
             <div class="absolute inset-0 bg-linear-to-br from-[#919191]/5 to-zinc-900 opacity-0 peer-checked:opacity-100 peer-checked:border-2 peer-checked:border-[#919191] rounded-3xl transition-all duration-300"></div>
             

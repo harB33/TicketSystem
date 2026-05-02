@@ -16,6 +16,9 @@ $page = isset($_GET['page']) ? $_GET['page'] : 'login';
                 case 'pickanarena':
                     include __DIR__ . '/mobile/pickanarena.php';
                     break;
+                case 'featured':
+                    include __DIR__ . '/mobile/featured.php';
+                    break;
                 default:
                     include __DIR__ . '/mobile/login.php';
                     break;

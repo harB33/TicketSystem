@@ -45,10 +45,18 @@
     font-style: normal;
     font-display: swap;
 }
+@font-face {
+    font-family: 'Tschichold';
+    src: url('../font/Architype-Tschichold.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
 
 @theme {
     --font-aubette: "Aubette", sans-serif;
     --font-ballmer: "Ballmer", sans-serif;
+    --font-tschichold: "Tschichold", sans-serif;
     --font-sans: "Poppins", sans-serif;
     --font-poppins: "Poppins", sans-serif;
 }

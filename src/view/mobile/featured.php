@@ -3,7 +3,7 @@
         <img src="./logo/featured.png" alt="" class="w-2/3">
     </div>
     <div>
-        <p id="live-timestamp" class="text-white text-5xl font-aubette text-center"><?php date_default_timezone_set('Asia/Singapore'); echo date("H:i:s"); ?></p>
+        <p id="live-timestamp" class="text-white text-5xl font-aubette text-center"><?php echo date("m d y"); ?></p>
     </div>
     <div>
         <div class="p-4 flex flex-col gap-2">
@@ -122,12 +122,12 @@
 <script>
     function updateTimestamp() {
         const now = new Date();
-        // const year = now.getFullYear();
-        // const month = String(now.getMonth() + 1).padStart(2, '0');
-        // const day = String(now.getDate()).padStart(2, '0');
-        const hours = String(now.getHours()).padStart(2, '0');
-        const minutes = String(now.getMinutes()).padStart(2, '0');
-        const seconds = String(now.getSeconds()).padStart(2, '0');
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const day = String(now.getDate()).padStart(2, '0');
+        // const hours = String(now.getHours()).padStart(2, '0');
+        // const minutes = String(now.getMinutes()).padStart(2, '0');
+        // const seconds = String(now.getSeconds()).padStart(2, '0');
         
         document.getElementById('live-timestamp').textContent = `${hours} ${minutes} ${seconds}`;
     }

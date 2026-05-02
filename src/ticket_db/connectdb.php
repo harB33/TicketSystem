@@ -1,11 +1,15 @@
 <?php
-$servername = "localhost";
+$servername = "127.0.0.1";
 $username = "root";
 $password = "";
 $dbname = "staged_db";
+$port = 3306;
+$alternative_port = 3307;
 
-if ($conn = mysqli_connect($servername, $username, $password, $dbname)) {
-} else {
-    die("Connection failed: " . mysqli_connect_error());
+try {
+    $conn = mysqli_connect($servername, $username, $password, $dbname, $port);
+} catch (Exception $e) {
+    $conn = mysqli_connect($servername, $username, $password, $dbname, $alternative_port);
 }
+
 ?>

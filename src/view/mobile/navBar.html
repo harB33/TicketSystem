@@ -20,7 +20,6 @@
         transform: scale(0);
         opacity: 0;
         transform-origin: right center;
-        background: white;
     }
 
     /* SVG draws the border + divider lines + inner circle ring */
@@ -211,7 +210,7 @@
         -->
         <svg class="pie-svg" viewBox="0 0 140 280" xmlns="http://www.w3.org/2000/svg">
             <!-- Outer half-circle fill + border -->
-            <path d="M 140 0 A 140 140 0 0 0 140 280 Z" fill="white" />
+            <path d="M 140 0 A 140 140 0 0 0 140 280 L 140 192 A 52 52 0 0 1 140 88 Z" fill="white" stroke="none" />
 
             <!-- Donut-wedge hover highlight paths -->
             <!-- Top slice -->
@@ -234,7 +233,7 @@
             <path d="M 140 0 A 140 140 0 0 0 140 280 Z" fill="none" />
 
             <!-- Inner circle ring -->
-            <circle cx="140" cy="140" r="52" fill="white" />
+            <circle cx="140" cy="140" r="52" fill="none" />
         </svg>
 
         <!-- Profile icon -->

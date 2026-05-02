@@ -5,18 +5,18 @@
     
     <div class="flex flex-col gap-4 p-4 z-10 mt-32 mb-40">
         <!-- Card 1: phil.arena -->
-        <label class="relative block w-full rounded-3xl h-36 cursor-pointer select-none overflow-hidden border border-zinc-700/50 hover:border-pink-500/50 bg-zinc-900/40">
+        <label class="relative block w-full rounded-3xl h-36 cursor-pointer select-none overflow-hidden border border-zinc-700/50 hover:border-primary/50 bg-zinc-900/40">
             <input type="radio" name="arena" value="phil_arena" class="sr-only peer" checked>
             <!-- Background tint -->
-            <div class="absolute inset-0 bg-linear-to-br from-pink-500/5 to-zinc-900 opacity-0 peer-checked:opacity-100 peer-checked:border-2 peer-checked:border-pink-500 rounded-3xl transition-all duration-300"></div>
+            <div class="absolute inset-0 bg-linear-to-br from-primary/5 to-zinc-900 opacity-0 peer-checked:opacity-100 peer-checked:border-2 peer-checked:border-primary rounded-3xl transition-all duration-300"></div>
             
             <!-- Selection circle on top right -->
-            <div class="absolute top-6 right-6 w-8 h-8 rounded-full border-4 border-white bg-transparent peer-checked:bg-pink-500 transition-colors duration-200 z-20"></div>
+            <div class="absolute top-6 right-6 w-8 h-8 rounded-full border-4 border-white bg-transparent peer-checked:bg-primary transition-colors duration-200 z-20"></div>
 
             <!-- Card Content -->
             <div class="relative flex flex-col justify-between h-full p-6 z-10">
                 <!-- SVG / Ticket Icon -->
-                <div class="flex items-center gap-2 text-pink-500">
+                <div class="flex items-center gap-2 text-primary">
                     <div class="w-1.5 h-6 bg-current"></div>
                     <svg class="w-11 h-6" viewBox="0 0 44 24" fill="currentColor">
                         <path d="M0 0H32A12 12 0 0 0 32 24H0Z" />
@@ -28,18 +28,18 @@
         </label>
 
         <!-- Card 2: moa.arena -->
-        <label class="relative block w-full rounded-3xl h-36 cursor-pointer select-none overflow-hidden border border-zinc-700/50 hover:border-green-400/50 bg-zinc-900/40">
+        <label class="relative block w-full rounded-3xl h-36 cursor-pointer select-none overflow-hidden border border-zinc-700/50 hover:border-[#77e652]/50 bg-zinc-900/40">
             <input type="radio" name="arena" value="moa_arena" class="sr-only peer">
             <!-- Background tint -->
-            <div class="absolute inset-0 bg-linear-to-br from-green-500/5 to-zinc-900 opacity-0 peer-checked:opacity-100 peer-checked:border-2 peer-checked:border-green-400 rounded-3xl transition-all duration-300"></div>
+            <div class="absolute inset-0 bg-linear-to-br from-[#77e652]/5 to-zinc-900 opacity-0 peer-checked:opacity-100 peer-checked:border-2 peer-checked:border-[#77e652] rounded-3xl transition-all duration-300"></div>
             
             <!-- Selection circle on top right -->
-            <div class="absolute top-6 right-6 w-8 h-8 rounded-full border-4 border-white bg-transparent peer-checked:bg-green-400 transition-colors duration-200 z-20"></div>
+            <div class="absolute top-6 right-6 w-8 h-8 rounded-full border-4 border-white bg-transparent peer-checked:bg-[#77e652] transition-colors duration-200 z-20"></div>
 
             <!-- Card Content -->
             <div class="relative flex flex-col justify-between h-full p-6 z-10">
                 <!-- SVG / Ticket Icon -->
-                <div class="flex items-center gap-2 text-green-400">
+                <div class="flex items-center gap-2 text-[#77e652]">
                     <div class="w-1.5 h-6 bg-current"></div>
                     <svg class="w-11 h-6" viewBox="0 0 44 24" fill="currentColor">
                         <path d="M0 0H32A12 12 0 0 0 32 24H0Z" />
@@ -51,18 +51,18 @@
         </label>
 
         <!-- Card 3: araneta.col -->
-        <label class="relative block w-full rounded-3xl h-36 cursor-pointer select-none overflow-hidden border border-zinc-700/50 hover:border-white/50 bg-zinc-900/40">
+        <label class="relative block w-full rounded-3xl h-36 cursor-pointer select-none overflow-hidden border border-zinc-700/50 hover:border-[#919191]/50 bg-zinc-900/40">
             <input type="radio" name="arena" value="araneta_col" class="sr-only peer">
             <!-- Background tint -->
-            <div class="absolute inset-0 bg-linear-to-br from-white/5 to-zinc-900 opacity-0 peer-checked:opacity-100 peer-checked:border-2 peer-checked:border-white rounded-3xl transition-all duration-300"></div>
+            <div class="absolute inset-0 bg-linear-to-br from-[#919191]/5 to-zinc-900 opacity-0 peer-checked:opacity-100 peer-checked:border-2 peer-checked:border-[#919191] rounded-3xl transition-all duration-300"></div>
             
             <!-- Selection circle on top right -->
-            <div class="absolute top-6 right-6 w-8 h-8 rounded-full border-4 border-white bg-transparent peer-checked:bg-white transition-colors duration-200 z-20"></div>
+            <div class="absolute top-6 right-6 w-8 h-8 rounded-full border-4 border-white bg-transparent peer-checked:bg-[#919191] transition-colors duration-200 z-20"></div>
 
             <!-- Card Content -->
             <div class="relative flex flex-col justify-between h-full p-6 z-10">
                 <!-- SVG / Ticket Icon -->
-                <div class="flex items-center gap-2 text-white">
+                <div class="flex items-center gap-2 text-[#919191]">
                     <div class="w-1.5 h-6 bg-current"></div>
                     <svg class="w-11 h-6" viewBox="0 0 44 24" fill="currentColor">
                         <path d="M0 0H32A12 12 0 0 0 32 24H0Z" />

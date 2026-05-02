@@ -10,6 +10,7 @@
     --color-amber-50: oklch(98.7% 0.022 95.277);
     --color-green-400: oklch(79.2% 0.209 151.711);
     --color-green-500: oklch(72.3% 0.219 149.579);
+    --color-pink-50: oklch(97.1% 0.014 343.198);
     --color-pink-500: oklch(65.6% 0.241 354.308);
     --color-zinc-700: oklch(37% 0.013 285.805);
     --color-zinc-900: oklch(21% 0.006 285.885);
@@ -2077,6 +2078,14 @@
     }
     background-image: linear-gradient(var(--tw-gradient-stops)) !important;
   }
+  .from-\[\#77e652\]\/5 {
+    --tw-gradient-from: color-mix(in oklab, #77e652 5%, transparent) !important;
+    --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position)) !important;
+  }
+  .from-\[\#919191\]\/5 {
+    --tw-gradient-from: color-mix(in oklab, #919191 5%, transparent) !important;
+    --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position)) !important;
+  }
   .from-black {
     --tw-gradient-from: var(--color-black) !important;
     --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position)) !important;
@@ -2100,6 +2109,17 @@
     --tw-gradient-from: color-mix(in srgb, oklch(65.6% 0.241 354.308) 5%, transparent) !important;
     @supports (color: color-mix(in lab, red, red)) {
       --tw-gradient-from: color-mix(in oklab, var(--color-pink-500) 5%, transparent) !important;
+    }
+    --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position)) !important;
+  }
+  .from-primary {
+    --tw-gradient-from: var(--color-primary) !important;
+    --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position)) !important;
+  }
+  .from-primary\/5 {
+    --tw-gradient-from: var(--color-primary) !important;
+    @supports (color: color-mix(in lab, red, red)) {
+      --tw-gradient-from: color-mix(in oklab, var(--color-primary) 5%, transparent) !important;
     }
     --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position)) !important;
   }
@@ -2194,11 +2214,17 @@
       --input-color: var(--color-primary) !important;
     }
   }
+  .text-\[\#77e652\] {
+    color: #77e652 !important;
+  }
   .text-\[\#5774e9\] {
     color: #5774e9 !important;
   }
   .text-\[\#525252\] {
     color: #525252 !important;
+  }
+  .text-\[\#919191\] {
+    color: #919191 !important;
   }
   .text-green-400 {
     color: var(--color-green-400) !important;
@@ -2283,6 +2309,16 @@
       border-width: 2px !important;
     }
   }
+  .peer-checked\:border-\[\#77e652\] {
+    &:is(:where(.peer):checked ~ *) {
+      border-color: #77e652 !important;
+    }
+  }
+  .peer-checked\:border-\[\#919191\] {
+    &:is(:where(.peer):checked ~ *) {
+      border-color: #919191 !important;
+    }
+  }
   .peer-checked\:border-green-400 {
     &:is(:where(.peer):checked ~ *) {
       border-color: var(--color-green-400) !important;
@@ -2293,9 +2329,24 @@
       border-color: var(--color-pink-500) !important;
     }
   }
+  .peer-checked\:border-primary {
+    &:is(:where(.peer):checked ~ *) {
+      border-color: var(--color-primary) !important;
+    }
+  }
   .peer-checked\:border-white {
     &:is(:where(.peer):checked ~ *) {
       border-color: var(--color-white) !important;
+    }
+  }
+  .peer-checked\:bg-\[\#77e652\] {
+    &:is(:where(.peer):checked ~ *) {
+      background-color: #77e652 !important;
+    }
+  }
+  .peer-checked\:bg-\[\#919191\] {
+    &:is(:where(.peer):checked ~ *) {
+      background-color: #919191 !important;
     }
   }
   .peer-checked\:bg-green-400 {
@@ -2306,6 +2357,11 @@
   .peer-checked\:bg-pink-500 {
     &:is(:where(.peer):checked ~ *) {
       background-color: var(--color-pink-500) !important;
+    }
+  }
+  .peer-checked\:bg-primary {
+    &:is(:where(.peer):checked ~ *) {
+      background-color: var(--color-primary) !important;
     }
   }
   .peer-checked\:bg-white {
@@ -2323,6 +2379,27 @@
       opacity: 100% !important;
     }
   }
+  .hover\:border-\[\#77e652\]\/50 {
+    &:hover {
+      @media (hover: hover) {
+        border-color: color-mix(in oklab, #77e652 50%, transparent) !important;
+      }
+    }
+  }
+  .hover\:border-\[\#919191\]\/50 {
+    &:hover {
+      @media (hover: hover) {
+        border-color: color-mix(in oklab, #919191 50%, transparent) !important;
+      }
+    }
+  }
+  .hover\:border-\[white\]\/50 {
+    &:hover {
+      @media (hover: hover) {
+        border-color: color-mix(in oklab, white 50%, transparent) !important;
+      }
+    }
+  }
   .hover\:border-green-400\/50 {
     &:hover {
       @media (hover: hover) {
@@ -2333,12 +2410,39 @@
       }
     }
   }
+  .hover\:border-pink-50\/50 {
+    &:hover {
+      @media (hover: hover) {
+        border-color: color-mix(in srgb, oklch(97.1% 0.014 343.198) 50%, transparent) !important;
+        @supports (color: color-mix(in lab, red, red)) {
+          border-color: color-mix(in oklab, var(--color-pink-50) 50%, transparent) !important;
+        }
+      }
+    }
+  }
+  .hover\:border-pink-500 {
+    &:hover {
+      @media (hover: hover) {
+        border-color: var(--color-pink-500) !important;
+      }
+    }
+  }
   .hover\:border-pink-500\/50 {
     &:hover {
       @media (hover: hover) {
         border-color: color-mix(in srgb, oklch(65.6% 0.241 354.308) 50%, transparent) !important;
         @supports (color: color-mix(in lab, red, red)) {
           border-color: color-mix(in oklab, var(--color-pink-500) 50%, transparent) !important;
+        }
+      }
+    }
+  }
+  .hover\:border-primary\/50 {
+    &:hover {
+      @media (hover: hover) {
+        border-color: var(--color-primary) !important;
+        @supports (color: color-mix(in lab, red, red)) {
+          border-color: color-mix(in oklab, var(--color-primary) 50%, transparent) !important;
         }
       }
     }

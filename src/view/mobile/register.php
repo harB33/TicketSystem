@@ -80,7 +80,7 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm
             <div id="strengthBar3" class="h-full w-full flex items-center justify-center border border-[#7ed957] rounded-full p-2 transition-all duration-200">
             </div>
         </div>
-        <p id="strengthMessage" class="text-center text-sm font-bold text-gray-500"></p>
+        <p id="strengthMessage" class="text-center text-sm font-bold text-gray-500 absolute"></p>
         <input type="password" name="confirm_password" placeholder="confirm password" class="px-6 py-4 rounded-full w-full text-lg font-bold text-[#525252] bg-[#919191]">
         <div class="flex items-center justify-end w-full">
             <button type="submit" class=" p-2 border border-primary rounded-full w-1/2 bg-primary"><p class="font-ballmer text-lg translate-y-1">sign up</p></button>

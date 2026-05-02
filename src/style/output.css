@@ -1832,6 +1832,9 @@
   .aspect-square {
     aspect-ratio: 1 / 1 !important;
   }
+  .h-5 {
+    height: calc(var(--spacing) * 5) !important;
+  }
   .h-6 {
     height: calc(var(--spacing) * 6) !important;
   }
@@ -1864,6 +1867,9 @@
   }
   .min-h-screen {
     min-height: 100vh !important;
+  }
+  .w-0 {
+    width: calc(var(--spacing) * 0) !important;
   }
   .w-1 {
     width: calc(var(--spacing) * 1) !important;
@@ -2066,8 +2072,17 @@
       border-color: color-mix(in oklab, var(--color-zinc-700) 50%, transparent) !important;
     }
   }
+  .bg-\[\#7ed957\] {
+    background-color: #7ed957 !important;
+  }
   .bg-\[\#919191\] {
     background-color: #919191 !important;
+  }
+  .bg-\[\#ff6b9d\] {
+    background-color: #ff6b9d !important;
+  }
+  .bg-\[\#ffde59\] {
+    background-color: #ffde59 !important;
   }
   .bg-black {
     background-color: var(--color-black) !important;
@@ -2165,6 +2180,12 @@
   }
   .object-cover {
     object-fit: cover !important;
+  }
+  .p-0 {
+    padding: calc(var(--spacing) * 0) !important;
+  }
+  .p-0\.5 {
+    padding: calc(var(--spacing) * 0.5) !important;
   }
   .p-2 {
     padding: calc(var(--spacing) * 2) !important;
@@ -2330,6 +2351,10 @@
   .duration-300 {
     --tw-duration: 300ms !important;
     transition-duration: 300ms !important;
+  }
+  .duration-500 {
+    --tw-duration: 500ms !important;
+    transition-duration: 500ms !important;
   }
   .ease-in {
     --tw-ease: var(--ease-in) !important;

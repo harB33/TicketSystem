@@ -1,3 +1,4 @@
+<?php include './view/mobile/navbar.html'; ?>
 <div class="flex flex-col w-full relative min-h-screen">
     <div class="h-[15vh] w-full flex flex-col items-center justify-center bg-black z-20">
         <img src="./asset/logo/featured.png" alt="" class="w-2/3">

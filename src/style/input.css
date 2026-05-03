@@ -64,6 +64,15 @@
     html, body, button, input, select, textarea, h1, h2, h3, h4, h5, h6, p, a, span {
         font-family: var(--font-poppins);
     }
+    .font-aubette{
+        @apply uppercase;
+    };
+    .font-ballmer{
+        @apply lowercase;
+    };
+    .font-tschichold{
+        @apply lowercase;
+    };
 }
 
 .primary-color {

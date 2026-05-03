@@ -44,7 +44,7 @@ $pool_artists = array_slice($all_artists, 15);
 
 <div class="flex flex-col w-full h-full relative overflow-y-auto custom-scrollbar-v">
 
-    <form method="POST" action="?page=featured" class="w-full flex flex-col h-full relative">
+    <form method="POST" action="?page=pickanarena" class="w-full flex flex-col h-full relative">
         
         <div class="h-[15vh] w-full sticky top-0 flex flex-col items-center justify-center bg-black z-30 shrink-0">
             <p class="font-ballmer text-2xl p-4 text-white text-center">pick three or more artist that you listen to</p>

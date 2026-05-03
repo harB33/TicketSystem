@@ -80,7 +80,7 @@ if ($res) {
                             $formatted_date = $date->format('m d y');
                             $formatted_time = $date->format('H:i');
                         ?>
-                        <div class="bg-zinc-900 rounded-[2.5rem] h-56 w-[80%] shrink-0 relative overflow-hidden border border-primary/20 shadow-[0_0_20px_rgba(255,102,153,0.1)]">
+                        <a href="?page=event&id=<?= $event['event_id'] ?>" class="bg-zinc-900 rounded-[2.5rem] h-56 w-[80%] shrink-0 relative overflow-hidden border border-primary/20 block">
                             <div class="absolute inset-0 p-6 flex items-end justify-between z-10 bg-liniear-to-t from-black via-black/40 to-transparent">
                                 <div>
                                     <p class="text-primary text-sm font-bold uppercase tracking-widest mb-1">Your Favorite</p>
@@ -98,7 +98,7 @@ if ($res) {
                                     <svg class="w-16 h-16 text-zinc-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"></path></svg>
                                 </div>
                             <?php endif; ?>
-                        </div>
+                        </a>
                     <?php endforeach; ?>
                 </div>
             </div>
@@ -122,8 +122,7 @@ if ($res) {
                                 $formatted_date = $date->format('m d y');
                                 $formatted_time = $date->format('H:i');
                             ?>
-                            <div class="bg-zinc-900 rounded-3xl h-40 w-[70%] shrink-0 relative overflow-hidden border border-white/5">
-                                <div class="absolute inset-0 p-4 flex items-end justify-between z-10 bg-linear-to-t from-black/90 via-black/20 to-transparent">
+                                <a href="?page=event&id=<?= $event['event_id'] ?>" class="bg-zinc-900 rounded-3xl h-40 w-[70%] shrink-0 relative overflow-hidden border border-white/5 block">                                <div class="absolute inset-0 p-4 flex items-end justify-between z-10 bg-linear-to-t from-black/90 via-black/20 to-transparent">
                                     <div>
                                         <p class="text-white text-lg font-bold font-aubette"><?= $formatted_date ?></p>
                                         <p class="text-white text-lg font-aubette opacity-70 truncate max-w-35"><?= htmlspecialchars($event['headliner_name'] ?? 'TBA') ?></p>
@@ -131,7 +130,7 @@ if ($res) {
                                     <div class="p-2.5 bg-zinc-800 border border-white/10 rounded-2xl">
                                         <p class="text-white text-xl font-bold font-aubette"><?= $formatted_time ?></p>
                                     </div>
-                                </div>
+                                </a>
                                 <?php if (!empty($event['headliner_image'])): ?>
                                     <img src="<?= htmlspecialchars($event['headliner_image']) ?>" class="w-full h-full object-cover">
                                 <?php else: ?>

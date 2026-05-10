@@ -41,7 +41,7 @@ $page = isset($_GET['page']) ? $_GET['page'] : 'login';
     </div>
 </mobile-view>
 
-<desktop-view class="relative z-10 block sm:hidden w-full h-screen bg-transparent">
+<desktop-view class="relative z-10 hidden lg:block w-full h-screen bg-transparent">
 <div class="w-full h-screen flex flex-col relative overflow-hidden">
         <?php
             switch($page) {

@@ -50,8 +50,10 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm
             mysqli_stmt_bind_param($stmt, "ss", $email, $hashed_password);
 
             if (mysqli_stmt_execute($stmt)) {
-                echo "<script>alert('Registration successful! Please log in.');</script>";
-                header('Location: ?page=login');
+                echo "<script>
+                    alert('Registration successful! Please log in.');
+                    window.location.href = '?page=login';
+                </script>";
                 exit();
             } else {
                 echo "Error: " . mysqli_error($conn);
@@ -83,7 +85,7 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm
                 <div id="strengthBar3" class="rounded-full" style="height: 100%; width: 0%; background-color: #7ed957; transition: width 0.4s ease-in-out;"></div>
             </div>
         </div>
-        <p id="strengthMessage" class="text-center text-sm font-bold text-gray-500 absolute"></p>
+        <p id="strengthMessage" class="text-center text-sm font-bold text-gray-500 absolute hidden"></p>
         <input type="password" name="confirm_password" placeholder="confirm password" class="px-6 py-4 rounded-full w-full text-lg font-bold text-[#525252] bg-[#919191]">
         <div class="flex items-center justify-end w-full">
             <button type="submit" class=" p-2 border border-primary rounded-full w-1/2 bg-primary"><p class="font-ballmer text-lg translate-y-1">sign up</p></button>

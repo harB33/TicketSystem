@@ -1,3 +1,7 @@
+<?php 
+ob_start(); 
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="en" class="min-h-screen" data-theme="mytheme" >
 <head>

@@ -5,26 +5,28 @@ $passwordStrength = 0;
 $strengthMessage = '';
 $showStrengthBars = false;
 
-function checkPasswordStrength($password) {
-    $strength = 0;
-    
-    // Check length
-    if (strlen($password) >= 8) $strength++;
-    if (strlen($password) >= 12) $strength++;
-    
-    // Check for lowercase
-    if (preg_match('/[a-z]/', $password)) $strength++;
-    
-    // Check for uppercase
-    if (preg_match('/[A-Z]/', $password)) $strength++;
-    
-    // Check for numbers
-    if (preg_match('/[0-9]/', $password)) $strength++;
-    
-    // Check for special characters
-    if (preg_match('/[!@#$%^&*()_+\-=\[\]{};\':"\\\\|,.<>\/?]/', $password)) $strength++;
-    
-    return $strength;
+if (!function_exists('checkPasswordStrength')) {
+    function checkPasswordStrength($password) {
+        $strength = 0;
+        
+        // Check length
+        if (strlen($password) >= 8) $strength++;
+        if (strlen($password) >= 12) $strength++;
+        
+        // Check for lowercase
+        if (preg_match('/[a-z]/', $password)) $strength++;
+        
+        // Check for uppercase
+        if (preg_match('/[A-Z]/', $password)) $strength++;
+        
+        // Check for numbers
+        if (preg_match('/[0-9]/', $password)) $strength++;
+        
+        // Check for special characters
+        if (preg_match('/[!@#$%^&*()_+\-=\[\]{};\':"\\\\|,.<>\/?]/', $password)) $strength++;
+        
+        return $strength;
+    }
 }
 
 if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm_password'])) {
@@ -50,8 +52,10 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm
             mysqli_stmt_bind_param($stmt, "ss", $email, $hashed_password);
 
             if (mysqli_stmt_execute($stmt)) {
-                echo "<script>alert('Registration successful! Please log in.');</script>";
-                header('Location: ?page=login');
+                echo "<script>
+                    alert('Registration successful! Please log in.');
+                    window.location.href = '?page=login';
+                </script>";
                 exit();
             } else {
                 echo "Error: " . mysqli_error($conn);
@@ -65,54 +69,75 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm
 }
 ?>
 
-<logo class="h-[50%] w-full flex flex-col items-center justify-center">
-    <img src="./asset/logo/register.png" alt="" class="w-2/3">
-</logo>
-<form action="" method="post" class="flex flex-col h-[50%] w-full justify-center items-center -translate-y-27.5">
-    <div class="flex flex-col items-center justify-start h-full w-[80%] gap-4">
-        <input type="text" name="email" placeholder="email" class="px-6 py-4 rounded-full w-full text-lg font-bold text-[#525252] bg-[#919191]">
-        <input type="password" name="password" id="passwordInput" placeholder="password" class="px-6 py-4 rounded-full w-full text-lg font-bold text-[#525252] bg-[#919191]">
-        <div class="grid grid-cols-3 gap-4 w-[94%]" style="height: 18px;">
-            <div class="border border-primary rounded-full flex items-center justify-start transition-all duration-200" style="height: 100%; width: 100%; padding: 2px; box-sizing: border-box;">
-                <div id="strengthBar1" class="rounded-full" style="height: 100%; width: 0%; background-color: #ff6b9d; transition: width 0.4s ease-in-out;"></div>
+<video autoplay muted loop playsinline class="absolute inset-0 w-full h-screen object-cover z-0">
+    <source src="./asset/image/login.mp4" type="video/mp4">
+</video>
+<div class="absolute inset-0 bg-black/60 z-5"></div>
+<div class="w-full h-full flex flex-col items-end relative z-10">
+    <div class="bg-black/40 backdrop-blur-3xl w-[40%] h-full border-l border-white/10 shadow-2xl flex flex-col overflow-y-auto custom-scrollbar">
+        <logo class="h-[35%] shrink-0 w-full flex flex-col items-center justify-center p-12">
+            <img src="./asset/logo/register.png" alt="Logo" class="min-w-48 max-w-48 drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]">
+        </logo>
+        <form action="" method="post" id="registerForm" class="flex flex-col w-full flex-grow justify-start items-center px-12 pb-12">
+            <div class="flex flex-col items-center justify-start w-[85%] gap-4">
+                <div class="w-full space-y-2">
+                    <input type="text" id="email" name="email" placeholder="name@example.com" required
+                        class="px-6 py-4 rounded-full w-full text-lg text-white font-medium bg-white/5 border border-white/10 focus:bg-white/10 focus:border-primary/50 focus:ring-1 focus:ring-primary/50 outline-none transition-all duration-300 placeholder:text-zinc-600">
+                </div>
+                <div class="w-full space-y-2">
+                    <input type="password" id="passwordInput" name="password" placeholder="••••••••" required
+                        class="px-6 py-4 rounded-full w-full text-lg text-white font-medium bg-white/5 border border-white/10 focus:bg-white/10 focus:border-primary/50 focus:ring-1 focus:ring-primary/50 outline-none transition-all duration-300 placeholder:text-zinc-600">
+                    
+                    <!-- Password Strength Bars -->
+                    <div class="flex flex-col gap-2 px-4 pt-1">
+                        <div class="grid grid-cols-3 gap-3 w-full h-1.5">
+                            <div class="bg-white/10 rounded-full overflow-hidden border border-white/5">
+                                <div id="strengthBar1" class="h-full w-0 bg-primary transition-all duration-500 ease-out"></div>
+                            </div>
+                            <div class="bg-white/10 rounded-full overflow-hidden border border-white/5">
+                                <div id="strengthBar2" class="h-full w-0 bg-[#ffde59] transition-all duration-500 ease-out"></div>
+                            </div>
+                            <div class="bg-white/10 rounded-full overflow-hidden border border-white/5">
+                                <div id="strengthBar3" class="h-full w-0 bg-[#7ed957] transition-all duration-500 ease-out"></div>
+                            </div>
+                        </div>
+                        <p id="strengthMessage" class="text-[10px] font-bold uppercase tracking-widest text-center h-4"></p>
+                    </div>
+                </div>
+                <div class="w-full space-y-2">
+                    <label for="confirm_password" class="text-xs font-bold uppercase tracking-widest text-zinc-400 ml-4">Confirm Password</label>
+                    <input type="password" id="confirm_password" name="confirm_password" placeholder="••••••••" required
+                        class="px-6 py-4 rounded-full w-full text-lg text-white font-medium bg-white/5 border border-white/10 focus:bg-white/10 focus:border-primary/50 focus:ring-1 focus:ring-primary/50 outline-none transition-all duration-300 placeholder:text-zinc-600">
+                </div>
+                <div class="flex items-center justify-between w-full mt-4">
+                    <a href="?page=login" class="text-zinc-400 font-medium text-sm hover:text-primary transition-colors">Back to sign in</a>
+                    <button type="submit" class="px-10 py-3 bg-primary text-white rounded-full font-bold text-lg">
+                        <span class="font-ballmer translate-y-0.5 inline-block">sign up</span>
+                    </button>
+                </div>
+                <div class="w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent mt-4"></div>
+                <p class="text-zinc-500 text-sm">By signing up, you agree to our <a href="#" class="text-zinc-300 hover:text-white underline transition-all">Terms of Service</a></p>
             </div>
-            <div class="border border-[#ffde59] rounded-full flex items-center justify-start transition-all duration-200" style="height: 100%; width: 100%; padding: 2px; box-sizing: border-box;">
-                <div id="strengthBar2" class="rounded-full" style="height: 100%; width: 0%; background-color: #ffde59; transition: width 0.4s ease-in-out;"></div>
-            </div>
-            <div class="border border-[#7ed957] rounded-full flex items-center justify-start transition-all duration-200" style="height: 100%; width: 100%; padding: 2px; box-sizing: border-box;">
-                <div id="strengthBar3" class="rounded-full" style="height: 100%; width: 0%; background-color: #7ed957; transition: width 0.4s ease-in-out;"></div>
-            </div>
-        </div>
-        <p id="strengthMessage" class="text-center text-sm font-bold text-gray-500 absolute"></p>
-        <input type="password" name="confirm_password" placeholder="confirm password" class="px-6 py-4 rounded-full w-full text-lg font-bold text-[#525252] bg-[#919191]">
-        <div class="flex items-center justify-end w-full">
-            <button type="submit" class=" p-2 border border-primary rounded-full w-1/2 bg-primary"><p class="font-ballmer text-lg translate-y-1">sign up</p></button>
-        </div>
-        <p class="opacity-75">Already have an account? <a href="?page=login" class="text-primary">Sign in</a></p>
-        </div>
+        </form>
     </div>
-</form>
+</div>
+
+<style>
+.custom-scrollbar::-webkit-scrollbar { width: 4px; }
+.custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+.custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+.custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
+</style>
 
 <script>
     function checkPasswordStrength(password) {
         let strength = 0;
-        
-        // Check length
         if (password.length >= 8) strength++;
         if (password.length >= 12) strength++;
-        
-        // Check for lowercase
         if (/[a-z]/.test(password)) strength++;
-        
-        // Check for uppercase
         if (/[A-Z]/.test(password)) strength++;
-        
-        // Check for numbers
         if (/[0-9]/.test(password)) strength++;
-        
-        // Check for special characters
         if (/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)) strength++;
-        
         return strength;
     }
     
@@ -125,11 +150,7 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm
         
         const strength = checkPasswordStrength(passwordInput.value);
         
-        // Count before vs after
-        const before1 = bar1.style.width === '100%' ? 1 : 0;
-        const before2 = bar2.style.width === '100%' ? 1 : 0;
-        const before3 = bar3.style.width === '100%' ? 1 : 0;
-        const beforeCount = before1 + before2 + before3;
+        const beforeCount = (bar1.style.width === '100%' ? 1 : 0) + (bar2.style.width === '100%' ? 1 : 0) + (bar3.style.width === '100%' ? 1 : 0);
         
         let target1 = '0%';
         let target2 = '0%';
@@ -143,34 +164,30 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm
         
         const afterCount = (target1 === '100%' ? 1 : 0) + (target2 === '100%' ? 1 : 0) + (target3 === '100%' ? 1 : 0);
         
-        // Determine transition delays based on direction (Filling vs Emptying)
         if (afterCount >= beforeCount) {
-            // Forward (Filling): Pink first, then Yellow, then Green
-            bar1.style.transition = 'width 0.3s ease-in-out 0s';
-            bar2.style.transition = 'width 0.3s ease-in-out 0.15s';
-            bar3.style.transition = 'width 0.3s ease-in-out 0.3s';
+            bar1.style.transition = 'width 0.3s ease-out 0s';
+            bar2.style.transition = 'width 0.3s ease-out 0.1s';
+            bar3.style.transition = 'width 0.3s ease-out 0.2s';
         } else {
-            // Reverse (Emptying): Green first, then Yellow, then Pink
-            bar1.style.transition = 'width 0.3s ease-in-out 0.3s';
-            bar2.style.transition = 'width 0.3s ease-in-out 0.15s';
-            bar3.style.transition = 'width 0.3s ease-in-out 0s';
+            bar1.style.transition = 'width 0.3s ease-out 0.2s';
+            bar2.style.transition = 'width 0.3s ease-out 0.1s';
+            bar3.style.transition = 'width 0.3s ease-out 0s';
         }
         
-        // Set widths
         bar1.style.width = target1;
         bar2.style.width = target2;
         bar3.style.width = target3;
         
-        // Message & Colors
         message.textContent = '';
-        message.style.color = '';
-        
         if (passwordInput.value !== '') {
             if (strength > 4) {
+                message.textContent = 'Strong Password';
                 message.style.color = '#7ed957';
             } else if (strength > 3) {
+                message.textContent = 'Medium Password';
                 message.style.color = '#ffde59';
             } else if (strength > 1) {
+                message.textContent = 'Weak Password';
                 message.style.color = '#ff6b9d';
             }
         }
@@ -178,3 +195,4 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm
     
     document.getElementById('passwordInput').addEventListener('input', updatePasswordStrength);
 </script>
+

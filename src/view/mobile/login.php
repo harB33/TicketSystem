@@ -13,7 +13,6 @@ if (isset($_POST['email']) && isset($_POST['password'])) {
     $user = mysqli_fetch_assoc($result);
 
     if ($user && password_verify($password, $user['password_hash'])) {
-        session_start();
         $_SESSION['user_id'] = $user['user_id'];
         header('Location: ?page=pickanartist');
         exit();

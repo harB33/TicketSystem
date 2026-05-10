@@ -105,11 +105,11 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm
                         class="px-6 py-4 rounded-full w-full text-lg text-white font-medium bg-white/5 border border-white/10 focus:bg-white/10 focus:border-primary/50 focus:ring-1 focus:ring-primary/50 outline-none transition-all duration-300 placeholder:text-zinc-600">
                 </div>
                 <div class="flex items-center justify-between w-full">
-                    <a href="?page=login" class="group flex items-center translate-x-6 text-zinc-400 hover:text-zinc-200 transition-all duration-300">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="transition-transform duration-300 group-hover:-translate-x-1">
+                    <a href="?page=login" class="group flex items-center translate-x-6 text-zinc-400  transition-all duration-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5transition-transform duration-300">
                             <path d="m15 18-6-6 6-6"/>
                         </svg>
-                        <span class="text-sm font-medium ml-3">Back to <span class="text-primary group-hover:text-primary/80 transition-colors">sign in</span></span>
+                        <span class="text-sm font-medium ml-3">Back to <span class="text-primary">sign in</span></span>
                     </a>
                     <button type="submit" class="px-10 py-3 bg-primary hover:bg-primary/90 text-white rounded-full font-bold text-lg">
                         <span class="font-ballmer translate-y-0.5 inline-block">sign up</span>

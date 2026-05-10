@@ -64,6 +64,9 @@
     html, body, button, input, select, textarea, h1, h2, h3, h4, h5, h6, p, a, span {
         font-family: var(--font-poppins);
     }
+    button{
+        cursor: pointer;
+    }
     .font-aubette{
         @apply uppercase;
     };

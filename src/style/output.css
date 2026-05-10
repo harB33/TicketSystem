@@ -2410,6 +2410,12 @@
   .w-px {
     width: 1px !important;
   }
+  .w-screen {
+    width: 100vw !important;
+  }
+  .max-w-2 {
+    max-width: calc(var(--spacing) * 2) !important;
+  }
   .max-w-2xl {
     max-width: var(--container-2xl) !important;
   }

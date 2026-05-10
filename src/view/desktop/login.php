@@ -34,7 +34,7 @@ if (isset($_POST['email']) && isset($_POST['password'])) {
 </video>
 <div class="absolute inset-0 bg-black/40 z-5"></div>
 <div class="w-full h-full flex flex-col items-center justify-center relative z-10">
-    <div class="bg-black/50 backdrop-blur-3xl w-[40%] h-[60%] border border-white/10 shadow-2xl flex flex-col rounded-2xl p-12">
+    <div class="bg-black/50 backdrop-blur-3xl w-[40%] h-[75%] border border-white/10 shadow-2xl flex flex-col rounded-2xl p-12">
         <logo class="h-[45%] w-full flex flex-col items-center justify-center p-12 pb-24">
             <img src="./asset/logo/logo.png" alt="Logo" class="min-w-48 max-w-48">
         </logo>

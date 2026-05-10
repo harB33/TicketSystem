@@ -76,7 +76,7 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm
 <div class="w-full h-full flex flex-col items-center justify-center relative z-10">
     <div class="bg-black/50 backdrop-blur-3xl w-[40%] h-[75%] border border-white/10 shadow-2xl flex flex-col rounded-2xl p-12">
         <logo class="h-[35%] shrink-0 w-full flex flex-col items-center justify-center p-8">
-            <img src="./asset/logo/register.png" alt="register" class="min-w-48 max-w-48">
+            <img src="./asset/logo/register.png" alt="register" class="min-h-24 max-h-24">
         </logo>
         <form action="" method="post" id="registerForm" class="flex flex-col w-full flex-grow justify-start items-center px-12">
             <div class="flex flex-col items-center justify-start w-[85%] gap-4">

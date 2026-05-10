@@ -112,9 +112,6 @@
             <div id="loader-shape" class="loader-morph-and-rotate"></div>
         </div>
     </div>
-    <div class="absolute inset-0 bg-black/75 z-5"></div>
-    <?php include './view/view.php'; ?>
-
     <script>
         // Check for pageTransition in sessionStorage immediately
         const isTransition = sessionStorage.getItem('pageTransition') === 'true';
@@ -267,11 +264,15 @@
             });
         };
 
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', initLoader);
-        } else {
+        // Initialize immediately if loader is present, or wait for DOM
+        if (document.getElementById('loading-screen')) {
             initLoader();
+        } else {
+            document.addEventListener('DOMContentLoaded', initLoader);
         }
     </script>
+    <div class="absolute inset-0 bg-black/75 z-5"></div>
+    <?php include './view/view.php'; ?>
+
 </body>
 </html>

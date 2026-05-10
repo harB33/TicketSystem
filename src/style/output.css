@@ -2425,6 +2425,9 @@
   .max-w-5xl {
     max-width: var(--container-5xl) !important;
   }
+  .max-w-9 {
+    max-width: calc(var(--spacing) * 9) !important;
+  }
   .max-w-35 {
     max-width: calc(var(--spacing) * 35) !important;
   }

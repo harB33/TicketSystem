@@ -54,9 +54,9 @@ $page = isset($_GET['page']) ? $_GET['page'] : 'login';
                 case 'pickanarena':
                     include __DIR__ . '/desktop/pickanarena.php';
                     break;
-                // case 'featured':
-                //     include __DIR__ . '/desktop/featured.php';
-                //     break;
+                case 'featured':
+                    include __DIR__ . '/desktop/featured.php';
+                    break;
                 // case 'profile':
                 //     include __DIR__ . '/desktop/profile.php';
                 //     break;

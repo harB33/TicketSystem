@@ -2,7 +2,7 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
-include (__DIR__ . '/../../ticket_db/connectdb.php');
+require_once (__DIR__ . '/../../ticket_db/connectdb.php');
 
 $user_id = $_SESSION['user_id'] ?? 1;
 

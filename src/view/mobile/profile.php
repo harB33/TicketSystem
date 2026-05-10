@@ -2,7 +2,7 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
-include (__DIR__ . '/../../ticket_db/connectdb.php');
+require_once (__DIR__ . '/../../ticket_db/connectdb.php');
 
 // Handle logout
 if (isset($_GET['action']) && $_GET['action'] === 'logout') {

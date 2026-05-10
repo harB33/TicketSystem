@@ -2,7 +2,7 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
-include (__DIR__ . '/../../ticket_db/connectdb.php');
+require_once (__DIR__ . '/../../ticket_db/connectdb.php');
 
 // Fallback to user_id 1 for testing (matches featured.php) so the navbar doesn't redirect you to login
 $user_id = $_SESSION['user_id'] ?? 1;

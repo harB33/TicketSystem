@@ -41,5 +41,40 @@ $page = isset($_GET['page']) ? $_GET['page'] : 'login';
     </div>
 </mobile-view>
 
-<desktop-view>
+<desktop-view class="relative z-10 block sm:hidden w-full h-screen bg-transparent">
+<div class="w-full h-screen flex flex-col relative overflow-hidden">
+        <?php
+            switch($page) {
+                case 'register':
+                    include __DIR__ . '/desktop/register.php';
+                    break;
+                // case 'pickanartist':
+                //     include __DIR__ . '/desktop/pickanartist.php';
+                //     break;
+                // case 'pickanarena':
+                //     include __DIR__ . '/desktop/pickanarena.php';
+                //     break;
+                // case 'featured':
+                //     include __DIR__ . '/desktop/featured.php';
+                //     break;
+                // case 'profile':
+                //     include __DIR__ . '/desktop/profile.php';
+                //     break;
+                // case 'mytickets':
+                //     include __DIR__ . '/desktop/mytickets.php';
+                //     break;
+                // case 'event':
+                //     include __DIR__ . '/desktop/event.php';
+                //     break;
+                default:
+                    include __DIR__ . '/desktop/login.php';
+                    break;
+            }
+            
+            // Only show navbar on specific pages if needed, but here we'll show it if it's not login/register
+            // if (!in_array($page, ['login', 'register','pickanartist','pickanarena'])) {
+            //     include __DIR__ . '/mobile/navBar.html';
+            // }
+        ?>
+    </div>
 </desktop-view>

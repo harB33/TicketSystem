@@ -2036,6 +2036,12 @@
   .mt-auto {
     margin-top: auto !important;
   }
+  .mr-1 {
+    margin-right: calc(var(--spacing) * 1) !important;
+  }
+  .mr-1\.5 {
+    margin-right: calc(var(--spacing) * 1.5) !important;
+  }
   .mb-1 {
     margin-bottom: calc(var(--spacing) * 1) !important;
   }
@@ -2286,6 +2292,9 @@
   .h-\[60\] {
     height: 60 !important;
   }
+  .h-\[75\%\] {
+    height: 75% !important;
+  }
   .h-\[175px\] {
     height: 175px !important;
   }
@@ -2421,6 +2430,9 @@
   .max-w-50 {
     max-width: calc(var(--spacing) * 50) !important;
   }
+  .max-w-96 {
+    max-width: calc(var(--spacing) * 96) !important;
+  }
   .max-w-\[200px\] {
     max-width: 200px !important;
   }
@@ -2454,6 +2466,9 @@
   .min-w-48 {
     min-width: calc(var(--spacing) * 48) !important;
   }
+  .min-w-96 {
+    min-width: calc(var(--spacing) * 96) !important;
+  }
   .flex-shrink {
     flex-shrink: 1 !important;
   }
@@ -2465,6 +2480,14 @@
   }
   .border-collapse {
     border-collapse: collapse !important;
+  }
+  .translate-x-4 {
+    --tw-translate-x: calc(var(--spacing) * 4) !important;
+    translate: var(--tw-translate-x) var(--tw-translate-y) !important;
+  }
+  .translate-x-6 {
+    --tw-translate-x: calc(var(--spacing) * 6) !important;
+    translate: var(--tw-translate-x) var(--tw-translate-y) !important;
   }
   .-translate-y-3 {
     --tw-translate-y: calc(var(--spacing) * -3) !important;
@@ -2492,6 +2515,10 @@
   }
   .translate-y-1 {
     --tw-translate-y: calc(var(--spacing) * 1) !important;
+    translate: var(--tw-translate-x) var(--tw-translate-y) !important;
+  }
+  .translate-y-6 {
+    --tw-translate-y: calc(var(--spacing) * 6) !important;
     translate: var(--tw-translate-x) var(--tw-translate-y) !important;
   }
   .translate-y-8 {
@@ -3047,6 +3074,9 @@
   .p-6 {
     padding: calc(var(--spacing) * 6) !important;
   }
+  .p-8 {
+    padding: calc(var(--spacing) * 8) !important;
+  }
   .p-10 {
     padding: calc(var(--spacing) * 10) !important;
   }
@@ -3346,6 +3376,12 @@
       --tw-shadow-color: color-mix(in oklab, var(--color-primary) var(--tw-shadow-alpha), transparent) !important;
     }
   }
+  .shadow-primary\/20 {
+    --tw-shadow-color: var(--color-primary) !important;
+    @supports (color: color-mix(in lab, red, red)) {
+      --tw-shadow-color: color-mix(in oklab, color-mix(in oklab, var(--color-primary) 20%, transparent) var(--tw-shadow-alpha), transparent) !important;
+    }
+  }
   .shadow-primary\/25 {
     --tw-shadow-color: var(--color-primary) !important;
     @supports (color: color-mix(in lab, red, red)) {
@@ -3441,6 +3477,24 @@
     -webkit-user-select: none !important;
     user-select: none !important;
   }
+  .group-hover\:-translate-x-1 {
+    &:is(:where(.group):hover *) {
+      @media (hover: hover) {
+        --tw-translate-x: calc(var(--spacing) * -1) !important;
+        translate: var(--tw-translate-x) var(--tw-translate-y) !important;
+      }
+    }
+  }
+  .group-hover\:text-primary\/80 {
+    &:is(:where(.group):hover *) {
+      @media (hover: hover) {
+        color: var(--color-primary) !important;
+        @supports (color: color-mix(in lab, red, red)) {
+          color: color-mix(in oklab, var(--color-primary) 80%, transparent) !important;
+        }
+      }
+    }
+  }
   .group-hover\:text-zinc-200 {
     &:is(:where(.group):hover *) {
       @media (hover: hover) {
@@ -3530,6 +3584,13 @@
         --tw-scale-y: 105% !important;
         --tw-scale-z: 105% !important;
         scale: var(--tw-scale-x) var(--tw-scale-y) !important;
+      }
+    }
+  }
+  .hover\:scale-\[1\.02\] {
+    &:hover {
+      @media (hover: hover) {
+        scale: 1.02 !important;
       }
     }
   }
@@ -3642,6 +3703,13 @@
       }
     }
   }
+  .hover\:text-zinc-200 {
+    &:hover {
+      @media (hover: hover) {
+        color: var(--color-zinc-200) !important;
+      }
+    }
+  }
   .hover\:underline {
     &:hover {
       @media (hover: hover) {
@@ -3701,6 +3769,11 @@
       --tw-scale-y: 95% !important;
       --tw-scale-z: 95% !important;
       scale: var(--tw-scale-x) var(--tw-scale-y) !important;
+    }
+  }
+  .active\:scale-\[0\.98\] {
+    &:active {
+      scale: 0.98 !important;
     }
   }
   .sm\:hidden {

@@ -34,7 +34,7 @@ if (isset($_POST['email']) && isset($_POST['password'])) {
 </video>
 <div class="absolute inset-0 bg-black/40 z-5"></div>
 <div class="w-full h-full flex flex-col items-center justify-center relative z-10">
-    <div class="bg-black/50 backdrop-blur-3xl w-[40%] h-[60%] border-l border-white/10 shadow-2xl flex flex-col rounded-2xl p-12">
+    <div class="bg-black/50 backdrop-blur-3xl w-[40%] h-[60%] border border-white/10 shadow-2xl flex flex-col rounded-2xl p-12">
         <logo class="h-[45%] w-full flex flex-col items-center justify-center p-12 pb-24">
             <img src="./asset/logo/logo.png" alt="Logo" class="min-w-48 max-w-48">
         </logo>
@@ -50,8 +50,8 @@ if (isset($_POST['email']) && isset($_POST['password'])) {
                     <input type="password" id="password" name="password" placeholder="password" 
                         class="px-6 py-4 rounded-full w-full text-lg text-white font-medium bg-white/5 border border-white/10 focus:bg-white/10 focus:border-primary/50 focus:ring-1 focus:ring-primary/50 outline-none transition-all duration-300 placeholder:text-zinc-600">
                 </div>
-                <div class="flex items-center justify-between w-full mt-2">
-                    <label class="flex items-center cursor-pointer group">
+                <div class="flex items-center justify-between w-full">
+                    <label class="flex items-center cursor-pointer group translate-x-6">
                         <div class="relative">
                             <input type="checkbox" checked="checked" class="peer hidden" />
                             <div class="w-5 h-5 border-2 border-white/20 rounded-full peer-checked:bg-primary peer-checked:border-primary transition-all duration-300"></div>
@@ -60,10 +60,10 @@ if (isset($_POST['email']) && isset($_POST['password'])) {
                         <span class="ml-3 text-sm font-medium text-zinc-400 group-hover:text-zinc-200 transition-colors">Remember me</span>
                     </label>
                     <button type="submit" class="px-8 py-3 bg-primary text-white rounded-full font-bold text-lg">
-                        <span class="font-ballmer translate-y-0.5 inline-block">sign in</span>
+                        <span class="font-ballmer translate-y-0.5 inline-block">Sign in</span>
                     </button>
                 </div>
-                <div class="w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent mt-4"></div>
+                <div class="w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
                 <p class="text-zinc-400 font-medium">Don't have an account? <a href="?page=register" class="text-primary hover:text-primary/80 hover:underline transition-all">Sign up</a></p>
             </div>
         </form>

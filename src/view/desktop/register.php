@@ -72,51 +72,51 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm
 <video autoplay muted loop playsinline class="absolute inset-0 w-full h-screen object-cover z-0">
     <source src="./asset/image/login.mp4" type="video/mp4">
 </video>
-<div class="absolute inset-0 bg-black/60 z-5"></div>
-<div class="w-full h-full flex flex-col items-end relative z-10">
-    <div class="bg-black/40 backdrop-blur-3xl w-[40%] h-full border-l border-white/10 shadow-2xl flex flex-col overflow-y-auto custom-scrollbar">
-        <logo class="h-[35%] shrink-0 w-full flex flex-col items-center justify-center p-12">
-            <img src="./asset/logo/register.png" alt="Logo" class="min-w-48 max-w-48 drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]">
+<div class="absolute inset-0 bg-black/40 z-5"></div>
+<div class="w-full h-full flex flex-col items-center justify-center relative z-10">
+    <div class="bg-black/50 backdrop-blur-3xl w-[40%] h-[75%] border border-white/10 shadow-2xl flex flex-col rounded-2xl p-12">
+        <logo class="h-[35%] shrink-0 w-full flex flex-col items-center justify-center p-8">
+            <img src="./asset/logo/register.png" alt="register" class="min-w-48 max-w-48">
         </logo>
-        <form action="" method="post" id="registerForm" class="flex flex-col w-full flex-grow justify-start items-center px-12 pb-12">
+        <form action="" method="post" id="registerForm" class="flex flex-col w-full flex-grow justify-start items-center px-12">
             <div class="flex flex-col items-center justify-start w-[85%] gap-4">
                 <div class="w-full space-y-2">
-                    <input type="text" id="email" name="email" placeholder="name@example.com" required
+                    <input type="text" id="email" name="email" placeholder="email" 
                         class="px-6 py-4 rounded-full w-full text-lg text-white font-medium bg-white/5 border border-white/10 focus:bg-white/10 focus:border-primary/50 focus:ring-1 focus:ring-primary/50 outline-none transition-all duration-300 placeholder:text-zinc-600">
                 </div>
                 <div class="w-full space-y-2">
-                    <input type="password" id="passwordInput" name="password" placeholder="••••••••" required
-                        class="px-6 py-4 rounded-full w-full text-lg text-white font-medium bg-white/5 border border-white/10 focus:bg-white/10 focus:border-primary/50 focus:ring-1 focus:ring-primary/50 outline-none transition-all duration-300 placeholder:text-zinc-600">
-                    
+                    <input type="password" id="passwordInput" name="password" placeholder="password" class="px-6 py-4 rounded-full w-full text-lg text-white font-medium bg-white/5 border border-white/10 focus:bg-white/10 focus:border-primary/50 focus:ring-1 focus:ring-primary/50 outline-none transition-all duration-300 placeholder:text-zinc-600">
                     <!-- Password Strength Bars -->
-                    <div class="flex flex-col gap-2 px-4 pt-1">
-                        <div class="grid grid-cols-3 gap-3 w-full h-1.5">
-                            <div class="bg-white/10 rounded-full overflow-hidden border border-white/5">
-                                <div id="strengthBar1" class="h-full w-0 bg-primary transition-all duration-500 ease-out"></div>
-                            </div>
-                            <div class="bg-white/10 rounded-full overflow-hidden border border-white/5">
-                                <div id="strengthBar2" class="h-full w-0 bg-[#ffde59] transition-all duration-500 ease-out"></div>
-                            </div>
-                            <div class="bg-white/10 rounded-full overflow-hidden border border-white/5">
-                                <div id="strengthBar3" class="h-full w-0 bg-[#7ed957] transition-all duration-500 ease-out"></div>
-                            </div>
-                        </div>
-                        <p id="strengthMessage" class="text-[10px] font-bold uppercase tracking-widest text-center h-4"></p>
+                </div>
+                <div class="grid grid-cols-3 gap-4 w-[94%]" style="height: 18px;">
+                    <div class="border border-primary rounded-full flex items-center justify-start transition-all duration-200" style="height: 100%; width: 100%; padding: 2px; box-sizing: border-box;">
+                        <div id="strengthBar1" class="rounded-full" style="height: 100%; width: 0%; background-color: #ff6b9d; transition: width 0.4s ease-in-out;"></div>
+                    </div>
+                    <div class="border border-[#ffde59] rounded-full flex items-center justify-start transition-all duration-200" style="height: 100%; width: 100%; padding: 2px; box-sizing: border-box;">
+                        <div id="strengthBar2" class="rounded-full" style="height: 100%; width: 0%; background-color: #ffde59; transition: width 0.4s ease-in-out;"></div>
+                    </div>
+                    <div class="border border-[#7ed957] rounded-full flex items-center justify-start transition-all duration-200" style="height: 100%; width: 100%; padding: 2px; box-sizing: border-box;">
+                        <div id="strengthBar3" class="rounded-full" style="height: 100%; width: 0%; background-color: #7ed957; transition: width 0.4s ease-in-out;"></div>
                     </div>
                 </div>
+                <p id="strengthMessage" class="text-[10px] font-bold uppercase tracking-widest text-center h-4 hidden"></p>
                 <div class="w-full space-y-2">
-                    <label for="confirm_password" class="text-xs font-bold uppercase tracking-widest text-zinc-400 ml-4">Confirm Password</label>
-                    <input type="password" id="confirm_password" name="confirm_password" placeholder="••••••••" required
+                    <input type="password" id="confirm_password" name="confirm_password" placeholder="confirm password" 
                         class="px-6 py-4 rounded-full w-full text-lg text-white font-medium bg-white/5 border border-white/10 focus:bg-white/10 focus:border-primary/50 focus:ring-1 focus:ring-primary/50 outline-none transition-all duration-300 placeholder:text-zinc-600">
                 </div>
-                <div class="flex items-center justify-between w-full mt-4">
-                    <a href="?page=login" class="text-zinc-400 font-medium text-sm hover:text-primary transition-colors">Back to sign in</a>
-                    <button type="submit" class="px-10 py-3 bg-primary text-white rounded-full font-bold text-lg">
+                <div class="flex items-center justify-between w-full">
+                    <a href="?page=login" class="group flex items-center translate-x-6 text-zinc-400 hover:text-zinc-200 transition-all duration-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="transition-transform duration-300 group-hover:-translate-x-1">
+                            <path d="m15 18-6-6 6-6"/>
+                        </svg>
+                        <span class="text-sm font-medium ml-3">Back to <span class="text-primary group-hover:text-primary/80 transition-colors">sign in</span></span>
+                    </a>
+                    <button type="submit" class="px-10 py-3 bg-primary hover:bg-primary/90 text-white rounded-full font-bold text-lg">
                         <span class="font-ballmer translate-y-0.5 inline-block">sign up</span>
                     </button>
                 </div>
-                <div class="w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent mt-4"></div>
-                <p class="text-zinc-500 text-sm">By signing up, you agree to our <a href="#" class="text-zinc-300 hover:text-white underline transition-all">Terms of Service</a></p>
+                <div class="w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
+                <p class="text-zinc-500 text-xs text-center">By signing up, you agree to our <a href="#" class="text-zinc-300 hover:text-white underline transition-all">Terms of Service</a></p>
             </div>
         </form>
     </div>
@@ -150,7 +150,11 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm
         
         const strength = checkPasswordStrength(passwordInput.value);
         
-        const beforeCount = (bar1.style.width === '100%' ? 1 : 0) + (bar2.style.width === '100%' ? 1 : 0) + (bar3.style.width === '100%' ? 1 : 0);
+        // Count before vs after
+        const before1 = bar1.style.width === '100%' ? 1 : 0;
+        const before2 = bar2.style.width === '100%' ? 1 : 0;
+        const before3 = bar3.style.width === '100%' ? 1 : 0;
+        const beforeCount = before1 + before2 + before3;
         
         let target1 = '0%';
         let target2 = '0%';
@@ -164,21 +168,28 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm
         
         const afterCount = (target1 === '100%' ? 1 : 0) + (target2 === '100%' ? 1 : 0) + (target3 === '100%' ? 1 : 0);
         
+        // Determine transition delays based on direction (Filling vs Emptying)
         if (afterCount >= beforeCount) {
-            bar1.style.transition = 'width 0.3s ease-out 0s';
-            bar2.style.transition = 'width 0.3s ease-out 0.1s';
-            bar3.style.transition = 'width 0.3s ease-out 0.2s';
+            // Forward (Filling): Pink first, then Yellow, then Green
+            bar1.style.transition = 'width 0.3s ease-in-out 0s';
+            bar2.style.transition = 'width 0.3s ease-in-out 0.15s';
+            bar3.style.transition = 'width 0.3s ease-in-out 0.3s';
         } else {
-            bar1.style.transition = 'width 0.3s ease-out 0.2s';
-            bar2.style.transition = 'width 0.3s ease-out 0.1s';
-            bar3.style.transition = 'width 0.3s ease-out 0s';
+            // Reverse (Emptying): Green first, then Yellow, then Pink
+            bar1.style.transition = 'width 0.3s ease-in-out 0.3s';
+            bar2.style.transition = 'width 0.3s ease-in-out 0.15s';
+            bar3.style.transition = 'width 0.3s ease-in-out 0s';
         }
         
+        // Set widths
         bar1.style.width = target1;
         bar2.style.width = target2;
         bar3.style.width = target3;
         
+        // Message & Colors
         message.textContent = '';
+        message.style.color = '';
+        
         if (passwordInput.value !== '') {
             if (strength > 4) {
                 message.textContent = 'Strong Password';
@@ -194,5 +205,40 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm
     }
     
     document.getElementById('passwordInput').addEventListener('input', updatePasswordStrength);
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const form = document.getElementById('registerForm');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('passwordInput');
+        const confirmInput = document.getElementById('confirm_password');
+
+        if (form && emailInput && passwordInput && confirmInput) {
+            form.addEventListener('submit', function(e) {
+                let isValid = true;
+
+                [emailInput, passwordInput, confirmInput].forEach(input => {
+                    if (!input.value.trim()) {
+                        input.style.outline = '2px solid #ef4444';
+                        isValid = false;
+                    } else {
+                        input.style.outline = 'none';
+                    }
+                });
+
+                if (!isValid) {
+                    e.preventDefault();
+                    e.stopImmediatePropagation();
+                }
+            }, true);
+
+            [emailInput, passwordInput, confirmInput].forEach(input => {
+                input.addEventListener('input', function() {
+                    if (this.value.trim()) {
+                        this.style.outline = 'none';
+                    }
+                });
+            });
+        }
+    });
 </script>
 

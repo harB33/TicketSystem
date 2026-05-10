@@ -90,7 +90,7 @@ $pool_artists = array_slice($all_artists, 15);
         </div>
 
         <div class="p-10 fixed bottom-0 left-0 bg-linear-to-t from-black via-black/80 to-transparent h-[20%] w-full flex flex-col justify-end items-center z-30 pointer-events-none">
-            <button type="submit" name="submit_artists" class="bg-primary max-w-2xl max-h-13 text-white p-2 rounded-full w-1/2 pointer-events-auto hover:scale-105 active:scale-95 transition">
+            <button type="submit" name="submit_artists" class="bg-primary max-w-sm max-h-13 text-white p-2 rounded-full w-1/2 pointer-events-auto hover:scale-105 active:scale-95 transition">
                 <p class="font-ballmer text-2xl translate-y-1">next</p>
             </button>
         </div>

@@ -30,7 +30,7 @@ if (isset($_POST['email']) && isset($_POST['password'])) {
 }
 ?>
 <video autoplay muted loop playsinline class="absolute inset-0 w-full h-screen object-cover z-0">
-    <source src="./asset/image/login.mp4" type="video/mp4">
+    <source src="./asset/video/login.mp4" type="video/mp4">
 </video>
 <div class="absolute inset-0 bg-black/75 z-5"></div>
 <logo class="relative z-10 h-[50%] w-full flex flex-col items-center justify-center">

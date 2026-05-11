@@ -38,16 +38,16 @@ if (isset($_POST['email']) && isset($_POST['password'])) {
         <logo class="h-[45%] w-full flex flex-col items-center justify-center p-12 pb-24">
             <img src="./asset/logo/logo.png" alt="Logo" class="min-w-48 max-w-48">
         </logo>
-        <form action="" method="post" id="loginForm" class="flex flex-col w-full h-[55%] justify-start items-center px-12">
+        <form action="" method="post" id="desktop_loginForm" class="flex flex-col w-full h-[55%] justify-start items-center px-12">
             <div class="flex flex-col items-center justify-start w-[85%] gap-4">
                 <div class="w-full space-y-2">
                     <!-- <label for="email" class="text-xs font-bold uppercase tracking-widest text-zinc-400 ml-4">Email Address</label> -->
-                    <input type="text" id="email" name="email" placeholder="email" 
+                    <input type="text" id="desktop_email" name="email" placeholder="email" 
                         class="px-6 py-4 rounded-full w-full text-lg text-white font-medium bg-white/5 border border-white/10 focus:bg-white/10 focus:border-primary/50 focus:ring-1 focus:ring-primary/50 outline-none transition-all duration-300 placeholder:text-zinc-600">
                 </div>
                 <div class="w-full space-y-2">
                     <!-- <label for="password" class="text-xs font-bold uppercase tracking-widest text-zinc-400 ml-4">Password</label> -->
-                    <input type="password" id="password" name="password" placeholder="password" 
+                    <input type="password" id="desktop_password" name="password" placeholder="password" 
                         class="px-6 py-4 rounded-full w-full text-lg text-white font-medium bg-white/5 border border-white/10 focus:bg-white/10 focus:border-primary/50 focus:ring-1 focus:ring-primary/50 outline-none transition-all duration-300 placeholder:text-zinc-600">
                 </div>
                 <div class="flex items-center justify-between w-full">
@@ -73,9 +73,9 @@ if (isset($_POST['email']) && isset($_POST['password'])) {
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-    const form = document.getElementById('loginForm');
-    const emailInput = document.getElementById('email');
-    const passwordInput = document.getElementById('password');
+    const form = document.getElementById('desktop_loginForm');
+    const emailInput = document.getElementById('desktop_email');
+    const passwordInput = document.getElementById('desktop_password');
 
     if (form && emailInput && passwordInput) {
         form.addEventListener('submit', function(e) {

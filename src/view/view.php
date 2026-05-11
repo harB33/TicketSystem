@@ -57,12 +57,12 @@ $page = isset($_GET['page']) ? $_GET['page'] : 'login';
                 case 'featured':
                     include __DIR__ . '/desktop/featured.php';
                     break;
-                // case 'profile':
-                //     include __DIR__ . '/desktop/profile.php';
-                //     break;
-                // case 'mytickets':
-                //     include __DIR__ . '/desktop/mytickets.php';
-                //     break;
+                case 'profile':
+                    include __DIR__ . '/desktop/profile.php';
+                    break;
+                case 'mytickets':
+                    include __DIR__ . '/desktop/mytickets.php';
+                    break;
                 // case 'event':
                 //     include __DIR__ . '/desktop/event.php';
                 //     break;
@@ -72,9 +72,9 @@ $page = isset($_GET['page']) ? $_GET['page'] : 'login';
             }
             
             // Only show navbar on specific pages if needed, but here we'll show it if it's not login/register
-            // if (!in_array($page, ['login', 'register','pickanartist','pickanarena'])) {
-            //     include __DIR__ . '/mobile/navBar.html';
-            // }
+            if (!in_array($page, ['login', 'register','pickanartist','pickanarena'])) {
+                include __DIR__ . '/mobile/navBar.html';
+            }
         ?>
     </div>
 </desktop-view>

@@ -30,9 +30,9 @@ if (isset($_POST['email']) && isset($_POST['password'])) {
 }
 ?>
 <video autoplay muted loop playsinline class="absolute inset-0 w-full h-screen object-cover z-0">
-    <source src="./asset/image/login.mp4" type="video/mp4">
+    <source src="./asset/video/login.mp4" type="video/mp4">
 </video>
-<div class="absolute inset-0 bg-black/40 z-5"></div>
+<div class="absolute inset-0 bg-black/60 z-10"></div>
 <div class="w-full h-full flex flex-col items-center justify-center relative z-10">
     <div class="bg-black/50 backdrop-blur-3xl w-[40%] h-[75%] border border-white/10 shadow-2xl flex flex-col rounded-2xl p-12">
         <logo class="h-[45%] w-full flex flex-col items-center justify-center p-12 pb-24">
@@ -64,7 +64,7 @@ if (isset($_POST['email']) && isset($_POST['password'])) {
                     </button>
                 </div>
                 <div class="w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
-                <p class="text-zinc-400 font-medium">Don't have an account? <a href="?page=register" class="text-primary hover:text-primary/80 hover:underline transition-all">Sign up</a></p>
+                <p class="text-zinc-500 font-medium">Don't have an account? <a href="?page=register" class="text-primary hover:text-primary/80 hover:underline transition-all">Sign up</a></p>
             </div>
         </form>
     </div>

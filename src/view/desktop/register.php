@@ -78,7 +78,7 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm
         <logo class="h-[35%] shrink-0 w-full flex flex-col items-center justify-center p-8 pb-20">
             <img src="./asset/logo/register.png" alt="register" class="min-h-24 max-h-24">
         </logo>
-        <form action="" method="post" id="registerForm" class="flex flex-col w-full flex-grow justify-start items-center px-12">
+        <form action="" method="post" id="registerForm" class="flex flex-col w-full grow justify-start items-center px-12">
             <div class="flex flex-col items-center justify-start w-[85%] gap-4">
                 <div class="w-full space-y-2">
                     <input type="text" id="email" name="email" placeholder="email" 
@@ -109,13 +109,13 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5transition-transform duration-300">
                             <path d="m15 18-6-6 6-6"/>
                         </svg>
-                        <span class="text-sm font-medium ml-3">Back to <span class="text-primary">sign in</span></span>
+                            <span class="text-sm font-medium ml-1.5">Back to <span class="text-primary group-hover:underline">sign in</span></span>
                     </a>
                     <button type="submit" class="px-10 py-3 bg-primary hover:bg-primary/90 text-white rounded-full font-bold text-lg">
                         <span class="font-ballmer translate-y-0.5 inline-block">sign up</span>
                     </button>
                 </div>
-                <div class="w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
+                <div class="w-full h-px bg-linear-to-r from-transparent via-white/10 to-transparent"></div>
                 <p class="text-zinc-500 text-xs text-center">By signing up, you agree to our <a href="#" class="text-zinc-300 hover:text-white underline transition-all">Terms of Service</a></p>
             </div>
         </form>

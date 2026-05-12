@@ -10,7 +10,21 @@ if (!$event_id) {
     echo "Event not found.";
     exit();
 }
+?>
+<style>
+    #tierSelector option {
+        background-color: #121212;
+        color: white;
+        padding: 12px;
+        font-family: inherit;
+    }
+    #tierSelector:focus {
+        border-color: #FF6699;
+        box-shadow: 0 0 15px rgba(255, 102, 153, 0.2);
+    }
+</style>
 
+<?php
 // Fetch event details
 $sql = "SELECT 
             e.event_name, 
@@ -56,7 +70,7 @@ $sections_sql = "SELECT ss.section_id, ss.section_name, ss.section_img, MIN(t.pr
                  JOIN events e ON ss.venue_id = e.venue_id
                  LEFT JOIN tickets t ON (ss.section_id = t.section_id AND t.event_id = e.event_id)
                  WHERE e.event_id = ?
-                 GROUP BY ss.section_id
+                 GROUP BY ss.section_id, ss.section_name, ss.section_img
                  ORDER BY price DESC, ss.section_name ASC";
 $stmt_sec = mysqli_prepare($conn, $sections_sql);
 mysqli_stmt_bind_param($stmt_sec, "i", $event_id);
@@ -94,43 +108,21 @@ while ($row = mysqli_fetch_assoc($sections_res)) {
     </div>
 
     <!-- Arena Layout Section -->
-    <div class="flex-1 relative flex flex-col items-center justify-center p-4 pt-24 overflow-y-auto">
+    <div class="flex-1 relative flex flex-col items-center justify-center p-4 pt-24 overflow-hidden">
         
         <!-- Seating Tier Selector (New) -->
-        <div class="w-full max-w-xs mb-8 z-20">
-            <div class="relative">
-                <select id="tierSelector" class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 appearance-none font-bold text-white focus:outline-none focus:border-primary transition-all backdrop-blur-xl">
-                    <?php if (empty($seating_tiers)): ?>
-                        <option value="" disabled selected>No tiers available</option>
-                    <?php else: ?>
-                        <?php foreach ($seating_tiers as $index => $tier): ?>
-                            <option value="<?= $tier['section_id'] ?>" 
-                                    data-img="<?= htmlspecialchars($tier['section_img'] ?? '') ?>"
-                                    <?= $index === 0 ? 'selected' : '' ?>>
-                                <?= htmlspecialchars($tier['section_name']) ?> - 
-                                <?= $tier['price'] ? '₱' . number_format($tier['price']) : 'Price TBA' ?>
-                            </option>
-                        <?php endforeach; ?>
-                    <?php endif; ?>
-                </select>
-                <div class="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none">
-                    <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                    </svg>
-                </div>
-            </div>
-        </div>
+        
 
-        <div class="w-full max-w-md aspect-square relative group">
+        <div class="w-full flex-col max-w-md aspect-square flex justify-center items-center relative group">
             <?php if ($is_phil_arena || $is_moa_arena || $is_araneta): ?>
                 <div class="absolute inset-0 bg-primary/5 rounded-full blur-[80px] opacity-30"></div>
                 
                 <!-- Base Layout -->
-                <img src="<?= $base_image ?>" alt="Arena Layout" class="w-full h-full object-contain drop-shadow-[0_0_20px_rgba(0,0,0,0.5)] transition-transform duration-700">
+                <img src="<?= $base_image ?>" alt="Arena Layout" class="w-[80%] h-[80%] object-contain drop-shadow-[0_0_20px_rgba(0,0,0,0.5)] transition-transform duration-700">
                 
                 <!-- Dynamic Section Overlay -->
                 <img id="sectionOverlay" src="<?= htmlspecialchars($seating_tiers[0]['section_img'] ?? '') ?>" 
-                     class="absolute inset-0 w-full h-full object-contain mix-blend-screen transition-opacity duration-300 <?= empty($seating_tiers[0]['section_img']) ? 'opacity-0' : 'opacity-100' ?> pointer-events-none">
+                     class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[80%] object-contain mix-blend-screen transition-opacity duration-300 <?= empty($seating_tiers[0]['section_img']) ? 'opacity-0' : 'opacity-100' ?> pointer-events-none">
 
             <?php else: ?>
                 <div class="w-full h-full border-2 border-dashed border-white/10 rounded-[3rem] flex flex-col items-center justify-center bg-zinc-900/30 backdrop-blur-sm">
@@ -143,42 +135,152 @@ while ($row = mysqli_fetch_assoc($sections_res)) {
             <?php endif; ?>
         </div>
         
-        <!-- Legend / Selection Indicator -->
-        <div class="mt-8 flex gap-4">
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const tierSelector = document.getElementById('tierSelector');
+            const sectionOverlay = document.getElementById('sectionOverlay');
+
+            if (tierSelector && sectionOverlay) {
+                // Initialize first overlay if available
+                const initialOption = tierSelector.options[tierSelector.selectedIndex];
+                if (initialOption) {
+                    const imgUrl = initialOption.getAttribute('data-img');
+                    if (imgUrl && imgUrl.trim() !== '') {
+                        sectionOverlay.src = imgUrl;
+                        sectionOverlay.classList.remove('opacity-0');
+                        sectionOverlay.classList.add('opacity-100');
+                    }
+                }
+
+                tierSelector.addEventListener('change', function() {
+                    const selectedOption = this.options[this.selectedIndex];
+                    const imgUrl = selectedOption.getAttribute('data-img');
+                    
+                    if (imgUrl && imgUrl.trim() !== '') {
+                        sectionOverlay.src = imgUrl;
+                        sectionOverlay.classList.remove('opacity-0');
+                        sectionOverlay.classList.add('opacity-100');
+                    } else {
+                        sectionOverlay.classList.remove('opacity-100');
+                        sectionOverlay.classList.add('opacity-0');
+                    }
+                });
+            }
+        });
+    </script>
+
+    <!-- Event Details Panel (Floating Glassmorphism) -->
+    <div class="px-6 bg-gradient-to-t from-black via-black/90 to-transparent pb-6 pt-0">
+        <!-- Legend (Placed here for visibility) -->
+        <div class="mb-3 flex gap-4 justify-center">
             <div class="flex items-center gap-2">
                 <div class="w-3 h-3 rounded-full bg-primary shadow-[0_0_8px_rgba(255,102,153,0.8)]"></div>
                 <span class="text-[10px] uppercase tracking-tighter text-white/60 font-bold">Selected Section</span>
             </div>
-            <div class="flex items-center gap-2">
-                <div class="w-3 h-3 rounded-full bg-zinc-800"></div>
-                <span class="text-[10px] uppercase tracking-tighter text-white/60 font-bold">Unavailable</span>
+        </div>
+
+        <div class="w-full mb-4 z-20">
+            <div class="relative custom-dropdown" id="tierDropdown">
+                <!-- Dropdown Trigger -->
+                <div id="dropdownTrigger" class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 flex items-center justify-between cursor-pointer active:scale-[0.98] transition-all backdrop-blur-xl group hover:border-primary/50">
+                    <span id="selectedTierText" class="font-bold text-white">
+                        <?= !empty($seating_tiers) ? htmlspecialchars($seating_tiers[0]['section_name']) . ' - ' . ($seating_tiers[0]['price'] ? '₱' . number_format($seating_tiers[0]['price']) : 'Price TBA') : 'No tiers available' ?>
+                    </span>
+                    <svg class="w-5 h-5 text-primary transition-transform duration-300 group-[.open]:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </div>
+
+                <!-- Dropdown Menu -->
+                <div id="dropdownMenu" class="absolute left-0 right-0 top-full mt-3 bg-zinc-900/90 backdrop-blur-2xl border border-white/10 rounded-2xl overflow-hidden opacity-0 pointer-events-none scale-95 origin-top transition-all duration-300 z-[100] shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
+                    <div class="max-h-60 overflow-y-auto custom-scrollbar">
+                        <?php if (empty($seating_tiers)): ?>
+                            <div class="px-6 py-4 text-white/40 italic">No tiers available</div>
+                        <?php else: ?>
+                            <?php foreach ($seating_tiers as $index => $tier): ?>
+                                <div class="tier-option px-6 py-4 hover:bg-primary/20 cursor-pointer transition-colors border-b border-white/5 last:border-0 flex items-center justify-between group/opt"
+                                     data-value="<?= $tier['section_id'] ?>" 
+                                     data-img="<?= htmlspecialchars($tier['section_img'] ?? '') ?>"
+                                     data-text="<?= htmlspecialchars($tier['section_name']) ?> - <?= $tier['price'] ? '₱' . number_format($tier['price']) : 'Price TBA' ?>">
+                                    <span class="text-white group-hover/opt:text-primary transition-colors font-semibold">
+                                        <?= htmlspecialchars($tier['section_name']) ?>
+                                    </span>
+                                    <span class="text-white/40 text-xs font-bold group-hover/opt:text-white/80 transition-colors">
+                                        <?= $tier['price'] ? '₱' . number_format($tier['price']) : 'Price TBA' ?>
+                                    </span>
+                                </div>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
 
-    <script>
-        const tierSelector = document.getElementById('tierSelector');
-        const sectionOverlay = document.getElementById('sectionOverlay');
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const tierDropdown = document.getElementById('tierDropdown');
+                const trigger = document.getElementById('dropdownTrigger');
+                const menu = document.getElementById('dropdownMenu');
+                const text = document.getElementById('selectedTierText');
+                const options = document.querySelectorAll('.tier-option');
+                const sectionOverlay = document.getElementById('sectionOverlay');
 
-        if (tierSelector && sectionOverlay) {
-            tierSelector.addEventListener('change', function() {
-                const selectedOption = this.options[this.selectedIndex];
-                const imgUrl = selectedOption.getAttribute('data-img');
-                
-                if (imgUrl && imgUrl.trim() !== '') {
-                    sectionOverlay.src = imgUrl;
-                    sectionOverlay.classList.remove('opacity-0');
-                    sectionOverlay.classList.add('opacity-100');
-                } else {
-                    sectionOverlay.classList.remove('opacity-100');
-                    sectionOverlay.classList.add('opacity-0');
-                }
+                // Toggle dropdown
+                trigger.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const isOpen = tierDropdown.classList.contains('open');
+                    
+                    if (isOpen) {
+                        tierDropdown.classList.remove('open');
+                        menu.classList.add('opacity-0', 'pointer-events-none', 'scale-95');
+                        menu.classList.remove('opacity-100', 'pointer-events-auto', 'scale-100');
+                    } else {
+                        tierDropdown.classList.add('open');
+                        menu.classList.remove('opacity-0', 'pointer-events-none', 'scale-95');
+                        menu.classList.add('opacity-100', 'pointer-events-auto', 'scale-100');
+                    }
+                });
+
+                // Option selection
+                options.forEach(option => {
+                    option.addEventListener('click', function() {
+                        const val = this.getAttribute('data-value');
+                        const imgUrl = this.getAttribute('data-img');
+                        const display = this.getAttribute('data-text');
+
+                        // Update text
+                        text.textContent = display;
+
+                        // Update overlay
+                        if (sectionOverlay) {
+                            if (imgUrl && imgUrl.trim() !== '') {
+                                sectionOverlay.src = imgUrl;
+                                sectionOverlay.classList.remove('opacity-0');
+                                sectionOverlay.classList.add('opacity-100');
+                            } else {
+                                sectionOverlay.classList.remove('opacity-100');
+                                sectionOverlay.classList.add('opacity-0');
+                            }
+                        }
+
+                        // Close menu
+                        tierDropdown.classList.remove('open');
+                        menu.classList.add('opacity-0', 'pointer-events-none', 'scale-95');
+                        menu.classList.remove('opacity-100', 'pointer-events-auto', 'scale-100');
+                    });
+                });
+
+                // Close on outside click
+                document.addEventListener('click', () => {
+                    tierDropdown.classList.remove('open');
+                    menu.classList.add('opacity-0', 'pointer-events-none', 'scale-95');
+                    menu.classList.remove('opacity-100', 'pointer-events-auto', 'scale-100');
+                });
             });
-        }
-    </script>
+        </script>
 
-    <!-- Event Details Panel (Floating Glassmorphism) -->
-    <div class="p-6 pb-12 bg-gradient-to-t from-black via-black/90 to-transparent pt-20">
         <div class="bg-white/5 backdrop-blur-2xl border border-white/10 rounded-[2.5rem] p-8 shadow-2xl relative overflow-hidden">
             <!-- Decorative Accent -->
             <div class="absolute -top-12 -right-12 w-32 h-32 bg-primary/10 rounded-full blur-3xl"></div>

@@ -49,14 +49,15 @@ while ($row = mysqli_fetch_assoc($result)) {
 }
 ?>
 
-<div class="flex flex-col w-full relative min-h-screen bg-black overflow-y-auto custom-scrollbar-v pb-40">
-    <!-- Header -->
-    <div class="h-[15vh] w-full shrink-0 flex flex-col items-center justify-end pb-4 bg-black z-20 sticky top-0">
-        <div class="px-4 flex items-center gap-2">
-            <div class="w-2 h-8 bg-primary rounded-full"></div>
-            <p class="font-aubette text-white text-3xl font-bold">MY TICKETS</p>
+<div class="flex flex-col w-full items-center relative min-h-screen bg-black overflow-y-auto custom-scrollbar-v pb-40">
+    <div class="max-w-3xl w-full flex flex-col h-full">
+        <!-- Header -->
+        <div class="h-[15vh] w-full shrink-0 flex flex-col items-center justify-end pb-4 bg-black z-20 sticky top-0">
+            <div class="px-4 flex items-center gap-2">
+                <div class="w-2 h-8 bg-primary rounded-full"></div>
+                <p class="font-aubette text-white text-3xl font-bold">MY TICKETS</p>
+            </div>
         </div>
-    </div>
     
     <div class="flex flex-col gap-6 px-6 mt-6 z-10">
         <?php if (empty($tickets)): ?>
@@ -198,6 +199,7 @@ while ($row = mysqli_fetch_assoc($result)) {
                 </div>
             <?php endforeach; ?>
         <?php endif; ?>
+    </div>
     </div>
 </div>
 

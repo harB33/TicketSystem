@@ -101,7 +101,7 @@ if (isset($isAjax) && $isAjax) {
             
             // Only show navbar on specific pages if needed, but here we'll show it if it's not login/register
             if (!in_array($page, ['login', 'register','pickanartist','pickanarena', 'event'])) {
-                include __DIR__ . '/mobile/navBar.html';
+                include __DIR__ . '/desktop/navBar.html';
             }
         ?>
     </div>

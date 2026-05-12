@@ -125,21 +125,21 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm
                         class="px-6 py-4 rounded-full w-full text-lg text-white font-medium bg-white/5 border border-white/10 focus:bg-white/10 focus:border-primary/50 focus:ring-1 focus:ring-primary/50 outline-none placeholder:text-zinc-600">
                 </div>
                 <div class="w-full space-y-2">
-                    <input type="password" id="desktop_passwordInput" name="password" placeholder="password" class="px-6 py-4 rounded-full w-full text-lg text-white font-medium bg-white/5 border border-white/10 focus:bg-white/10 focus:border-primary/50 focus:ring-1 focus:ring-primary/50 outline-none placeholder:text-zinc-600">
+                    <input type="password" id="desktop_passwordInput" name="password" placeholder="password" 
+                        class="px-6 py-4 rounded-full w-full text-lg text-white font-medium bg-white/5 border border-white/10 focus:bg-white/10 focus:border-primary/50 focus:ring-1 focus:ring-primary/50 outline-none placeholder:text-zinc-600">
                     <!-- Password Strength Bars -->
                 </div>
                 <div class="grid grid-cols-3 gap-4 w-[94%]" style="height: 18px;">
                     <div class="border border-primary rounded-full flex items-center justify-start" style="height: 100%; width: 100%; padding: 2px; box-sizing: border-box;">
-                        <div id="desktop_strengthBar1" class="rounded-full" style="height: 100%; width: 0%; background-color: #ff6b9d;"></div>
+                        <div id="desktop_strengthBar1" class="rounded-full" style="height: 100%; width: 0%; background-color: #ff6b9d; transition: width 0.3s ease;"></div>
                     </div>
                     <div class="border border-[#ffde59] rounded-full flex items-center justify-start" style="height: 100%; width: 100%; padding: 2px; box-sizing: border-box;">
-                        <div id="desktop_strengthBar2" class="rounded-full" style="height: 100%; width: 0%; background-color: #ffde59;"></div>
+                        <div id="desktop_strengthBar2" class="rounded-full" style="height: 100%; width: 0%; background-color: #ffde59; transition: width 0.3s ease;"></div>
                     </div>
                     <div class="border border-[#7ed957] rounded-full flex items-center justify-start" style="height: 100%; width: 100%; padding: 2px; box-sizing: border-box;">
-                        <div id="desktop_strengthBar3" class="rounded-full" style="height: 100%; width: 0%; background-color: #7ed957;"></div>
+                        <div id="desktop_strengthBar3" class="rounded-full" style="height: 100%; width: 0%; background-color: #7ed957; transition: width 0.3s ease;"></div>
                     </div>
                 </div>
-                <p id="desktop_strengthMessage" class="text-[10px] font-bold uppercase tracking-widest text-center h-4 opacity-0 hidden"></p>
                 <div class="w-full space-y-2">
                     <input type="password" id="desktop_confirm_password" name="confirm_password" placeholder="confirm password" 
                         class="px-6 py-4 rounded-full w-full text-lg text-white font-medium bg-white/5 border border-white/10 focus:bg-white/10 focus:border-primary/50 focus:ring-1 focus:ring-primary/50 outline-none placeholder:text-zinc-600">
@@ -170,7 +170,7 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm
 </style>
 
 <script>
-    const shakeEl = (el) => {
+    window.shakeEl = window.shakeEl || function(el) {
         el.animate([
             { transform: 'translateX(0)' },
             { transform: 'translateX(-7px)' },
@@ -197,46 +197,28 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm
         const bar1 = document.getElementById('desktop_strengthBar1');
         const bar2 = document.getElementById('desktop_strengthBar2');
         const bar3 = document.getElementById('desktop_strengthBar3');
-        const message = document.getElementById('desktop_strengthMessage');
         
+        if (!passwordInput || !bar1 || !bar2 || !bar3) return;
+
         const strength = desktop_checkPasswordStrength(passwordInput.value);
         
-        // Count before vs after
-        const before1 = bar1.style.width === '100%' ? 1 : 0;
-        const before2 = bar2.style.width === '100%' ? 1 : 0;
-        const before3 = bar3.style.width === '100%' ? 1 : 0;
-        const beforeCount = before1 + before2 + before3;
         let target1 = '0%';
         let target2 = '0%';
         let target3 = '0%';
         
         if (passwordInput.value !== '') {
-            message.classList.add('opacity-100');
-            message.classList.remove('opacity-0');
-            
-            if (strength > 4) {
-                message.textContent = 'Strong Password';
-                message.style.color = '#7ed957';
-                target1 = '100%'; target2 = '100%'; target3 = '100%';
-                passwordInput.style.borderColor = '';
-                passwordInput.style.boxShadow = '';
-            } else if (strength > 2) {
-                message.textContent = 'Medium Password';
-                message.style.color = '#ffde59';
-                target1 = '100%'; target2 = '100%'; target3 = '0%';
-                passwordInput.style.borderColor = '';
-                passwordInput.style.boxShadow = '';
-            } else {
-                message.textContent = 'Weak Password';
-                message.style.color = '#ff6b9d';
-                target1 = '100%'; target2 = '0%'; target3 = '0%';
+            if (strength > 1) target1 = '100%';
+            if (strength > 3) target2 = '100%';
+            if (strength > 4) target3 = '100%';
+
+            if (strength <= 2) {
                 passwordInput.style.borderColor = '#ef4444';
                 passwordInput.style.boxShadow = '0 0 0 1px #ef4444';
+            } else {
+                passwordInput.style.borderColor = '';
+                passwordInput.style.boxShadow = '';
             }
         } else {
-            message.classList.add('opacity-0');
-            message.classList.remove('opacity-100');
-            message.textContent = '';
             target1 = '0%'; target2 = '0%'; target3 = '0%';
             passwordInput.style.borderColor = '';
             passwordInput.style.boxShadow = '';
@@ -247,11 +229,14 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm
         bar2.style.width = target2;
         bar3.style.width = target3;
     }
+
+    window.desktop_updatePasswordStrength = desktop_updatePasswordStrength;
     
     document.addEventListener('DOMContentLoaded', () => {
         const passwordInputField = document.getElementById('desktop_passwordInput');
         if (passwordInputField) {
             passwordInputField.addEventListener('input', desktop_updatePasswordStrength);
+            desktop_updatePasswordStrength();
         }
         const form = document.getElementById('desktop_registerForm');
         const emailInput = document.getElementById('desktop_email');
@@ -340,7 +325,7 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm
                 }
             });
 
-            [emailInput, passwordInput, confirmInput].forEach(input => {
+            [emailInput, confirmInput].forEach(input => {
                 input.addEventListener('input', function() {
                     if (this.value.trim()) {
                         this.style.borderColor = '';

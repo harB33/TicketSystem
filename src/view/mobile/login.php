@@ -20,10 +20,10 @@ if (isset($_POST['email']) && isset($_POST['password'])) {
         if ($isAjax) {
             ob_clean();
             header('Content-Type: application/json');
-            echo json_encode(['success' => true, 'redirect' => '?page=pickanartist']);
+            echo json_encode(['success' => true, 'redirect' => '?page=featured']);
             exit();
         }
-        header('Location: ?page=pickanartist');
+        header('Location: ?page=featured');
         exit();
     } else {
         if ($isAjax) {

@@ -54,7 +54,7 @@ $pool_artists = array_slice($all_artists, 15);
             <?php endif; ?>
         </div>
 
-        <div id="artists-grid-desktop" class="grid grid-cols-3 gap-4 p-4 z-10 pb-40">
+        <div id="artists-grid-desktop" class="grid grid-cols-3 gap-4 p-4 z-10 pb-40 max-w-3xl mx-auto">
             <?php if(empty($initial_artists)): ?>
                 <p class="col-span-3 text-center text-zinc-500 mt-10">No artists available yet. Please add some via the Staff Portal.</p>
             <?php endif; ?>

@@ -7,6 +7,12 @@
         width: 140px;
         height: 280px;
         z-index: 100;
+        clip-path: circle(52px at 140px 140px);
+        transition: clip-path 0.3s ease;
+    }
+
+    .menu-container.active {
+        clip-path: circle(200px at 140px 140px);
     }
 
     /* The full fan shape — white bg, clipped to half-circle */

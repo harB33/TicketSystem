@@ -24,7 +24,8 @@ $sql = "SELECT
             ss.section_name,
             s.row_number,
             s.seat_number,
-            a.name AS headliner_name
+            a.name AS headliner_name,
+            p.payment_method
         FROM orders o
         JOIN order_items oi ON o.order_id = oi.order_id
         JOIN tickets t ON oi.ticket_id = t.ticket_id
@@ -50,156 +51,154 @@ while ($row = mysqli_fetch_assoc($result)) {
 ?>
 
 <div class="flex flex-col w-full items-center relative min-h-screen bg-black overflow-y-auto custom-scrollbar-v pb-40">
-    <div class="max-w-3xl w-full flex flex-col h-full">
+    <!-- Background Ambient Glow -->
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[500px] bg-primary/5 blur-[120px] pointer-events-none"></div>
+
+    <div class="max-w-7xl w-full flex flex-col h-full relative z-10">
         <!-- Header -->
-        <div class="h-[15vh] w-full shrink-0 flex flex-col items-center justify-end pb-4 bg-black z-20 sticky top-0">
-            <div class="px-4 flex items-center gap-2">
-                <div class="w-2 h-8 bg-primary rounded-full"></div>
-                <p class="font-aubette text-white text-3xl font-bold">MY TICKETS</p>
+        <div class="h-[25vh] w-full shrink-0 flex flex-col items-start justify-end pb-12 px-8">
+            <div class="flex items-center gap-6 mb-4">
+                <div class="w-3 h-12 bg-primary rounded-full shadow-[0_0_20px_rgba(255,102,153,0.6)]"></div>
+                <div>
+                    <p class="font-aubette text-white text-6xl font-bold tracking-tight">MY TICKETS</p>
+                    <p class="text-zinc-500 font-medium tracking-[0.2em] uppercase text-xs mt-2">Your collection of upcoming experiences</p>
+                </div>
             </div>
+            
+            <?php if (!empty($tickets)): ?>
+                <div class="flex items-center gap-4 mt-4">
+                    <div class="px-4 py-2 bg-zinc-900/80 border border-white/10 rounded-2xl backdrop-blur-xl">
+                        <span class="text-primary font-bold text-xl"><?= count($tickets) ?></span>
+                        <span class="text-zinc-400 text-sm ml-2 uppercase font-bold tracking-widest">Active Passes</span>
+                    </div>
+                </div>
+            <?php endif; ?>
         </div>
     
-    <div class="flex flex-col gap-6 px-6 mt-6 z-10">
-        <?php if (empty($tickets)): ?>
-            <!-- Empty State -->
-            <div class="flex flex-col items-center justify-center mt-20 gap-4 opacity-70">
-                <div class="w-24 h-24 rounded-full bg-zinc-900 border-2 border-dashed border-zinc-700 flex items-center justify-center">
-                    <svg class="w-12 h-12 text-zinc-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"></path>
-                    </svg>
+        <div class="px-8 z-10">
+            <?php if (empty($tickets)): ?>
+                <!-- Empty State -->
+                <div class="flex flex-col items-center justify-center py-32 gap-6 bg-zinc-900/30 rounded-[4rem] border border-white/5 backdrop-blur-sm">
+                    <div class="w-32 h-32 rounded-full bg-zinc-900 border-2 border-dashed border-zinc-700 flex items-center justify-center mb-4">
+                        <svg class="w-16 h-16 text-zinc-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"></path>
+                        </svg>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-white font-aubette text-4xl mb-2">no tickets yet</p>
+                        <p class="text-zinc-500 max-w-sm mx-auto text-lg">Your dashboard is empty. Discover the next big event and secure your spot today.</p>
+                    </div>
+                    <a href="?page=featured" class="mt-6 px-12 py-5 bg-primary text-white rounded-2xl font-bold hover:scale-105 hover:shadow-[0_0_30px_rgba(255,102,153,0.4)] active:scale-95 transition-all duration-300">
+                        <p class="font-ballmer text-2xl translate-y-1">explore events</p>
+                    </a>
                 </div>
-                <p class="text-white font-aubette text-2xl mt-4">no tickets yet</p>
-                <p class="text-zinc-500 text-center max-w-[250px]">Looks like you haven't secured your spot for any events. Let's change that!</p>
-                <a href="?page=featured" class="mt-4 px-8 py-4 bg-primary text-white rounded-full font-bold hover:scale-105 active:scale-95 transition-transform">
-                    <p class="font-ballmer text-xl translate-y-1">browse events</p>
-                </a>
-            </div>
-        <?php else: ?>
-            <!-- Ticket List -->
-            <?php foreach ($tickets as $ticket): ?>
-                <?php 
-                    $start_date = new DateTime($ticket['event_start_datetime']);
-                    $end_date = !empty($ticket['event_end_datetime']) ? new DateTime($ticket['event_end_datetime']) : null;
-                    
-                    $formatted_date = $start_date->format('M d, Y');
-                    $formatted_time = $start_date->format('H:i');
-                    $display_name = !empty($ticket['event_name']) ? $ticket['event_name'] : ($ticket['headliner_name'] ?? 'Upcoming Event');
-                    
-                    $full_location = $ticket['venue_name'];
-                    if (!empty($ticket['venue_city'])) {
-                        $full_location .= ', ' . $ticket['venue_city'];
-                    }
-                    
-                    $price_display = !empty($ticket['unit_price']) ? '₱' . number_format($ticket['unit_price'], 2) : 'FREE';
-                ?>
-                <div class="relative bg-zinc-900 rounded-[2.5rem] overflow-hidden border border-white/10 flex flex-col shadow-[0_10px_40px_rgba(0,0,0,0.5)] max-w-lg mx-auto w-full">
-                    
-                    <!-- Decorative cutouts -->
-                    <div class="absolute left-[-15px] top-[220px] w-8 h-8 bg-black rounded-full z-20"></div>
-                    <div class="absolute right-[-15px] top-[220px] w-8 h-8 bg-black rounded-full z-20"></div>
-                    <div class="absolute left-4 right-4 top-[236px] border-b-2 border-dashed border-zinc-700 z-10"></div>
-
-                    <!-- Top half: Event info (No Images) -->
-                    <div class="h-[236px] w-full relative bg-linear-to-br from-primary/30 via-zinc-800 to-zinc-900 p-6 flex flex-col justify-between">
-                        
-                        <!-- Watermark -->
-                        <div class="absolute inset-0 overflow-hidden opacity-5 pointer-events-none z-0 flex flex-wrap content-start">
-                            <?php for($i=0; $i<50; $i++): ?>
-                                <span class="font-black text-2xl uppercase tracking-tighter mr-2 leading-none font-sans text-white">TICKET</span>
-                            <?php endfor; ?>
-                        </div>
-
-                        <div class="relative z-10 flex justify-between items-start">
-                            <div class="bg-primary/20 text-primary border border-primary/30 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest">
-                                Valid Ticket
-                            </div>
-                            <div class="text-right">
-                                <p class="text-white/50 text-[10px] uppercase tracking-widest font-bold">Order Ref</p>
-                                <p class="text-white/80 font-mono text-xs"><?= htmlspecialchars($ticket['transaction_ref'] ?? 'N/A') ?></p>
-                            </div>
-                        </div>
-                        
-                        <div class="relative z-10 mt-auto">
-                            <p class="text-white text-3xl font-bold font-aubette leading-tight truncate mb-2"><?= htmlspecialchars($display_name) ?></p>
+            <?php else: ?>
+                <!-- Ticket Grid -->
+                <div class="grid grid-cols-1 xl:grid-cols-2 gap-8">
+                    <?php foreach ($tickets as $ticket): ?>
+                        <?php 
+                            $start_date = new DateTime($ticket['event_start_datetime']);
+                            $formatted_date = $start_date->format('M d, Y');
+                            $formatted_time = $start_date->format('H:i');
+                            $display_name = !empty($ticket['event_name']) ? $ticket['event_name'] : ($ticket['headliner_name'] ?? 'Upcoming Event');
                             
-                            <div class="grid grid-cols-2 gap-4">
-                                <div>
-                                    <p class="text-white/50 text-[10px] uppercase tracking-widest font-bold mb-1">Location</p>
-                                    <p class="text-zinc-300 text-sm font-medium truncate"><?= htmlspecialchars($full_location) ?></p>
+                            $full_location = $ticket['venue_name'];
+                            if (!empty($ticket['venue_city'])) {
+                                $full_location .= ', ' . $ticket['venue_city'];
+                            }
+                        ?>
+                        <div class="relative bg-zinc-900/40 backdrop-blur-3xl rounded-[2.5rem] overflow-hidden border border-white/10 flex flex-row shadow-[0_20px_50px_rgba(0,0,0,0.5)] group hover:scale-[1.02] hover:border-primary/40 transition-all duration-500 h-72">
+                            
+                            <!-- Left: Event Info -->
+                            <div class="flex-1 p-8 flex flex-col justify-between relative overflow-hidden">
+                                <!-- Watermark Background -->
+                                <div class="absolute inset-0 opacity-[0.03] pointer-events-none select-none flex flex-wrap content-start p-2 gap-2 transform -rotate-12 scale-150">
+                                    <?php for($i=0; $i<20; $i++): ?>
+                                        <span class="font-black text-2xl uppercase tracking-tighter text-white">ACCESS</span>
+                                    <?php endfor; ?>
                                 </div>
-                                <div>
-                                    <p class="text-white/50 text-[10px] uppercase tracking-widest font-bold mb-1">Purchased For</p>
-                                    <p class="text-zinc-300 text-sm font-medium"><?= $price_display ?></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Bottom half: Details & Barcode -->
-                    <div class="p-6 pt-8 flex flex-col gap-4 bg-zinc-900">
-                        <!-- Datetime -->
-                        <div class="flex justify-between items-center bg-black/30 p-4 rounded-2xl border border-white/5">
-                            <div>
-                                <p class="text-xs text-zinc-500 uppercase tracking-wider font-bold">Date</p>
-                                <p class="text-white font-aubette text-xl"><?= $formatted_date ?></p>
-                            </div>
-                            <div class="w-px h-8 bg-zinc-700"></div>
-                            <div class="text-right">
-                                <p class="text-xs text-zinc-500 uppercase tracking-wider font-bold">Time</p>
-                                <p class="text-white font-aubette text-xl"><?= $formatted_time ?></p>
-                            </div>
-                        </div>
 
-                        <!-- Seating -->
-                        <div class="flex justify-between px-2 mt-2">
-                            <div>
-                                <p class="text-xs text-zinc-500 uppercase tracking-wider font-bold mb-1">Section</p>
-                                <p class="text-primary font-bold text-lg"><?= htmlspecialchars($ticket['section_name']) ?></p>
-                            </div>
-                            <div>
-                                <p class="text-xs text-zinc-500 uppercase tracking-wider font-bold mb-1">Row</p>
-                                <p class="text-white font-bold text-lg"><?= htmlspecialchars($ticket['row_number'] ?? 'N/A') ?></p>
-                            </div>
-                            <div class="text-right">
-                                <p class="text-xs text-zinc-500 uppercase tracking-wider font-bold mb-1">Seat</p>
-                                <p class="text-white font-bold text-lg"><?= htmlspecialchars($ticket['seat_number'] ?? 'N/A') ?></p>
-                            </div>
-                        </div>
-                        
-                        <div class="flex justify-between px-2 mt-1">
-                            <?php if (!empty($ticket['attendee_first_name'])): ?>
-                                <div>
-                                    <p class="text-xs text-zinc-500 uppercase tracking-wider font-bold mb-1">Ticket Holder</p>
-                                    <p class="text-white/80 font-medium"><?= htmlspecialchars($ticket['attendee_first_name'] . ' ' . $ticket['attendee_last_name']) ?></p>
+                                <div class="relative z-10 flex justify-between items-start">
+                                    <div class="bg-primary/10 text-primary border border-primary/20 px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-[0.2em] backdrop-blur-md">
+                                        Confirmed Admission
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="text-white/30 text-[9px] uppercase tracking-widest font-bold">Method / Transaction</p>
+                                        <p class="text-white/60 font-mono text-[10px]">
+                                            <span class="text-primary/80 font-bold"><?= htmlspecialchars($ticket['payment_method'] ?? 'Unknown') ?></span> • <?= htmlspecialchars($ticket['transaction_ref'] ?? 'REF-00000') ?>
+                                        </p>
+                                    </div>
                                 </div>
-                            <?php endif; ?>
-                            <div class="text-right">
-                                <p class="text-xs text-zinc-500 uppercase tracking-wider font-bold mb-1">Ticket ID</p>
-                                <p class="text-white/80 font-mono text-sm">#<?= str_pad($ticket['order_item_id'], 6, '0', STR_PAD_LEFT) ?></p>
-                            </div>
-                        </div>
+                                
+                                <div class="relative z-10">
+                                    <p class="text-white text-3xl font-bold font-aubette leading-tight truncate mb-1 group-hover:text-primary transition-colors"><?= htmlspecialchars($display_name) ?></p>
+                                    <div class="flex items-center gap-2 text-zinc-400">
+                                        <svg class="w-4 h-4 text-primary/60" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                                        <p class="text-sm font-medium truncate"><?= htmlspecialchars($full_location) ?></p>
+                                    </div>
+                                </div>
 
-                        <!-- Barcode Area -->
-                        <div class="mt-4 flex flex-col items-center justify-center bg-white rounded-2xl p-4">
-                            <!-- Visual Barcode Representation -->
-                            <div class="flex h-12 w-full max-w-[200px] justify-between items-end gap-[2px] opacity-90">
-                                <?php 
-                                    srand(crc32($ticket['barcode_string'])); 
-                                    for ($i = 0; $i < 35; $i++) {
-                                        $width = rand(1, 4);
-                                        echo "<div class='bg-black h-full' style='width: {$width}px;'></div>";
-                                    }
-                                ?>
+                                <div class="relative z-10 flex gap-8">
+                                    <div>
+                                        <p class="text-white/30 text-[9px] uppercase tracking-widest font-bold mb-1">Date</p>
+                                        <p class="text-white font-aubette text-lg"><?= $formatted_date ?></p>
+                                    </div>
+                                    <div>
+                                        <p class="text-white/30 text-[9px] uppercase tracking-widest font-bold mb-1">Doors Open</p>
+                                        <p class="text-white font-aubette text-lg"><?= $formatted_time ?></p>
+                                    </div>
+                                </div>
                             </div>
-                            <p class="text-black font-mono text-xs tracking-[0.4em] mt-2 font-bold uppercase">
-                                <?= htmlspecialchars($ticket['barcode_string']) ?>
-                            </p>
+
+                            <!-- Decorative Perforation -->
+                            <div class="relative flex flex-col items-center justify-between py-4">
+                                <div class="absolute top-[-20px] w-10 h-10 bg-black rounded-full z-20 border border-white/5"></div>
+                                <div class="w-px h-full border-r-2 border-dashed border-zinc-700/50 mx-2"></div>
+                                <div class="absolute bottom-[-20px] w-10 h-10 bg-black rounded-full z-20 border border-white/5"></div>
+                            </div>
+
+                            <!-- Right: Seating & Barcode -->
+                            <div class="w-72 p-8 flex flex-col justify-between bg-zinc-800/20 border-l border-white/5 backdrop-blur-sm">
+                                <div class="grid grid-cols-3 gap-2">
+                                    <div class="text-center">
+                                        <p class="text-[9px] text-zinc-500 uppercase tracking-widest font-bold mb-1">Section</p>
+                                        <p class="text-primary font-bold text-base truncate"><?= htmlspecialchars($ticket['section_name']) ?></p>
+                                    </div>
+                                    <div class="text-center border-x border-white/5">
+                                        <p class="text-[9px] text-zinc-500 uppercase tracking-widest font-bold mb-1">Row</p>
+                                        <p class="text-white font-bold text-base"><?= htmlspecialchars($ticket['row_number'] ?? 'N/A') ?></p>
+                                    </div>
+                                    <div class="text-center">
+                                        <p class="text-[9px] text-zinc-500 uppercase tracking-widest font-bold mb-1">Seat</p>
+                                        <p class="text-white font-bold text-base"><?= htmlspecialchars($ticket['seat_number'] ?? 'N/A') ?></p>
+                                    </div>
+                                </div>
+
+                                <!-- Barcode Container -->
+                                <div class="mt-4 flex flex-col items-center group/barcode">
+                                    <div class="bg-white p-3 rounded-xl transition-all duration-500 group-hover/barcode:scale-105 group-hover/barcode:shadow-[0_0_20px_rgba(255,255,255,0.2)]">
+                                        <!-- Dynamic Barcode Rendering -->
+                                        <div class="flex h-10 w-full max-w-[160px] justify-between items-end gap-[1px]">
+                                            <?php 
+                                                srand(crc32($ticket['barcode_string'])); 
+                                                for ($i = 0; $i < 30; $i++) {
+                                                    $width = rand(1, 3);
+                                                    echo "<div class='bg-black h-full' style='width: {$width}px;'></div>";
+                                                }
+                                            ?>
+                                        </div>
+                                        <p class="text-black font-mono text-[8px] tracking-[0.3em] mt-2 font-bold uppercase text-center">
+                                            <?= htmlspecialchars($ticket['barcode_string']) ?>
+                                        </p>
+                                    </div>
+                                    <p class="text-[9px] text-zinc-500 uppercase tracking-[0.2em] mt-3 font-bold opacity-0 group-hover:opacity-100 transition-opacity">Scan at Entrance</p>
+                                </div>
+                            </div>
                         </div>
-                    </div>
+                    <?php endforeach; ?>
                 </div>
-            <?php endforeach; ?>
-        <?php endif; ?>
-    </div>
+            <?php endif; ?>
+        </div>
     </div>
 </div>
 

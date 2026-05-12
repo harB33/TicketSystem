@@ -277,32 +277,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['checkout']) && $is_ve
                                 <a href="?page=payment_methods" class="inline-block px-6 py-3 bg-primary rounded-xl text-white font-bold text-sm">Add Payment Method</a>
                             </div>
                         <?php else: ?>
-                            <div class="grid grid-cols-1 gap-4">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <?php foreach($payment_methods as $index => $pm): ?>
                                     <label class="relative cursor-pointer group">
                                         <input type="radio" name="payment_method" value="<?= htmlspecialchars($pm['provider'] . ' - ' . substr($pm['account_number'], -4)) ?>" class="peer sr-only" <?= $index === 0 ? 'checked' : '' ?>>
-                                        <div class="p-5 rounded-2xl border-2 border-white/10 bg-white/5 text-white peer-checked:border-primary peer-checked:bg-primary/10 transition-all flex items-center justify-between hover:bg-white/10">
-                                            <div class="flex items-center gap-4">
-                                                <div class="w-12 h-12 rounded-xl bg-black/50 flex items-center justify-center shrink-0">
-                                                    <?php if (stripos($pm['provider'], 'visa') !== false): ?>
-                                                        <span class="font-bold italic text-sm">VISA</span>
-                                                    <?php elseif (stripos($pm['provider'], 'mastercard') !== false): ?>
-                                                        <div class="flex">
-                                                            <div class="w-4 h-4 rounded-full bg-red-500 opacity-80 mix-blend-screen"></div>
-                                                            <div class="w-4 h-4 rounded-full bg-yellow-500 opacity-80 mix-blend-screen -ml-2"></div>
-                                                        </div>
-                                                    <?php elseif (stripos($pm['provider'], 'gcash') !== false): ?>
-                                                        <span class="text-blue-400 font-bold italic text-[10px]">GCash</span>
-                                                    <?php else: ?>
-                                                        <svg class="w-6 h-6 text-white/50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
-                                                    <?php endif; ?>
-                                                </div>
-                                                <div class="flex flex-col">
-                                                    <span class="font-bold text-lg leading-none mb-1"><?= htmlspecialchars($pm['provider']) ?></span>
-                                                    <span class="text-white/50 font-mono text-xs tracking-widest">•••• <?= substr(htmlspecialchars($pm['account_number']), -4) ?></span>
-                                                </div>
+                                        <div class="p-6 rounded-3xl border-2 border-white/10 bg-white/5 backdrop-blur-xl text-white peer-checked:border-primary peer-checked:bg-primary/10 transition-all flex items-center gap-4 hover:bg-white/10">
+                                            <div class="w-14 h-14 rounded-2xl bg-black/50 border border-white/5 flex items-center justify-center shrink-0">
+                                                <?php if (stripos($pm['provider'], 'visa') !== false): ?>
+                                                    <span class="font-bold italic text-lg">VISA</span>
+                                                <?php elseif (stripos($pm['provider'], 'mastercard') !== false): ?>
+                                                    <div class="flex">
+                                                        <div class="w-5 h-5 rounded-full bg-red-500 opacity-80 mix-blend-screen"></div>
+                                                        <div class="w-5 h-5 rounded-full bg-yellow-500 opacity-80 mix-blend-screen -ml-3"></div>
+                                                    </div>
+                                                <?php elseif (stripos($pm['provider'], 'gcash') !== false): ?>
+                                                    <span class="text-blue-400 font-bold italic text-sm">GCash</span>
+                                                <?php elseif (stripos($pm['provider'], 'maya') !== false): ?>
+                                                    <span class="text-green-400 font-bold italic text-sm">Maya</span>
+                                                <?php else: ?>
+                                                    <svg class="w-8 h-8 text-white/50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
+                                                <?php endif; ?>
                                             </div>
-                                            <div class="w-6 h-6 rounded-full border-2 border-white/20 peer-checked:border-primary peer-checked:bg-primary flex items-center justify-center transition-colors">
+                                            <div class="flex flex-col flex-1">
+                                                <span class="font-bold text-xl leading-none mb-1"><?= htmlspecialchars($pm['provider']) ?></span>
+                                                <span class="text-white/40 font-mono text-[10px] tracking-widest">•••• <?= substr(htmlspecialchars($pm['account_number']), -4) ?></span>
+                                                <span class="text-white/20 text-[9px] uppercase tracking-widest font-bold mt-1"><?= htmlspecialchars($pm['account_name']) ?></span>
+                                            </div>
+                                            <div class="w-6 h-6 rounded-full border-2 border-white/20 peer-checked:border-primary peer-checked:bg-primary flex items-center justify-center transition-all group-hover:border-white/40">
                                                 <svg class="w-4 h-4 text-white opacity-0 peer-checked:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
                                             </div>
                                         </div>

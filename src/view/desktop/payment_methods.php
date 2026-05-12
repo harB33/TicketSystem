@@ -129,20 +129,80 @@ while ($row = mysqli_fetch_assoc($result)) {
                 </div>
             <?php endforeach; ?>
 
-            <div class="mt-8 bg-zinc-900/40 border border-dashed border-white/20 rounded-[2.5rem] p-8">
-                <h3 class="text-white font-aubette text-2xl mb-6">Add New Method</h3>
+            <div class="mt-8 bg-zinc-900/40 border border-white/5 rounded-[2.5rem] p-8 backdrop-blur-sm relative z-50">
+                <h3 class="text-white font-aubette text-xl mb-6 uppercase tracking-[0.2em]">Add New Method</h3>
                 <form method="POST" class="flex flex-col gap-5">
                     <input type="hidden" name="action" value="add">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                        <div class="flex flex-col gap-2">
-                            <label class="text-white/40 text-[10px] font-bold uppercase tracking-widest px-2">Provider / Card Type</label>
-                            <input type="text" name="provider" required placeholder="e.g. GCash, Visa, Mastercard" class="w-full bg-black/50 border border-white/10 rounded-2xl px-6 py-4 text-white placeholder-white/20 focus:outline-none focus:border-primary transition-colors">
+                        <div class="flex flex-col gap-2 relative" id="desktop-providerSelectContainer" style="z-index: 100;">
+                            <label class="text-white/40 text-[10px] font-bold uppercase tracking-widest px-4">Provider / Card Type</label>
+                            <button type="button" id="desktop-providerTrigger" class="w-full bg-black/50 border border-white/10 rounded-2xl px-6 py-5 text-white flex items-center justify-between focus:outline-none focus:border-primary transition-all group/trigger cursor-pointer">
+                                <span id="desktop-selectedProviderDisplay" class="text-white/20">Select Provider</span>
+                                <svg class="w-5 h-5 text-white/20 group-hover/trigger:text-primary transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </button>
+                            <input type="hidden" name="provider" id="desktop-providerHiddenInput" required>
+                            
+                            <!-- Premium Dropdown (Mobile-style but Desktop IDs) -->
+                            <div id="desktop-providerDropdown" class="hidden absolute top-[calc(100%+8px)] left-0 w-full bg-zinc-900/95 backdrop-blur-3xl border border-white/10 rounded-2xl overflow-hidden z-50 shadow-2xl">
+                                <!-- GCash -->
+                                <div class="desktop-provider-option px-6 py-4 hover:bg-primary/20 cursor-pointer transition-all border-b border-white/5 last:border-0 flex items-center justify-between group/opt" data-value="GCash">
+                                    <div class="flex flex-col">
+                                        <span class="text-white group-hover/opt:text-primary transition-colors text-lg font-bold">GCash</span>
+                                        <span class="text-white/30 text-[10px] font-bold uppercase tracking-widest mt-0.5">E-Wallet</span>
+                                    </div>
+                                    <div class="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center">
+                                        <p class="text-blue-400 font-bold italic text-[10px]">GCash</p>
+                                    </div>
+                                </div>
+                                <!-- Maya -->
+                                <div class="desktop-provider-option px-6 py-4 hover:bg-primary/20 cursor-pointer transition-all border-b border-white/5 last:border-0 flex items-center justify-between group/opt" data-value="Maya">
+                                    <div class="flex flex-col">
+                                        <span class="text-white group-hover/opt:text-primary transition-colors text-lg font-bold">Maya</span>
+                                        <span class="text-white/30 text-[10px] font-bold uppercase tracking-widest mt-0.5">E-Wallet</span>
+                                    </div>
+                                    <div class="w-10 h-10 rounded-xl bg-green-500/10 flex items-center justify-center">
+                                        <p class="text-green-400 font-bold italic text-[10px]">Maya</p>
+                                    </div>
+                                </div>
+                                <!-- Visa -->
+                                <div class="desktop-provider-option px-6 py-4 hover:bg-primary/20 cursor-pointer transition-all border-b border-white/5 last:border-0 flex items-center justify-between group/opt" data-value="Visa">
+                                    <div class="flex flex-col">
+                                        <span class="text-white group-hover/opt:text-primary transition-colors text-lg font-bold">Visa</span>
+                                        <span class="text-white/30 text-[10px] font-bold uppercase tracking-widest mt-0.5">Credit / Debit Card</span>
+                                    </div>
+                                    <p class="text-white font-bold italic text-sm">VISA</p>
+                                </div>
+                                <!-- Mastercard -->
+                                <div class="desktop-provider-option px-6 py-4 hover:bg-primary/20 cursor-pointer transition-all border-b border-white/5 last:border-0 flex items-center justify-between group/opt" data-value="Mastercard">
+                                    <div class="flex flex-col">
+                                        <span class="text-white group-hover/opt:text-primary transition-colors text-lg font-bold">Mastercard</span>
+                                        <span class="text-white/30 text-[10px] font-bold uppercase tracking-widest mt-0.5">Credit / Debit Card</span>
+                                    </div>
+                                    <div class="flex">
+                                        <div class="w-4 h-4 rounded-full bg-red-500 opacity-80 mix-blend-screen"></div>
+                                        <div class="w-4 h-4 rounded-full bg-yellow-500 opacity-80 mix-blend-screen -ml-2"></div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
+
                         <div class="flex flex-col gap-2">
                             <label class="text-white/40 text-[10px] font-bold uppercase tracking-widest px-2">Account / Card Number</label>
                             <input type="text" name="account_number" required placeholder="•••• •••• •••• 1234" class="w-full bg-black/50 border border-white/10 rounded-2xl px-6 py-4 text-white font-mono placeholder-white/20 focus:outline-none focus:border-primary transition-colors">
                         </div>
                     </div>
+
+                    <div id="desktop-cardExtraFields" class="hidden grid grid-cols-2 gap-5">
+                        <div class="flex flex-col gap-2">
+                            <label class="text-white/40 text-[10px] font-bold uppercase tracking-widest px-2">Expires On</label>
+                            <input type="text" name="expiry_date" placeholder="MM/YY" class="w-full bg-black/50 border border-white/10 rounded-2xl px-6 py-4 text-white placeholder-white/20 focus:outline-none focus:border-primary transition-colors">
+                        </div>
+                        <div class="flex flex-col gap-2">
+                            <label class="text-white/40 text-[10px] font-bold uppercase tracking-widest px-2">CVV</label>
+                            <input type="password" name="cvv" placeholder="•••" class="w-full bg-black/50 border border-white/10 rounded-2xl px-6 py-4 text-white placeholder-white/20 focus:outline-none focus:border-primary transition-colors">
+                        </div>
+                    </div>
+
                     <div class="flex flex-col gap-2">
                         <label class="text-white/40 text-[10px] font-bold uppercase tracking-widest px-2">Account Name</label>
                         <input type="text" name="account_name" required placeholder="Name on account" class="w-full bg-black/50 border border-white/10 rounded-2xl px-6 py-4 text-white placeholder-white/20 focus:outline-none focus:border-primary transition-colors">
@@ -156,3 +216,54 @@ while ($row = mysqli_fetch_assoc($result)) {
         </div>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const trigger = document.getElementById('desktop-providerTrigger');
+    const dropdown = document.getElementById('desktop-providerDropdown');
+    const display = document.getElementById('desktop-selectedProviderDisplay');
+    const hiddenInput = document.getElementById('desktop-providerHiddenInput');
+    const options = document.querySelectorAll('.desktop-provider-option');
+    const cardFields = document.getElementById('desktop-cardExtraFields');
+
+    // Toggle dropdown
+    if (trigger) {
+        trigger.addEventListener('click', function(e) {
+            e.stopPropagation();
+            dropdown.classList.toggle('hidden');
+        });
+    }
+
+    // Selection logic
+    options.forEach(option => {
+        option.addEventListener('click', function() {
+            const value = this.getAttribute('data-value');
+            display.textContent = value;
+            display.classList.remove('text-white/20');
+            display.classList.add('text-white');
+            hiddenInput.value = value;
+            dropdown.classList.add('hidden');
+
+            // Show/hide card details based on selection
+            if (value === 'Visa' || value === 'Mastercard') {
+                cardFields.classList.remove('hidden');
+                cardFields.querySelectorAll('input').forEach(input => {
+                    input.required = true;
+                });
+            } else {
+                cardFields.classList.add('hidden');
+                cardFields.querySelectorAll('input').forEach(input => {
+                    input.required = false;
+                });
+            }
+        });
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function(e) {
+        if (dropdown && !dropdown.contains(e.target) && !trigger.contains(e.target)) {
+            dropdown.classList.add('hidden');
+        }
+    });
+});
+</script>

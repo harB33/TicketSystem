@@ -61,7 +61,7 @@ while ($row = mysqli_fetch_assoc($result)) {
     <div class="flex flex-col gap-6 px-6 mt-6 z-10">
         <?php if (empty($tickets)): ?>
             <!-- Empty State -->
-            <div class="flex flex-col items-center justify-center mt-20 gap-4 opacity-70">
+            <div class="flex flex-col items-center justify-center mt-20 gap-4">
                 <div class="w-24 h-24 rounded-full bg-zinc-900 border-2 border-dashed border-zinc-700 flex items-center justify-center">
                     <svg class="w-12 h-12 text-zinc-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"></path>

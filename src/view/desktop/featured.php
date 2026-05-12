@@ -65,39 +65,39 @@ if ($res) {
 ?>
 
 <div class="flex flex-col w-full items-center relative min-h-screen bg-black overflow-y-auto custom-scrollbar-v">
-    <div class="max-w-3xl w-full">
+    <div class="max-w-7xl w-full px-8">
 
-        <div class="h-[15vh] w-full shrink-0 flex flex-col items-center justify-center bg-black z-20">
-            <img src="./asset/logo/featured.png" alt="" class="max-w-2xl">
+        <div class="h-[20vh] w-full pt-20 shrink-0 flex flex-col items-center justify-center bg-black z-20">
+            <img src="./asset/logo/featured.png" alt="" class="max-w-3xl w-full object-contain">
         </div>
         
-        <div class="shrink-0">
-            <p id="live-timestamp" class="text-white text-5xl font-aubette text-center"><?php echo date("m d y"); ?></p>
+        <div class="shrink-0 m-12">
+            <p id="live-timestamp" class="text-white text-8xl font-aubette text-center tracking-wide"><?php echo date("m d y"); ?></p>
         </div>
         
-        <div class="pb-32 flex flex-col gap-8 mt-4">
+        <div class="pb-32 flex flex-col gap-16 mt-4">
             
             <?php if (!empty($recommended_events)): ?>
                 <div class="flex flex-col gap-4">
-                    <div class="px-6 flex items-center gap-3">
-                        <div class="w-1.5 h-8 bg-primary rounded-full shadow-[0_0_15px_rgba(255,102,153,0.5)]"></div>
-                    <p class="font-tschichold text-white text-3xl font-bold lowercase tracking-tight">recommended for you</p>
-                </div>
-                <div class="flex gap-5 px-6 z-10 w-full overflow-x-auto pb-6 custom-scrollbar-h">
-                    <?php foreach ($recommended_events as $event): ?>
-                        <?php 
-                            $date = new DateTime($event['event_start_datetime']);
-                            $formatted_date = $date->format('m d y');
-                            $formatted_time = $date->format('H:i');
-                            ?>
-                        <a href="?page=event&id=<?= $event['event_id'] ?>" class="group bg-zinc-900 rounded-[2.5rem] h-64 w-[85%] shrink-0 relative overflow-hidden border border-white/10 block transition-transform active:scale-[0.98]">
-                            <div class="absolute inset-0 p-8 flex flex-col justify-between z-10 bg-gradient-to-t from-black via-black/40 to-transparent">
-                                <div class="flex justify-between items-start">
-                                    <span class="px-3 py-1 bg-primary/20 border border-primary/30 rounded-full text-primary text-[10px] font-bold uppercase tracking-widest backdrop-blur-sm">Featured</span>
-                                    <div class="flex flex-col items-end gap-2">
-                                        <div class="p-3 bg-primary/90 rounded-2xl shadow-xl shadow-primary/20 backdrop-blur-md">
-                                            <p class="text-white text-2xl font-bold font-aubette"><?= $formatted_time ?></p>
-                                        </div>
+                    <div class="px-6 flex items-center gap-4">
+                        <div class="w-2 h-10 bg-primary rounded-full shadow-[0_0_20px_rgba(255,102,153,0.6)]"></div>
+                        <p class="font-tschichold text-white text-4xl font-bold lowercase tracking-tight">recommended for you</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 px-6 z-10 w-full">
+                        <?php foreach ($recommended_events as $event): ?>
+                            <?php 
+                                $date = new DateTime($event['event_start_datetime']);
+                                $formatted_date = $date->format('m d y');
+                                $formatted_time = $date->format('H:i');
+                                ?>
+                            <a href="?page=event&id=<?= $event['event_id'] ?>" class="group bg-zinc-900 rounded-[3rem] h-80 w-full relative overflow-hidden border border-white/10 block transition-all hover:scale-[1.02] hover:border-primary/50 active:scale-[0.98] shadow-2xl">
+                                <div class="absolute inset-0 p-10 flex flex-col justify-between z-10 bg-gradient-to-t from-black via-black/20 to-transparent">
+                                    <div class="flex justify-between items-start">
+                                        <span class="px-4 py-1.5 bg-primary/20 border border-primary/30 rounded-full text-primary text-[10px] font-bold uppercase tracking-widest backdrop-blur-md">Featured</span>
+                                        <div class="flex flex-col items-end gap-3">
+                                            <div class="p-4 bg-primary/90 rounded-2xl shadow-2xl shadow-primary/40 backdrop-blur-md">
+                                                <p class="text-white text-3xl font-bold font-aubette tracking-wide"><?= $formatted_time ?></p>
+                                            </div>
                                         <?php if (!empty($event['artist_images'])): ?>
                                             <div class="flex -space-x-3">
                                                 <?php 
@@ -120,7 +120,7 @@ if ($res) {
                                             <div data-artist-names="<?= htmlspecialchars($event['artist_lineup'] ?? '') ?>">
                                                 <p class="text-white/40 text-[10px] font-bold uppercase tracking-[0.2em] mb-1"><?= htmlspecialchars($event['event_name'] ?? 'TBA') ?></p>
                                                 <?php $artist_array = explode(', ', $event['artist_lineup'] ?? ''); ?>
-                                                <p class="text-white text-2xl font-bold font-aubette leading-tight mb-1"><?= $formatted_date ?></p>
+                                                <p class="text-white text-2xl font-bold font-aubette leading-tight mb-1 tracking-wide"><?= $formatted_date ?></p>
                                                 <p class="text-white text-xl font-aubette opacity-80 truncate artist-name-display"><?= htmlspecialchars($artist_array[0] ?? 'TBA') ?></p>
                                             </div>
                                         </div>
@@ -154,47 +154,52 @@ if ($res) {
                             </div>
                             <?php else: ?>
                                 <?php foreach ($grouped_events as $venue_name => $events): ?>
-                                    <div class="flex flex-col gap-4 mb-2">
+                                    <div class="flex flex-col gap-6 mb-8">
                                         <div class="px-6 flex items-center justify-between">
-                                            <p class="font-tschichold text-white/40 text-xl font-bold lowercase tracking-wide"><?= htmlspecialchars($venue_name) ?></p>
-                                            <div class="h-[1px] flex-1 bg-white/5 ml-4"></div>
+                                            <p class="font-tschichold text-white/40 text-2xl font-bold lowercase tracking-widest"><?= htmlspecialchars($venue_name) ?></p>
+                                            <div class="h-[1px] flex-1 bg-white/10 ml-8"></div>
                                         </div>
-                                        <div class="flex gap-4 px-6 z-10 w-full overflow-x-auto pb-6 custom-scrollbar-h">
+                                        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 px-6 z-10 w-full">
                                             <?php foreach ($events as $event): ?>
                             <?php 
                                 $date = new DateTime($event['event_start_datetime']);
                                 $formatted_date = $date->format('m d y');
                                 $formatted_time = $date->format('H:i');
                                 ?>
-                            <a href="?page=event&id=<?= $event['event_id'] ?>" class="group bg-zinc-900 rounded-3xl h-76 w-[75%] shrink-0 relative overflow-hidden border border-white/5 block transition-transform active:scale-[0.98]">
-                                <div class="absolute inset-0 p-5 flex items-end justify-between z-10 bg-gradient-to-t from-black/90 via-black/40 to-transparent">
+                            <a href="?page=event&id=<?= $event['event_id'] ?>" class="group bg-zinc-900 rounded-[2.5rem] h-80 w-full relative overflow-hidden border border-white/5 block transition-all hover:scale-[1.02] hover:border-primary/30 active:scale-[0.98]">
+                                <div class="absolute inset-0 p-6 flex flex-col justify-between z-10 bg-gradient-to-t from-black via-black/40 to-transparent">
+                                    <div class="flex justify-between items-start">
+                                        <p class="text-white drop-shadow-2xl text-[12px] font-bold uppercase tracking-widest"><?= htmlspecialchars($event['event_name'] ?? 'TBA') ?></p>
+                                    </div>
+                                    
                                     <div>
-                                        <p class="text-white drop-shadow-[0_10px_10px_rgba(0,0,0,.8)] text-[14px] absolute top-5 left-5 font-bold uppercase tracking-widest mb-0.5"><?= htmlspecialchars($event['event_name'] ?? 'TBA') ?></p>
                                         <?php if (!empty($event['artist_images'])): ?>
-                                            <div class="flex -space-x-2 mb-3">
+                                            <div class="flex -space-x-2 mb-4">
                                                 <?php 
                                                 $imgs = explode('|', $event['artist_images']);
                                                 foreach (array_slice($imgs, 0, 3) as $img): if (empty($img)) continue;
                                                 ?>
-                                                    <div class="w-8 h-8 rounded-full border-2 border-zinc-900 overflow-hidden bg-zinc-800 shadow-lg">
+                                                    <div class="w-10 h-10 rounded-full border-2 border-zinc-900 overflow-hidden bg-zinc-800 shadow-xl">
                                                         <img src="<?= htmlspecialchars($img) ?>" class="w-full h-full object-cover">
                                                     </div>
                                                     <?php endforeach; ?>
                                                     <?php if (count($imgs) > 3): ?>
-                                                        <div class="w-8 h-8 rounded-full border-2 border-zinc-900 bg-zinc-800 flex items-center justify-center shadow-lg">
-                                                            <span class="text-white text-[8px] font-bold">+<?= count($imgs) - 3 ?></span>
+                                                        <div class="w-10 h-10 rounded-full border-2 border-zinc-900 bg-zinc-800 flex items-center justify-center shadow-xl">
+                                                            <span class="text-white text-[10px] font-bold">+<?= count($imgs) - 3 ?></span>
                                                         </div>
                                                         <?php endif; ?>
                                                     </div>
                                                     <?php endif; ?>
-                                                    <div data-artist-names="<?= htmlspecialchars($event['artist_lineup'] ?? '') ?>">
-                                                        <p class="text-white text-xl font-bold font-aubette mb-0.5"><?= $formatted_date ?></p>
-                                                        <?php $artist_array_all = explode(', ', $event['artist_lineup'] ?? ''); ?>
-                                                        <p class="text-white/80 text-base font-aubette truncate max-w-[140px] artist-name-display"><?= htmlspecialchars($artist_array_all[0] ?? 'TBA') ?></p>
+                                                    <div class="flex items-end justify-between">
+                                                        <div data-artist-names="<?= htmlspecialchars($event['artist_lineup'] ?? '') ?>">
+                                                            <p class="text-white text-2xl font-bold font-aubette mb-1 tracking-wide"><?= $formatted_date ?></p>
+                                                            <?php $artist_array_all = explode(', ', $event['artist_lineup'] ?? ''); ?>
+                                                            <p class="text-white/80 text-lg font-aubette truncate artist-name-display"><?= htmlspecialchars($artist_array_all[0] ?? 'TBA') ?></p>
+                                                        </div>
+                                                        <div class="p-3 bg-zinc-800/90 border border-white/10 rounded-2xl backdrop-blur-md">
+                                                            <p class="text-white text-xl font-bold font-aubette tracking-wide"><?= $formatted_time ?></p>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="p-3 bg-zinc-800/80 border border-white/10 rounded-2xl backdrop-blur-md self-end">
-                                                    <p class="text-white text-lg font-bold font-aubette"><?= $formatted_time ?></p>
                                                 </div>
                                 </div>
                                 <div class="absolute inset-0 z-0">

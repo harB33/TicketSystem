@@ -273,7 +273,7 @@ while ($row = mysqli_fetch_assoc($sections_res)) {
                     </div>
                     <div class="flex flex-col items-end">
                         <div class="px-4 py-2 bg-primary/20 border border-primary/30 rounded-2xl">
-                            <p class="text-primary text-xl font-bold font-aubette"><?= $formatted_time ?></p>
+                            <p class="text-primary text-xl font-bold font-aubette tracking-wide"><?= $formatted_time ?></p>
                         </div>
                     </div>
                 </div>
@@ -281,7 +281,7 @@ while ($row = mysqli_fetch_assoc($sections_res)) {
                 <div class="grid grid-cols-2 gap-4 mb-8">
                     <div class="p-4 bg-white/5 rounded-2xl border border-white/5">
                         <p class="text-white/40 text-[10px] font-bold uppercase tracking-widest mb-1">Date</p>
-                        <p class="text-white text-sm font-bold"><?= $formatted_date ?></p>
+                        <p class="text-white text-sm font-bold tracking-wide"><?= $formatted_date ?></p>
                     </div>
                     <div class="p-4 bg-white/5 rounded-2xl border border-white/5">
                         <p class="text-white/40 text-[10px] font-bold uppercase tracking-widest mb-1">Location</p>

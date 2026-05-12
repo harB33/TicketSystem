@@ -4,12 +4,14 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 require_once (__DIR__ . '/../../ticket_db/connectdb.php');
 
-$isAjax = isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
+$savedEmail = isset($_COOKIE['remembered_email']) ? $_COOKIE['remembered_email'] : '';
+$isRemembered = isset($_COOKIE['remembered_email']);
 
 if (isset($_POST['email']) && isset($_POST['password'])) {
     $email = mysqli_real_escape_string($conn, $_POST['email']);
     $password = $_POST['password'];
     $isAjax = isset($_POST['ajax']) && $_POST['ajax'] === 'true';
+    $rememberMe = isset($_POST['remember_me']);
 
     $sql = "SELECT user_id, password_hash FROM users WHERE email = ?";
     $stmt = mysqli_prepare($conn, $sql);
@@ -20,6 +22,13 @@ if (isset($_POST['email']) && isset($_POST['password'])) {
 
     if ($user && password_verify($password, $user['password_hash'])) {
         $_SESSION['user_id'] = $user['user_id'];
+
+        if ($rememberMe) {
+            setcookie('remembered_email', $email, time() + (30 * 24 * 60 * 60), "/");
+        } else {
+            setcookie('remembered_email', '', time() - 3600, "/");
+        }
+
         if ($isAjax) {
             ob_clean();
             header('Content-Type: application/json');
@@ -56,11 +65,11 @@ if (isset($_POST['email']) && isset($_POST['password'])) {
 </logo>
 <form action="" method="post" id="loginForm" class="relative z-10 flex flex-col h-[50%] w-full justify-center items-center">
     <div class="flex flex-col items-center justify-start h-full w-[80%] gap-4">
-        <input type="text" id="email" name="email" placeholder="email" class="px-6 py-4 rounded-full w-full text-lg text-[#525252] font-bold bg-[#919191]">
+        <input type="text" id="email" name="email" placeholder="email" value="<?php echo htmlspecialchars($savedEmail); ?>" class="px-6 py-4 rounded-full w-full text-lg text-[#525252] font-bold bg-[#919191]">
         <input type="password" id="password" name="password" placeholder="password" class="px-6 py-4 rounded-full w-full text-lg text-[#525252] font-bold bg-[#919191]">
         <div class="flex items-center justify-between w-full">
             <div class="flex items-center">
-                <input type="checkbox" checked="checked" class="checkbox border checkbox-primary rounded-full" style="border-radius: 100% !important; box-shadow: none !important;" />
+                <input type="checkbox" name="remember_me" <?php echo $isRemembered ? 'checked="checked"' : ''; ?> class="checkbox border checkbox-primary rounded-full" style="border-radius: 100% !important; box-shadow: none !important;" />
                 <span class="ml-2 text-sm opacity-75">Remember me</span>
             </div>
             <button type="submit" id="mobile_loginBtn" class=" p-2 border border-primary rounded-full w-1/2 bg-primary"><p class="font-ballmer text-lg translate-y-1">sign in</p></button>

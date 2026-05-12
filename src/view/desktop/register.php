@@ -162,6 +162,17 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm
 </style>
 
 <script>
+    const shakeEl = (el) => {
+        el.animate([
+            { transform: 'translateX(0)' },
+            { transform: 'translateX(-7px)' },
+            { transform: 'translateX(7px)' },
+            { transform: 'translateX(-5px)' },
+            { transform: 'translateX(5px)' },
+            { transform: 'translateX(0)' }
+        ], { duration: 400, easing: 'ease' });
+    };
+
     function desktop_checkPasswordStrength(password) {
         let strength = 0;
         if (password.length >= 8) strength++;
@@ -229,9 +240,11 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm
         bar3.style.width = target3;
     }
     
-    document.getElementById('desktop_passwordInput').addEventListener('input', desktop_updatePasswordStrength);
-
     document.addEventListener('DOMContentLoaded', () => {
+        const passwordInputField = document.getElementById('desktop_passwordInput');
+        if (passwordInputField) {
+            passwordInputField.addEventListener('input', desktop_updatePasswordStrength);
+        }
         const form = document.getElementById('desktop_registerForm');
         const emailInput = document.getElementById('desktop_email');
         const passwordInput = document.getElementById('desktop_passwordInput');
@@ -240,14 +253,10 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm
         if (form && emailInput && passwordInput && confirmInput) {
             form.addEventListener('submit', function(e) {
                 e.preventDefault();
+                e.stopPropagation();
                 e.stopImmediatePropagation();
             const submitBtn = document.getElementById('desktop_registerBtn');
-            const shakeBtn = () => {
-                submitBtn.classList.remove('desktop-register-shake-anim');
-                void submitBtn.offsetWidth;
-                submitBtn.classList.add('desktop-register-shake-anim');
-                submitBtn.addEventListener('animationend', () => submitBtn.classList.remove('desktop-register-shake-anim'), { once: true });
-            };
+            const shakeBtn = () => shakeEl(submitBtn);
             let isValid = true;
 
                 [emailInput, passwordInput, confirmInput].forEach(input => {
@@ -268,6 +277,7 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm
                     confirmInput.style.borderColor = '#ef4444';
                     confirmInput.style.boxShadow = '0 0 0 1px #ef4444';
                     isValid = false;
+                    shakeBtn();
                 }
 
                 // Check confirm password
@@ -320,7 +330,6 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm
                         alert('An error occurred. Please try again.');
                     });
                 }
-                if (!isValid) shakeBtn();
             });
 
             [emailInput, passwordInput, confirmInput].forEach(input => {

@@ -40,7 +40,7 @@ if (isset($isAjax) && $isAjax) {
                     include __DIR__ . '/mobile/mytickets.php';
                     break;
                 case 'event':
-                    include __DIR__ . '/mobile/event.php';
+                    include __DIR__ . '/mobile/events.php';
                     break;
                 default:
                     include __DIR__ . '/mobile/login.php';
@@ -48,7 +48,7 @@ if (isset($isAjax) && $isAjax) {
             }
             
             // Only show navbar on specific pages if needed, but here we'll show it if it's not login/register
-            if (!in_array($page, ['login', 'register','pickanartist','pickanarena'])) {
+            if (!in_array($page, ['login', 'register','pickanartist','pickanarena', 'event'])) {
                 include __DIR__ . '/mobile/navBar.html';
             }
         ?>
@@ -88,7 +88,7 @@ if (isset($isAjax) && $isAjax) {
             }
             
             // Only show navbar on specific pages if needed, but here we'll show it if it's not login/register
-            if (!in_array($page, ['login', 'register','pickanartist','pickanarena'])) {
+            if (!in_array($page, ['login', 'register','pickanartist','pickanarena', 'event'])) {
                 include __DIR__ . '/mobile/navBar.html';
             }
         ?>

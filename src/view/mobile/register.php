@@ -208,9 +208,11 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm
         bar3.style.width = target3;
     }
     
-    document.getElementById('passwordInput').addEventListener('input', updatePasswordStrength);
-
     document.addEventListener('DOMContentLoaded', () => {
+        const passwordInputField = document.getElementById('passwordInput');
+        if (passwordInputField) {
+            passwordInputField.addEventListener('input', updatePasswordStrength);
+        }
         const form = document.getElementById('mobile_registerForm');
         const emailInput = document.getElementById('emailInput');
         const passwordInput = document.getElementById('passwordInput');
@@ -219,14 +221,10 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm
         if (form && emailInput && passwordInput && confirmInput) {
             form.addEventListener('submit', function(e) {
                 e.preventDefault();
+                e.stopPropagation();
                 e.stopImmediatePropagation();
                 const submitBtn = document.getElementById('mobile_registerBtn');
-                const shakeBtn = () => {
-                    submitBtn.classList.remove('mobile-register-shake-anim');
-                    void submitBtn.offsetWidth;
-                    submitBtn.classList.add('mobile-register-shake-anim');
-                    submitBtn.addEventListener('animationend', () => submitBtn.classList.remove('mobile-register-shake-anim'), { once: true });
-                };
+                const shakeBtn = () => shakeEl(submitBtn);
                 let isValid = true;
 
                 [emailInput, passwordInput, confirmInput].forEach(input => {
@@ -247,6 +245,7 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm
                     confirmInput.style.borderColor = '#ef4444';
                     confirmInput.style.boxShadow = '0 0 0 1px #ef4444';
                     isValid = false;
+                    shakeBtn();
                 }
 
                 // Check confirm password
@@ -299,19 +298,8 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm
                         alert('An error occurred. Please try again.');
                     });
                 }
-                if (!isValid) shakeBtn();
             });
 
-            [emailInput, passwordInput, confirmInput].forEach(input => {
-                input.addEventListener('input', function() {
-                    if (this.value.trim()) {
-                        if (this.id !== 'passwordInput' || checkPasswordStrength(this.value) >= 3) {
-                            this.style.borderColor = '';
-                            this.style.boxShadow = '';
-                        }
-                    }
-                });
-            });
         }
     });
 </script>

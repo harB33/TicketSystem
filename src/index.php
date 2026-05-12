@@ -1,4 +1,5 @@
 <?php 
+$start_time = microtime(true);
 ob_start(); 
 session_start();
 
@@ -154,9 +155,42 @@ if ($isAjax) {
         const initLoader = () => {
             const loader = document.getElementById('loading-screen');
             if (loader) {
-                const morphTime = isTransition ? 2500 : 6000;
-                const popOutTime = isTransition ? 3000 : 6500;
-                const slideTime = isTransition ? 3500 : 7000;
+                // Load Intelligence Timing
+                const getNetworkQualityFactor = () => {
+                    if (navigator.connection && navigator.connection.downlink) {
+                        const downlink = navigator.connection.downlink;
+                        if (downlink >= 10) return 0.6;
+                        if (downlink >= 5) return 0.9;
+                        if (downlink >= 2) return 1.3;
+                        return 2.5;
+                    }
+                    if (window.performance && window.performance.timing) {
+                        const t = window.performance.timing;
+                        const loadTime = t.responseEnd - t.navigationStart;
+                        if (loadTime > 0) {
+                            if (loadTime < 500) return 0.6;
+                            if (loadTime < 1500) return 1.1;
+                            return 2.2;
+                        }
+                    }
+                    return 1.0;
+                };
+
+                const dbTime = window.serverSideLoadTime || 150;
+                const netFactor = getNetworkQualityFactor();
+                
+                // base duration starts at 3s to allow animations to breathe
+                let totalDuration = (3000 + (dbTime * 2)) * netFactor;
+                
+                // Clamp duration to stay within reasonable bounds
+                // isTransition means we are navigating between pages, can be faster
+                const minDur = isTransition ? 2000 : 3500;
+                const maxDur = isTransition ? 5000 : 8500;
+                totalDuration = Math.max(minDur, Math.min(totalDuration, maxDur));
+
+                const morphTime = totalDuration * 0.75;
+                const popOutTime = totalDuration * 0.88;
+                const slideTime = totalDuration;
 
                 // Morph the square back into a circle
                 addTimeout(() => {
@@ -279,16 +313,22 @@ if ($isAjax) {
                 });
             });
         };
-
-        // Initialize immediately if loader is present, or wait for DOM
-        if (document.getElementById('loading-screen')) {
-            initLoader();
-        } else {
-            document.addEventListener('DOMContentLoaded', initLoader);
-        }
     </script>
     <div class="absolute inset-0 bg-black/75 z-5"></div>
     <?php include './view/view.php'; ?>
+    <?php 
+        $end_time = microtime(true);
+        $duration = ($end_time - $start_time) * 1000;
+    ?>
+    <script>
+        window.serverSideLoadTime = <?php echo round($duration, 2); ?>;
+        console.log('Server-side Load Time (DB Fetch Approx): ' + window.serverSideLoadTime + 'ms');
+        
+        // Initialize loader once we have the performance data
+        if (typeof initLoader === 'function') {
+            initLoader();
+        }
+    </script>
 
 </body>
 </html>

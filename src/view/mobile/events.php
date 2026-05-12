@@ -185,6 +185,18 @@ while ($row = mysqli_fetch_assoc($sections_res)) {
                 const text = document.getElementById('mobileSelectedTierText');
                 const options = document.querySelectorAll('.mobile-tier-option');
                 const sectionOverlay = document.getElementById('mobileSectionOverlay');
+                let selectedSectionId = "<?= !empty($seating_tiers) ? $seating_tiers[0]['section_id'] : '' ?>";
+
+                const reserveBtn = document.getElementById('reserveBtn');
+                if (reserveBtn) {
+                    reserveBtn.addEventListener('click', () => {
+                        if (selectedSectionId) {
+                            window.location.href = `?page=transactions&event_id=<?= $event_id ?>&section_id=${selectedSectionId}`;
+                        } else {
+                            alert('Please select a seating tier first.');
+                        }
+                    });
+                }
 
                 if (trigger && menu) {
                     // Toggle dropdown
@@ -209,6 +221,7 @@ while ($row = mysqli_fetch_assoc($sections_res)) {
                             const val = this.getAttribute('data-value');
                             const imgUrl = this.getAttribute('data-img');
                             const display = this.getAttribute('data-text');
+                        selectedSectionId = val;
 
                             // Update text
                             text.textContent = display;
@@ -276,7 +289,7 @@ while ($row = mysqli_fetch_assoc($sections_res)) {
                     </div>
                 </div>
 
-                <button class="w-full py-5 bg-primary hover:bg-primary-dark text-white rounded-2xl font-bold text-lg shadow-xl shadow-primary/20 transition-all active:scale-[0.98] flex items-center justify-center gap-3">
+                <button id="reserveBtn" class="w-full py-5 bg-primary hover:bg-primary-dark text-white rounded-2xl font-bold text-lg shadow-xl shadow-primary/20 transition-all active:scale-[0.98] flex items-center justify-center gap-3">
                     Select Seats
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>

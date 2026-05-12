@@ -209,7 +209,7 @@ while ($row = mysqli_fetch_assoc($sections_res)) {
 
                 <!-- CTA Button -->
                 <div class="relative z-10 pt-4">
-                    <button class="w-full py-8 bg-primary rounded-[2rem] text-white font-bold text-2xl uppercase tracking-widest shadow-[0_20px_50px_rgba(255,102,153,0.3)] hover:scale-[1.02] active:scale-[0.98] transition-all">
+                    <button id="reserveBtn" class="w-full py-8 bg-primary rounded-[2rem] text-white font-bold text-2xl uppercase tracking-widest shadow-[0_20px_50px_rgba(255,102,153,0.3)] hover:scale-[1.02] active:scale-[0.98] transition-all">
                         Reserve Seats Now
                     </button>
                     <p class="text-center text-white/20 text-[10px] uppercase tracking-[0.3em] mt-6 font-bold">Secure checkout with instant ticket delivery</p>
@@ -228,6 +228,18 @@ while ($row = mysqli_fetch_assoc($sections_res)) {
         const text = document.getElementById('desktopSelectedTierText');
         const options = document.querySelectorAll('.desktop-tier-option');
         const sectionOverlay = document.getElementById('desktopSectionOverlay');
+        let selectedSectionId = "<?= !empty($seating_tiers) ? $seating_tiers[0]['section_id'] : '' ?>";
+
+        const reserveBtn = document.getElementById('reserveBtn');
+        if (reserveBtn) {
+            reserveBtn.addEventListener('click', () => {
+                if (selectedSectionId) {
+                    window.location.href = `?page=transactions&event_id=<?= $event_id ?>&section_id=${selectedSectionId}`;
+                } else {
+                    alert('Please select a seating tier first.');
+                }
+            });
+        }
 
         if (trigger && menu) {
             // Toggle dropdown
@@ -251,6 +263,7 @@ while ($row = mysqli_fetch_assoc($sections_res)) {
                 option.addEventListener('click', function() {
                     const imgUrl = this.getAttribute('data-img');
                     const display = this.getAttribute('data-text');
+                selectedSectionId = this.getAttribute('data-value');
 
                     // Update text
                     text.textContent = display;

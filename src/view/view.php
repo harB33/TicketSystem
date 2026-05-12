@@ -79,9 +79,9 @@ if (isset($isAjax) && $isAjax) {
                 case 'mytickets':
                     include __DIR__ . '/desktop/mytickets.php';
                     break;
-                // case 'event':
-                //     include __DIR__ . '/desktop/event.php';
-                //     break;
+                case 'event':
+                    include __DIR__ . '/desktop/events.php';
+                    break;
                 default:
                     include __DIR__ . '/desktop/login.php';
                     break;

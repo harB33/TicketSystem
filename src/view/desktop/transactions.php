@@ -77,9 +77,20 @@ $already_bought = $bought_row['bought'] ?? 0;
 
 $available_to_buy = max(0, $max_tickets_allowed - $already_bought);
 
+// Fetch Payment Methods
+$methods_sql = "SELECT * FROM user_payment_methods WHERE user_id = ? ORDER BY is_default DESC, created_at DESC";
+$methods_stmt = mysqli_prepare($conn, $methods_sql);
+mysqli_stmt_bind_param($methods_stmt, "i", $user_id);
+mysqli_stmt_execute($methods_stmt);
+$methods_res = mysqli_stmt_get_result($methods_stmt);
+$payment_methods = [];
+while ($row = mysqli_fetch_assoc($methods_res)) {
+    $payment_methods[] = $row;
+}
+
 // Handle checkout
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['checkout']) && $is_verified) {
-    $payment_method = $_POST['payment_method'] ?? 'credit_card';
+    $payment_method = $_POST['payment_method'] ?? 'Unknown';
     $qty = (int)($_POST['qty'] ?? 1);
     
     if ($qty < 1 || $qty > $available_to_buy) {
@@ -255,33 +266,53 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['checkout']) && $is_ve
 
                     <!-- Payment Method -->
                     <div class="bg-zinc-900 rounded-[2.5rem] p-8 border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.5)]">
-                        <h2 class="text-white font-aubette text-2xl mb-6">Payment Method</h2>
-                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                            <label class="relative cursor-pointer">
-                                <input type="radio" name="payment_method" value="credit_card" class="peer sr-only" checked>
-                                <div class="p-6 rounded-2xl border-2 border-white/10 bg-white/5 text-white peer-checked:border-primary peer-checked:bg-primary/10 transition-all text-center flex flex-col items-center gap-3 hover:bg-white/10">
-                                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
-                                    <span class="font-bold">Credit Card</span>
-                                </div>
-                            </label>
-                            <label class="relative cursor-pointer">
-                                <input type="radio" name="payment_method" value="gcash" class="peer sr-only">
-                                <div class="p-6 rounded-2xl border-2 border-white/10 bg-white/5 text-white peer-checked:border-primary peer-checked:bg-primary/10 transition-all text-center flex flex-col items-center gap-3 hover:bg-white/10">
-                                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
-                                    <span class="font-bold">GCash</span>
-                                </div>
-                            </label>
-                            <label class="relative cursor-pointer">
-                                <input type="radio" name="payment_method" value="maya" class="peer sr-only">
-                                <div class="p-6 rounded-2xl border-2 border-white/10 bg-white/5 text-white peer-checked:border-primary peer-checked:bg-primary/10 transition-all text-center flex flex-col items-center gap-3 hover:bg-white/10">
-                                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
-                                    <span class="font-bold">Maya</span>
-                                </div>
-                            </label>
+                        <div class="flex items-center justify-between mb-6">
+                            <h2 class="text-white font-aubette text-2xl">Payment Method</h2>
+                            <a href="?page=payment_methods" class="text-primary text-xs font-bold uppercase tracking-widest hover:underline">Manage</a>
                         </div>
+                        
+                        <?php if (empty($payment_methods)): ?>
+                            <div class="p-6 bg-white/5 rounded-2xl border border-white/10 text-center flex flex-col items-center">
+                                <p class="text-white/60 text-sm mb-4">No payment methods found.</p>
+                                <a href="?page=payment_methods" class="inline-block px-6 py-3 bg-primary rounded-xl text-white font-bold text-sm">Add Payment Method</a>
+                            </div>
+                        <?php else: ?>
+                            <div class="grid grid-cols-1 gap-4">
+                                <?php foreach($payment_methods as $index => $pm): ?>
+                                    <label class="relative cursor-pointer group">
+                                        <input type="radio" name="payment_method" value="<?= htmlspecialchars($pm['provider'] . ' - ' . substr($pm['account_number'], -4)) ?>" class="peer sr-only" <?= $index === 0 ? 'checked' : '' ?>>
+                                        <div class="p-5 rounded-2xl border-2 border-white/10 bg-white/5 text-white peer-checked:border-primary peer-checked:bg-primary/10 transition-all flex items-center justify-between hover:bg-white/10">
+                                            <div class="flex items-center gap-4">
+                                                <div class="w-12 h-12 rounded-xl bg-black/50 flex items-center justify-center shrink-0">
+                                                    <?php if (stripos($pm['provider'], 'visa') !== false): ?>
+                                                        <span class="font-bold italic text-sm">VISA</span>
+                                                    <?php elseif (stripos($pm['provider'], 'mastercard') !== false): ?>
+                                                        <div class="flex">
+                                                            <div class="w-4 h-4 rounded-full bg-red-500 opacity-80 mix-blend-screen"></div>
+                                                            <div class="w-4 h-4 rounded-full bg-yellow-500 opacity-80 mix-blend-screen -ml-2"></div>
+                                                        </div>
+                                                    <?php elseif (stripos($pm['provider'], 'gcash') !== false): ?>
+                                                        <span class="text-blue-400 font-bold italic text-[10px]">GCash</span>
+                                                    <?php else: ?>
+                                                        <svg class="w-6 h-6 text-white/50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
+                                                    <?php endif; ?>
+                                                </div>
+                                                <div class="flex flex-col">
+                                                    <span class="font-bold text-lg leading-none mb-1"><?= htmlspecialchars($pm['provider']) ?></span>
+                                                    <span class="text-white/50 font-mono text-xs tracking-widest">•••• <?= substr(htmlspecialchars($pm['account_number']), -4) ?></span>
+                                                </div>
+                                            </div>
+                                            <div class="w-6 h-6 rounded-full border-2 border-white/20 peer-checked:border-primary peer-checked:bg-primary flex items-center justify-center transition-colors">
+                                                <svg class="w-4 h-4 text-white opacity-0 peer-checked:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                                            </div>
+                                        </div>
+                                    </label>
+                                <?php endforeach; ?>
+                            </div>
+                        <?php endif; ?>
                     </div>
 
-                    <button type="submit" class="w-full py-6 bg-primary rounded-[2rem] text-white font-bold text-2xl uppercase tracking-widest shadow-[0_20px_50px_rgba(255,102,153,0.3)] hover:scale-[1.02] active:scale-[0.98] transition-all">
+                    <button type="submit" <?= empty($payment_methods) ? 'disabled' : '' ?> class="w-full py-6 bg-primary rounded-[2rem] text-white font-bold text-2xl uppercase tracking-widest shadow-[0_20px_50px_rgba(255,102,153,0.3)] hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 disabled:pointer-events-none">
                         Confirm Purchase
                     </button>
                     <p class="text-center text-zinc-500 text-xs font-bold uppercase tracking-widest mb-10">By confirming, you agree to our terms of service</p>

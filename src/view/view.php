@@ -36,6 +36,9 @@ if (isset($isAjax) && $isAjax) {
                 case 'profile':
                     include __DIR__ . '/mobile/profile.php';
                     break;
+                case 'payment_methods':
+                    include __DIR__ . '/mobile/payment_methods.php';
+                    break;
                 case 'transactions':
                     include __DIR__ . '/mobile/transactions.php';
                     break;
@@ -78,6 +81,9 @@ if (isset($isAjax) && $isAjax) {
                     break;
                 case 'profile':
                     include __DIR__ . '/desktop/profile.php';
+                    break;
+                case 'payment_methods':
+                    include __DIR__ . '/desktop/payment_methods.php';
                     break;
                 case 'transactions':
                     include __DIR__ . '/desktop/transactions.php';

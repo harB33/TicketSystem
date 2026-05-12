@@ -77,9 +77,26 @@ $seating_tiers = [];
 while ($row = mysqli_fetch_assoc($sections_res)) {
     $seating_tiers[] = $row;
 }
+
+// Fetch performing artists
+$artists_sql = "SELECT a.name, a.image_url, a.genre, a.bio 
+                FROM artists a 
+                JOIN event_lineup el ON a.artist_id = el.artist_id 
+                WHERE el.event_id = ? 
+                ORDER BY el.is_headliner DESC, el.performance_order ASC";
+$stmt_art = mysqli_prepare($conn, $artists_sql);
+mysqli_stmt_bind_param($stmt_art, "i", $event_id);
+mysqli_stmt_execute($stmt_art);
+$artists_res = mysqli_stmt_get_result($stmt_art);
+$artists_list = [];
+while ($row = mysqli_fetch_assoc($artists_res)) {
+    $artists_list[] = $row;
+}
 ?>
 
-<div class="flex flex-col w-full h-full bg-black text-white overflow-hidden relative">
+<div class="flex flex-col w-full min-h-[100dvh] bg-black text-white overflow-x-hidden relative custom-scrollbar-v pb-20">
+    <!-- Immersive Wrapper -->
+    <div class="flex flex-col w-full min-h-[100dvh] shrink-0 relative">
     <!-- Headliner Background Blur -->
     <?php if (!empty($event['artist_images'])): 
         $imgs = explode('|', $event['artist_images']);
@@ -292,6 +309,37 @@ while ($row = mysqli_fetch_assoc($sections_res)) {
             </div>
         </div>
     </div>
+    </div> <!-- Close Immersive Wrapper -->
+
+    <!-- Performing Artists Section -->
+    <?php if (!empty($artists_list)): ?>
+    <div class="w-full px-6 py-10 z-20 relative shrink-0">
+        <h2 class="text-3xl font-aubette font-bold mb-8 text-white text-center">Performing Artists</h2>
+        <div class="flex flex-col gap-8">
+            <?php foreach ($artists_list as $artist): ?>
+                <div class="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl overflow-hidden flex flex-col group">
+                    <?php if (!empty($artist['image_url'])): ?>
+                        <div class="w-full h-56 relative overflow-hidden bg-black">
+                            <div class="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity z-10"></div>
+                            <div class="absolute inset-0 bg-linear-to-t from-zinc-900 to-transparent z-10"></div>
+                            <img src="<?= htmlspecialchars($artist['image_url']) ?>" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                        </div>
+                    <?php endif; ?>
+                    <div class="p-6 relative z-20 <?= !empty($artist['image_url']) ? '-mt-16' : '' ?>">
+                        <?php if (!empty($artist['genre'])): ?>
+                            <span class="text-primary font-bold uppercase tracking-widest text-[10px] mb-1 block"><?= htmlspecialchars($artist['genre']) ?></span>
+                        <?php endif; ?>
+                        <h3 class="text-2xl font-aubette font-bold text-white mb-3"><?= htmlspecialchars($artist['name']) ?></h3>
+                        <?php if (!empty($artist['bio'])): ?>
+                            <p class="text-white/60 text-sm leading-relaxed"><?= nl2br(htmlspecialchars($artist['bio'])) ?></p>
+                        <?php endif; ?>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        </div>
+    </div>
+    <?php endif; ?>
+    
 </div>
 
 <style>

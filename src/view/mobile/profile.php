@@ -32,8 +32,11 @@ if ($row = mysqli_fetch_assoc($result)) {
 
 <div class="flex flex-col w-full relative min-h-screen bg-black overflow-y-auto custom-scrollbar-v pb-32">
     <!-- Header -->
-    <div class="h-[15vh] w-full shrink-0 flex flex-col items-center justify-end pb-4 bg-black z-20">
-        <p class="font-tschichold text-white text-3xl font-bold lowercase">my profile</p>
+    <div class="h-[15vh] w-full shrink-0 flex flex-col items-center justify-end pb-4 bg-black z-20 sticky top-0">
+        <div class="px-4 flex items-center gap-2">
+            <div class="w-2 h-8 bg-primary rounded-full"></div>
+            <p class="font-aubette text-white text-3xl font-bold">MY PROFILE</p>
+        </div>
     </div>
     
     <!-- Profile Info -->
@@ -56,7 +59,7 @@ if ($row = mysqli_fetch_assoc($result)) {
 
     <!-- Menu Options -->
     <div class="flex flex-col mt-10 px-6 gap-4">
-        <a href="#" class="flex items-center justify-between p-5 bg-zinc-900/60 rounded-3xl border border-white/5 hover:border-primary/30 transition-colors">
+        <a href="?page=payment_methods" class="flex items-center justify-between p-5 bg-zinc-900/60 rounded-3xl border border-white/5 hover:border-primary/30 transition-colors">
             <div class="flex items-center gap-4">
                 <div class="p-3 bg-zinc-800 rounded-xl text-primary">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>

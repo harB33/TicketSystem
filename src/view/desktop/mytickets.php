@@ -13,9 +13,14 @@ $sql = "SELECT
             oi.barcode_string,
             oi.attendee_first_name,
             oi.attendee_last_name,
+            oi.unit_price,
+            o.order_id,
+            p.transaction_ref,
             e.event_name,
             e.event_start_datetime,
+            e.event_end_datetime,
             v.name AS venue_name,
+            v.city AS venue_city,
             ss.section_name,
             s.row_number,
             s.seat_number,
@@ -29,6 +34,7 @@ $sql = "SELECT
         LEFT JOIN seats s ON t.seat_id = s.seat_id
         LEFT JOIN event_lineup el ON e.event_id = el.event_id AND el.is_headliner = 1
         LEFT JOIN artists a ON el.artist_id = a.artist_id
+        LEFT JOIN payments p ON o.order_id = p.order_id
         WHERE o.user_id = ? 
         ORDER BY e.event_start_datetime ASC";
 
@@ -71,29 +77,60 @@ while ($row = mysqli_fetch_assoc($result)) {
             <!-- Ticket List -->
             <?php foreach ($tickets as $ticket): ?>
                 <?php 
-                    $date = new DateTime($ticket['event_start_datetime']);
-                    $formatted_date = $date->format('M d, Y');
-                    $formatted_time = $date->format('H:i');
+                    $start_date = new DateTime($ticket['event_start_datetime']);
+                    $end_date = !empty($ticket['event_end_datetime']) ? new DateTime($ticket['event_end_datetime']) : null;
+                    
+                    $formatted_date = $start_date->format('M d, Y');
+                    $formatted_time = $start_date->format('H:i');
                     $display_name = !empty($ticket['event_name']) ? $ticket['event_name'] : ($ticket['headliner_name'] ?? 'Upcoming Event');
+                    
+                    $full_location = $ticket['venue_name'];
+                    if (!empty($ticket['venue_city'])) {
+                        $full_location .= ', ' . $ticket['venue_city'];
+                    }
+                    
+                    $price_display = !empty($ticket['unit_price']) ? '₱' . number_format($ticket['unit_price'], 2) : 'FREE';
                 ?>
-                <div class="relative bg-zinc-900 rounded-[2.5rem] overflow-hidden border border-white/10 flex flex-col shadow-[0_10px_40px_rgba(0,0,0,0.5)]">
+                <div class="relative bg-zinc-900 rounded-[2.5rem] overflow-hidden border border-white/10 flex flex-col shadow-[0_10px_40px_rgba(0,0,0,0.5)] max-w-lg mx-auto w-full">
                     
                     <!-- Decorative cutouts -->
-                    <div class="absolute left-[-15px] top-[160px] w-8 h-8 bg-black rounded-full z-20"></div>
-                    <div class="absolute right-[-15px] top-[160px] w-8 h-8 bg-black rounded-full z-20"></div>
-                    <div class="absolute left-4 right-4 top-[175px] border-b-2 border-dashed border-zinc-700 z-10"></div>
+                    <div class="absolute left-[-15px] top-[220px] w-8 h-8 bg-black rounded-full z-20"></div>
+                    <div class="absolute right-[-15px] top-[220px] w-8 h-8 bg-black rounded-full z-20"></div>
+                    <div class="absolute left-4 right-4 top-[236px] border-b-2 border-dashed border-zinc-700 z-10"></div>
 
-                    <!-- Top half: Image & Event info -->
-                    <div class="h-[175px] w-full relative">
-                        <div class="absolute inset-0 bg-linear-to-t from-zinc-900 via-zinc-900/40 to-transparent"></div>
+                    <!-- Top half: Event info (No Images) -->
+                    <div class="h-[236px] w-full relative bg-linear-to-br from-primary/30 via-zinc-800 to-zinc-900 p-6 flex flex-col justify-between">
                         
-                        <div class="absolute bottom-4 left-6 right-6">
-                            <p class="text-primary text-xs font-bold uppercase tracking-widest mb-1">Admit One</p>
-                            <p class="text-white text-3xl font-bold font-aubette leading-tight truncate"><?= htmlspecialchars($display_name) ?></p>
-                            <p class="text-zinc-400 font-medium truncate flex items-center gap-1 mt-1">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                                <?= htmlspecialchars($ticket['venue_name']) ?>
-                            </p>
+                        <!-- Watermark -->
+                        <div class="absolute inset-0 overflow-hidden opacity-5 pointer-events-none z-0 flex flex-wrap content-start">
+                            <?php for($i=0; $i<50; $i++): ?>
+                                <span class="font-black text-2xl uppercase tracking-tighter mr-2 leading-none font-sans text-white">TICKET</span>
+                            <?php endfor; ?>
+                        </div>
+
+                        <div class="relative z-10 flex justify-between items-start">
+                            <div class="bg-primary/20 text-primary border border-primary/30 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest">
+                                Valid Ticket
+                            </div>
+                            <div class="text-right">
+                                <p class="text-white/50 text-[10px] uppercase tracking-widest font-bold">Order Ref</p>
+                                <p class="text-white/80 font-mono text-xs"><?= htmlspecialchars($ticket['transaction_ref'] ?? 'N/A') ?></p>
+                            </div>
+                        </div>
+                        
+                        <div class="relative z-10 mt-auto">
+                            <p class="text-white text-3xl font-bold font-aubette leading-tight truncate mb-2"><?= htmlspecialchars($display_name) ?></p>
+                            
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <p class="text-white/50 text-[10px] uppercase tracking-widest font-bold mb-1">Location</p>
+                                    <p class="text-zinc-300 text-sm font-medium truncate"><?= htmlspecialchars($full_location) ?></p>
+                                </div>
+                                <div>
+                                    <p class="text-white/50 text-[10px] uppercase tracking-widest font-bold mb-1">Purchased For</p>
+                                    <p class="text-zinc-300 text-sm font-medium"><?= $price_display ?></p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     
@@ -128,20 +165,25 @@ while ($row = mysqli_fetch_assoc($result)) {
                             </div>
                         </div>
                         
-                        <?php if (!empty($ticket['attendee_first_name'])): ?>
-                            <div class="px-2 mt-1">
-                                <p class="text-xs text-zinc-500 uppercase tracking-wider font-bold mb-1">Ticket Holder</p>
-                                <p class="text-white/80 font-medium"><?= htmlspecialchars($ticket['attendee_first_name'] . ' ' . $ticket['attendee_last_name']) ?></p>
+                        <div class="flex justify-between px-2 mt-1">
+                            <?php if (!empty($ticket['attendee_first_name'])): ?>
+                                <div>
+                                    <p class="text-xs text-zinc-500 uppercase tracking-wider font-bold mb-1">Ticket Holder</p>
+                                    <p class="text-white/80 font-medium"><?= htmlspecialchars($ticket['attendee_first_name'] . ' ' . $ticket['attendee_last_name']) ?></p>
+                                </div>
+                            <?php endif; ?>
+                            <div class="text-right">
+                                <p class="text-xs text-zinc-500 uppercase tracking-wider font-bold mb-1">Ticket ID</p>
+                                <p class="text-white/80 font-mono text-sm">#<?= str_pad($ticket['order_item_id'], 6, '0', STR_PAD_LEFT) ?></p>
                             </div>
-                        <?php endif; ?>
+                        </div>
 
                         <!-- Barcode Area -->
                         <div class="mt-4 flex flex-col items-center justify-center bg-white rounded-2xl p-4">
                             <!-- Visual Barcode Representation -->
                             <div class="flex h-12 w-full max-w-[200px] justify-between items-end gap-[2px] opacity-90">
                                 <?php 
-                                    // Generate a deterministic but random-looking pattern based on order_item_id
-                                    srand($ticket['order_item_id']); 
+                                    srand(crc32($ticket['barcode_string'])); 
                                     for ($i = 0; $i < 35; $i++) {
                                         $width = rand(1, 4);
                                         echo "<div class='bg-black h-full' style='width: {$width}px;'></div>";

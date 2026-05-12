@@ -167,7 +167,7 @@ if ($res) {
                             <a href="?page=event&id=<?= $event['event_id'] ?>" class="group bg-zinc-900 rounded-3xl h-44 w-[75%] shrink-0 relative overflow-hidden border border-white/5 block transition-transform active:scale-[0.98]">
                                 <div class="absolute inset-0 p-5 flex items-end justify-between z-10 bg-gradient-to-t from-black/90 via-black/40 to-transparent">
                                     <div>
-                                        <p class="text-white drop-shadow-[0_10px_10px_rgba(0,0,0,.8)] text-[14px] absolute top-5 left-5 font-bold uppercase tracking-widest mb-0.5"><?= htmlspecialchars($event['event_name'] ?? 'TBA') ?></p>
+                                        <p class="text-white drop-shadow-[0_10px_10px_rgba(0,0,0,.8)] text-[14px] text-shadow-lg/50 absolute top-5 left-5 font-bold uppercase tracking-widest mb-0.5"><?= htmlspecialchars($event['event_name'] ?? 'TBA') ?></p>
                                         <?php if (!empty($event['artist_images'])): ?>
                                             <div class="flex -space-x-2 mb-3">
                                                 <?php 

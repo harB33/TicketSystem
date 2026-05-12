@@ -38,6 +38,10 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm
     
     $isAjax = isset($_POST['ajax']) && $_POST['ajax'] === 'true';
 
+    // Validation
+    $error = null;
+    $field = null;
+
     // Check if email already exists
     $checkEmailSql = "SELECT user_id FROM users WHERE email = ?";
     $checkStmt = mysqli_prepare($conn, $checkEmailSql);
@@ -48,42 +52,50 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm
     mysqli_stmt_close($checkStmt);
 
     if ($emailExists) {
+        $error = 'Email already registered';
+        $field = 'email';
+    } else if ($password !== $confirm_password) {
+        $error = 'Passwords do not match';
+        $field = 'confirm_password';
+    } else if ($passwordStrength < 3) {
+        $error = 'Password is too weak';
+        $field = 'password';
+    }
+
+    if ($error) {
         if ($isAjax) {
             ob_clean();
             header('Content-Type: application/json');
-            echo json_encode(['success' => false, 'error' => 'Email already registered', 'field' => 'email']);
+            echo json_encode(['success' => false, 'error' => $error, 'field' => $field]);
             exit();
         }
-        // Fallback for non-ajax
-        echo "<script>alert('Email already registered!');</script>";
-    } else if ($password === $confirm_password) {
-        if ($passwordStrength >= 3) {
-            $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-            $sql = "INSERT INTO users (email, password_hash) VALUES (?, ?)";
-            $stmt = mysqli_prepare($conn, $sql);
-            mysqli_stmt_bind_param($stmt, "ss", $email, $hashed_password);
+        // echo "<script>alert('$error');</script>";
+    } else {
+        $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+        $sql = "INSERT INTO users (email, password_hash) VALUES (?, ?)";
+        $stmt = mysqli_prepare($conn, $sql);
+        mysqli_stmt_bind_param($stmt, "ss", $email, $hashed_password);
 
-            if (mysqli_stmt_execute($stmt)) {
-                if ($isAjax) {
-                    ob_clean();
-                    header('Content-Type: application/json');
-                    echo json_encode(['success' => true, 'message' => 'Registration successful!', 'redirect' => '?page=login']);
-                    exit();
-                }
-                echo "<script>
-                    alert('Registration successful! Please log in.');
-                    window.location.href = '?page=login';
-                </script>";
+        if (mysqli_stmt_execute($stmt)) {
+            if ($isAjax) {
+                ob_clean();
+                header('Content-Type: application/json');
+                echo json_encode(['success' => true, 'message' => 'Registration successful!', 'redirect' => '?page=login']);
                 exit();
-            } else {
-                if ($isAjax) {
-                    ob_clean();
-                    header('Content-Type: application/json');
-                    echo json_encode(['success' => false, 'error' => 'Database error: ' . mysqli_error($conn)]);
-                    exit();
-                }
-                echo "Error: " . mysqli_error($conn);
             }
+            echo "<script>
+                alert('Registration successful! Please log in.');
+                window.location.href = '?page=login';
+            </script>";
+            exit();
+        } else {
+            if ($isAjax) {
+                ob_clean();
+                header('Content-Type: application/json');
+                echo json_encode(['success' => false, 'error' => 'Database error: ' . mysqli_error($conn)]);
+                exit();
+            }
+            echo "Error: " . mysqli_error($conn);
         }
     }
 }
@@ -98,31 +110,31 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm
         <logo class="h-[35%] shrink-0 w-full flex flex-col items-center justify-center p-8 pb-20">
             <img src="./asset/logo/register.png" alt="register" class="min-h-24 max-h-24">
         </logo>
-        <form action="" method="post" id="registerForm" class="flex flex-col w-full grow justify-start items-center px-12">
+        <form action="" method="post" id="desktop_registerForm" data-ajax-form="true" class="flex flex-col w-full grow justify-start items-center px-12">
             <div class="flex flex-col items-center justify-start w-[85%] gap-4">
                 <div class="w-full space-y-2">
                     <input type="text" id="desktop_email" name="email" placeholder="email" 
-                        class="px-6 py-4 rounded-full w-full text-lg text-white font-medium bg-white/5 border border-white/10 focus:bg-white/10 focus:border-primary/50 focus:ring-1 focus:ring-primary/50 outline-none transition-all duration-300 placeholder:text-zinc-600">
+                        class="px-6 py-4 rounded-full w-full text-lg text-white font-medium bg-white/5 border border-white/10 focus:bg-white/10 focus:border-primary/50 focus:ring-1 focus:ring-primary/50 outline-none placeholder:text-zinc-600">
                 </div>
                 <div class="w-full space-y-2">
-                    <input type="password" id="desktop_passwordInput" name="password" placeholder="password" class="px-6 py-4 rounded-full w-full text-lg text-white font-medium bg-white/5 border border-white/10 focus:bg-white/10 focus:border-primary/50 focus:ring-1 focus:ring-primary/50 outline-none transition-all duration-300 placeholder:text-zinc-600">
+                    <input type="password" id="desktop_passwordInput" name="password" placeholder="password" class="px-6 py-4 rounded-full w-full text-lg text-white font-medium bg-white/5 border border-white/10 focus:bg-white/10 focus:border-primary/50 focus:ring-1 focus:ring-primary/50 outline-none placeholder:text-zinc-600">
                     <!-- Password Strength Bars -->
                 </div>
                 <div class="grid grid-cols-3 gap-4 w-[94%]" style="height: 18px;">
-                    <div class="border border-primary rounded-full flex items-center justify-start transition-all duration-200" style="height: 100%; width: 100%; padding: 2px; box-sizing: border-box;">
-                        <div id="desktop_strengthBar1" class="rounded-full" style="height: 100%; width: 0%; background-color: #ff6b9d; transition: width 0.4s ease-in-out;"></div>
+                    <div class="border border-primary rounded-full flex items-center justify-start" style="height: 100%; width: 100%; padding: 2px; box-sizing: border-box;">
+                        <div id="desktop_strengthBar1" class="rounded-full" style="height: 100%; width: 0%; background-color: #ff6b9d;"></div>
                     </div>
-                    <div class="border border-[#ffde59] rounded-full flex items-center justify-start transition-all duration-200" style="height: 100%; width: 100%; padding: 2px; box-sizing: border-box;">
-                        <div id="desktop_strengthBar2" class="rounded-full" style="height: 100%; width: 0%; background-color: #ffde59; transition: width 0.4s ease-in-out;"></div>
+                    <div class="border border-[#ffde59] rounded-full flex items-center justify-start" style="height: 100%; width: 100%; padding: 2px; box-sizing: border-box;">
+                        <div id="desktop_strengthBar2" class="rounded-full" style="height: 100%; width: 0%; background-color: #ffde59;"></div>
                     </div>
-                    <div class="border border-[#7ed957] rounded-full flex items-center justify-start transition-all duration-200" style="height: 100%; width: 100%; padding: 2px; box-sizing: border-box;">
-                        <div id="desktop_strengthBar3" class="rounded-full" style="height: 100%; width: 0%; background-color: #7ed957; transition: width 0.4s ease-in-out;"></div>
+                    <div class="border border-[#7ed957] rounded-full flex items-center justify-start" style="height: 100%; width: 100%; padding: 2px; box-sizing: border-box;">
+                        <div id="desktop_strengthBar3" class="rounded-full" style="height: 100%; width: 0%; background-color: #7ed957;"></div>
                     </div>
                 </div>
-                <p id="desktop_strengthMessage" class="text-[10px] font-bold uppercase tracking-widest text-center h-4 opacity-0 transition-opacity duration-300 hidden"></p>
+                <p id="desktop_strengthMessage" class="text-[10px] font-bold uppercase tracking-widest text-center h-4 opacity-0 hidden"></p>
                 <div class="w-full space-y-2">
                     <input type="password" id="desktop_confirm_password" name="confirm_password" placeholder="confirm password" 
-                        class="px-6 py-4 rounded-full w-full text-lg text-white font-medium bg-white/5 border border-white/10 focus:bg-white/10 focus:border-primary/50 focus:ring-1 focus:ring-primary/50 outline-none transition-all duration-300 placeholder:text-zinc-600">
+                        class="px-6 py-4 rounded-full w-full text-lg text-white font-medium bg-white/5 border border-white/10 focus:bg-white/10 focus:border-primary/50 focus:ring-1 focus:ring-primary/50 outline-none placeholder:text-zinc-600">
                 </div>
                 <div class="flex items-center justify-between w-full">
                     <a href="?page=login" class="group flex items-center translate-x-6 text-zinc-400  transition-all duration-300">
@@ -211,19 +223,6 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm
             passwordInput.style.boxShadow = '';
         }
         
-        const afterCount = (target1 === '100%' ? 1 : 0) + (target2 === '100%' ? 1 : 0) + (target3 === '100%' ? 1 : 0);
-        
-        // Determine transition delays based on direction (Filling vs Emptying)
-        if (afterCount >= beforeCount) {
-            bar1.style.transition = 'width 0.3s ease-in-out 0s';
-            bar2.style.transition = 'width 0.3s ease-in-out 0.1s';
-            bar3.style.transition = 'width 0.3s ease-in-out 0.2s';
-        } else {
-            bar1.style.transition = 'width 0.3s ease-in-out 0.2s';
-            bar2.style.transition = 'width 0.3s ease-in-out 0.1s';
-            bar3.style.transition = 'width 0.3s ease-in-out 0s';
-        }
-        
         // Set widths
         bar1.style.width = target1;
         bar2.style.width = target2;
@@ -233,7 +232,7 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm
     document.getElementById('desktop_passwordInput').addEventListener('input', desktop_updatePasswordStrength);
 
     document.addEventListener('DOMContentLoaded', () => {
-        const form = document.getElementById('registerForm');
+        const form = document.getElementById('desktop_registerForm');
         const emailInput = document.getElementById('desktop_email');
         const passwordInput = document.getElementById('desktop_passwordInput');
         const confirmInput = document.getElementById('desktop_confirm_password');
@@ -241,6 +240,7 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm
         if (form && emailInput && passwordInput && confirmInput) {
             form.addEventListener('submit', function(e) {
                 e.preventDefault();
+                e.stopImmediatePropagation();
                 let isValid = true;
 
                 [emailInput, passwordInput, confirmInput].forEach(input => {
@@ -258,11 +258,15 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm
                 if (isValid && desktop_checkPasswordStrength(passwordInput.value) < 3) {
                     passwordInput.style.borderColor = '#ef4444';
                     passwordInput.style.boxShadow = '0 0 0 1px #ef4444';
+                    confirmInput.style.borderColor = '#ef4444';
+                    confirmInput.style.boxShadow = '0 0 0 1px #ef4444';
                     isValid = false;
                 }
 
                 // Check confirm password
                 if (isValid && passwordInput.value !== confirmInput.value) {
+                    passwordInput.style.borderColor = '#ef4444';
+                    passwordInput.style.boxShadow = '0 0 0 1px #ef4444';
                     confirmInput.style.borderColor = '#ef4444';
                     confirmInput.style.boxShadow = '0 0 0 1px #ef4444';
                     isValid = false;
@@ -288,7 +292,14 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm
                             if (data.field === 'email') {
                                 emailInput.style.borderColor = '#ef4444';
                                 emailInput.style.boxShadow = '0 0 0 1px #ef4444';
-                                emailInput.focus();
+                                emailInput.blur();
+                            } else if (data.field === 'password' || data.field === 'confirm_password') {
+                                passwordInput.style.borderColor = '#ef4444';
+                                passwordInput.style.boxShadow = '0 0 0 1px #ef4444';
+                                confirmInput.style.borderColor = '#ef4444';
+                                confirmInput.style.boxShadow = '0 0 0 1px #ef4444';
+                                passwordInput.blur();
+                                confirmInput.blur();
                             } else {
                                 alert(data.error || 'Registration failed');
                             }

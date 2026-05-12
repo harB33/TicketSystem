@@ -54,7 +54,6 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm
             echo json_encode(['success' => false, 'error' => 'Email already registered', 'field' => 'email']);
             exit();
         }
-        echo "<script>alert('Email already registered!');</script>";
     } else if ($password === $confirm_password) {
         if ($passwordStrength >= 3) {
             $hashed_password = password_hash($password, PASSWORD_DEFAULT);
@@ -85,8 +84,6 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm
             if ($isAjax) {
                 echo json_encode(['error' => 'Password too weak']);
                 exit();
-            } else {
-                echo "<script>alert('Password is too weak. Please use at least 3 complexity requirements.');</script>";
             }
         }
     } else {
@@ -103,23 +100,23 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm
 <logo class="h-[50%] w-full flex flex-col items-center justify-center">
     <img src="./asset/logo/register.png" alt="" class="w-2/3">
 </logo>
-<form action="" method="post" id="registerForm" class="flex flex-col h-[50%] w-full justify-center items-center -translate-y-27.5">
+<form action="" method="post" id="mobile_registerForm" data-ajax-form="true" class="flex flex-col h-[50%] w-full justify-center items-center -translate-y-27.5">
     <div class="flex flex-col items-center justify-start h-full w-[80%] gap-4">
-        <input type="text" id="emailInput" name="email" placeholder="email" class="px-6 py-4 rounded-full w-full text-lg font-bold text-[#525252] bg-[#919191] transition-all duration-300">
-        <input type="password" name="password" id="passwordInput" placeholder="password" class="px-6 py-4 rounded-full w-full text-lg font-bold text-[#525252] bg-[#919191] transition-all duration-300">
+        <input type="text" id="emailInput" name="email" placeholder="email" class="px-6 py-4 rounded-full w-full text-lg font-bold text-[#525252] bg-[#919191]">
+        <input type="password" name="password" id="passwordInput" placeholder="password" class="px-6 py-4 rounded-full w-full text-lg font-bold text-[#525252] bg-[#919191]">
         <div class="grid grid-cols-3 gap-4 w-[94%]" style="height: 18px;">
-            <div class="border border-primary rounded-full flex items-center justify-start transition-all duration-200" style="height: 100%; width: 100%; padding: 2px; box-sizing: border-box;">
-                <div id="strengthBar1" class="rounded-full" style="height: 100%; width: 0%; background-color: #ff6b9d; transition: width 0.4s ease-in-out;"></div>
+            <div class="border border-primary rounded-full flex items-center justify-start" style="height: 100%; width: 100%; padding: 2px; box-sizing: border-box;">
+                <div id="strengthBar1" class="rounded-full" style="height: 100%; width: 0%; background-color: #ff6b9d;"></div>
             </div>
-            <div class="border border-[#ffde59] rounded-full flex items-center justify-start transition-all duration-200" style="height: 100%; width: 100%; padding: 2px; box-sizing: border-box;">
-                <div id="strengthBar2" class="rounded-full" style="height: 100%; width: 0%; background-color: #ffde59; transition: width 0.4s ease-in-out;"></div>
+            <div class="border border-[#ffde59] rounded-full flex items-center justify-start" style="height: 100%; width: 100%; padding: 2px; box-sizing: border-box;">
+                <div id="strengthBar2" class="rounded-full" style="height: 100%; width: 0%; background-color: #ffde59;"></div>
             </div>
-            <div class="border border-[#7ed957] rounded-full flex items-center justify-start transition-all duration-200" style="height: 100%; width: 100%; padding: 2px; box-sizing: border-box;">
-                <div id="strengthBar3" class="rounded-full" style="height: 100%; width: 0%; background-color: #7ed957; transition: width 0.4s ease-in-out;"></div>
+            <div class="border border-[#7ed957] rounded-full flex items-center justify-start" style="height: 100%; width: 100%; padding: 2px; box-sizing: border-box;">
+                <div id="strengthBar3" class="rounded-full" style="height: 100%; width: 0%; background-color: #7ed957;"></div>
             </div>
         </div>
         <p id="strengthMessage" class="text-center text-sm font-bold text-gray-500 absolute hidden"></p>
-        <input type="password" id="confirmInput" name="confirm_password" placeholder="confirm password" class="px-6 py-4 rounded-full w-full text-lg font-bold text-[#525252] bg-[#919191] transition-all duration-300">
+        <input type="password" id="confirmInput" name="confirm_password" placeholder="confirm password" class="px-6 py-4 rounded-full w-full text-lg font-bold text-[#525252] bg-[#919191]">
         <div class="flex items-center justify-end w-full">
             <button type="submit" class=" p-2 border border-primary rounded-full w-1/2 bg-primary"><p class="font-ballmer text-lg translate-y-1">sign up</p></button>
         </div>
@@ -194,19 +191,6 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm
         
         const afterCount = (target1 === '100%' ? 1 : 0) + (target2 === '100%' ? 1 : 0) + (target3 === '100%' ? 1 : 0);
         
-        // Determine transition delays based on direction (Filling vs Emptying)
-        if (afterCount >= beforeCount) {
-            // Forward (Filling): Pink first, then Yellow, then Green
-            bar1.style.transition = 'width 0.3s ease-in-out 0s';
-            bar2.style.transition = 'width 0.3s ease-in-out 0.15s';
-            bar3.style.transition = 'width 0.3s ease-in-out 0.3s';
-        } else {
-            // Reverse (Emptying): Green first, then Yellow, then Pink
-            bar1.style.transition = 'width 0.3s ease-in-out 0.3s';
-            bar2.style.transition = 'width 0.3s ease-in-out 0.15s';
-            bar3.style.transition = 'width 0.3s ease-in-out 0s';
-        }
-        
         // Set widths
         bar1.style.width = target1;
         bar2.style.width = target2;
@@ -216,7 +200,7 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm
     document.getElementById('passwordInput').addEventListener('input', updatePasswordStrength);
 
     document.addEventListener('DOMContentLoaded', () => {
-        const form = document.getElementById('registerForm');
+        const form = document.getElementById('mobile_registerForm');
         const emailInput = document.getElementById('emailInput');
         const passwordInput = document.getElementById('passwordInput');
         const confirmInput = document.getElementById('confirmInput');
@@ -224,6 +208,7 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm
         if (form && emailInput && passwordInput && confirmInput) {
             form.addEventListener('submit', function(e) {
                 e.preventDefault();
+                e.stopImmediatePropagation();
                 let isValid = true;
 
                 [emailInput, passwordInput, confirmInput].forEach(input => {
@@ -241,11 +226,15 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm
                 if (isValid && checkPasswordStrength(passwordInput.value) < 3) {
                     passwordInput.style.borderColor = '#ef4444';
                     passwordInput.style.boxShadow = '0 0 0 1px #ef4444';
+                    confirmInput.style.borderColor = '#ef4444';
+                    confirmInput.style.boxShadow = '0 0 0 1px #ef4444';
                     isValid = false;
                 }
 
                 // Check confirm password
                 if (isValid && passwordInput.value !== confirmInput.value) {
+                    passwordInput.style.borderColor = '#ef4444';
+                    passwordInput.style.boxShadow = '0 0 0 1px #ef4444';
                     confirmInput.style.borderColor = '#ef4444';
                     confirmInput.style.boxShadow = '0 0 0 1px #ef4444';
                     isValid = false;
@@ -265,13 +254,20 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm
                     .then(response => response.json())
                     .then(data => {
                         if (data.success) {
-                            alert(data.message);
-                            window.location.href = data.redirect;
+                            alert(data.message || 'Registration successful!');
+                            window.location.href = data.redirect || '?page=login';
                         } else {
                             if (data.field === 'email') {
                                 emailInput.style.borderColor = '#ef4444';
                                 emailInput.style.boxShadow = '0 0 0 1px #ef4444';
                                 emailInput.focus();
+                            } else if (data.field === 'password' || data.field === 'confirm_password') {
+                                passwordInput.style.borderColor = '#ef4444';
+                                passwordInput.style.boxShadow = '0 0 0 1px #ef4444';
+                                confirmInput.style.borderColor = '#ef4444';
+                                confirmInput.style.boxShadow = '0 0 0 1px #ef4444';
+                                passwordInput.blur();
+                                confirmInput.blur();
                             } else {
                                 alert(data.error || 'Registration failed');
                             }

@@ -56,12 +56,12 @@ if (isset($_POST['email']) && isset($_POST['password'])) {
                 <div class="w-full space-y-2">
                     <!-- <label for="email" class="text-xs font-bold uppercase tracking-widest text-zinc-400 ml-4">Email Address</label> -->
                     <input type="text" id="desktop_email" name="email" placeholder="email" 
-                        class="px-6 py-4 rounded-full w-full text-lg text-white font-medium bg-white/5 border border-white/10 focus:bg-white/10 focus:border-primary/50 focus:ring-1 focus:ring-primary/50 outline-none transition-all duration-300 placeholder:text-zinc-600">
+                        class="px-6 py-4 rounded-full w-full text-lg text-white font-medium bg-white/5 border border-white/10 focus:bg-white/10 focus:border-primary/50 focus:ring-1 focus:ring-primary/50 outline-none placeholder:text-zinc-600">
                 </div>
                 <div class="w-full space-y-2">
                     <!-- <label for="password" class="text-xs font-bold uppercase tracking-widest text-zinc-400 ml-4">Password</label> -->
                     <input type="password" id="desktop_password" name="password" placeholder="password" 
-                        class="px-6 py-4 rounded-full w-full text-lg text-white font-medium bg-white/5 border border-white/10 focus:bg-white/10 focus:border-primary/50 focus:ring-1 focus:ring-primary/50 outline-none transition-all duration-300 placeholder:text-zinc-600">
+                        class="px-6 py-4 rounded-full w-full text-lg text-white font-medium bg-white/5 border border-white/10 focus:bg-white/10 focus:border-primary/50 focus:ring-1 focus:ring-primary/50 outline-none placeholder:text-zinc-600">
                 </div>
                 <div class="flex items-center justify-between w-full">
                     <label class="flex items-center cursor-pointer group translate-x-6">
@@ -135,7 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         passwordInput.style.borderColor = '#ef4444';
                         passwordInput.style.boxShadow = '0 0 0 1px #ef4444';
                         passwordInput.value = '';
-                        passwordInput.focus();
+                        passwordInput.blur();
                     }
                 })
                 .catch(error => {

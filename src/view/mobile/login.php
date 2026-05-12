@@ -75,6 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (form && emailInput && passwordInput) {
         form.addEventListener('submit', function(e) {
             e.preventDefault();
+            e.stopImmediatePropagation();
             let isValid = true;
 
             if (!emailInput.value.trim()) {
@@ -108,7 +109,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     passwordInput.style.borderColor = '#ef4444';
                     passwordInput.style.boxShadow = '0 0 0 1px #ef4444';
                     passwordInput.value = '';
-                    passwordInput.focus();
+                    passwordInput.blur();
                 }
             })
             .catch(error => {

@@ -1,8 +1,40 @@
 <?php
 include_once __DIR__ . '/ticket_db/connectdb.php'; 
-
 $message = '';
 $current_tab = 'event';
+
+// Ensure pricing table exists and helper functions
+create_event_section_prices_table($conn);
+
+function create_event_section_prices_table($conn) {
+    $sql = "CREATE TABLE IF NOT EXISTS event_section_prices (
+        esp_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+        event_id INT UNSIGNED NOT NULL,
+        section_id INT UNSIGNED NOT NULL,
+        price DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+        PRIMARY KEY (esp_id),
+        UNIQUE KEY `idx_event_section` (`event_id`, `section_id`),
+        KEY `event_id` (`event_id`),
+        KEY `section_id` (`section_id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;";
+    mysqli_query($conn, $sql);
+}
+
+function insert_section_prices($conn, $event_id, $prices) {
+    if (!is_array($prices)) return;
+    $del_stmt = mysqli_prepare($conn, "DELETE FROM event_section_prices WHERE event_id = ?");
+    mysqli_stmt_bind_param($del_stmt, "i", $event_id);
+    mysqli_stmt_execute($del_stmt);
+    $ins_stmt = mysqli_prepare($conn, "INSERT INTO event_section_prices (event_id, section_id, price) VALUES (?, ?, ?)");
+    foreach ($prices as $section_id => $price) {
+        $section_id = (int)$section_id;
+        $price = str_replace(',', '', $price);
+        $price = floatval($price);
+        if ($price < 0) $price = 0;
+        mysqli_stmt_bind_param($ins_stmt, "iid", $event_id, $section_id, $price);
+        mysqli_stmt_execute($ins_stmt);
+    }
+}
 
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -70,6 +102,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (mysqli_stmt_execute($stmt)) {
                 $event_id = mysqli_insert_id($conn);
                 insert_lineup($conn, $event_id, $_POST['artists'] ?? []);
+                insert_section_prices($conn, $event_id, $_POST['section_price'] ?? []);
                 $message = success_msg("Concert successfully published!");
             } else $message = error_msg("Error adding event: " . mysqli_error($conn));
         } else {
@@ -80,6 +113,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (mysqli_stmt_execute($stmt)) {
                 mysqli_query($conn, "DELETE FROM event_lineup WHERE event_id = $id");
                 insert_lineup($conn, $id, $_POST['artists'] ?? []);
+                mysqli_query($conn, "DELETE FROM event_section_prices WHERE event_id = $id");
+                insert_section_prices($conn, $id, $_POST['section_price'] ?? []);
                 $message = success_msg("Concert updated!");
             } else $message = error_msg("Error updating event: " . mysqli_error($conn));
         }
@@ -88,6 +123,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     elseif ($action === 'delete_event') {
         $id = (int)$_POST['event_id'];
         mysqli_query($conn, "DELETE FROM event_lineup WHERE event_id = $id");
+        mysqli_query($conn, "DELETE FROM event_section_prices WHERE event_id = $id");
         $stmt = mysqli_prepare($conn, "DELETE FROM events WHERE event_id=?");
         mysqli_stmt_bind_param($stmt, "i", $id);
         if (mysqli_stmt_execute($stmt)) $message = success_msg("Event deleted!");
@@ -120,6 +156,10 @@ $artists = [];
 $a_res = mysqli_query($conn, "SELECT * FROM artists ORDER BY name ASC");
 if ($a_res) while($r = mysqli_fetch_assoc($a_res)) $artists[] = $r;
 
+$sections_by_venue = [];
+$s_res = mysqli_query($conn, "SELECT * FROM seating_sections ORDER BY venue_id ASC, section_name ASC");
+if ($s_res) while($r = mysqli_fetch_assoc($s_res)) $sections_by_venue[$r['venue_id']][] = $r;
+
 $events = [];
 $e_res = mysqli_query($conn, "SELECT e.*, v.name as venue_name FROM events e LEFT JOIN venues v ON e.venue_id = v.venue_id ORDER BY event_start_datetime DESC");
 if ($e_res) {
@@ -127,6 +167,9 @@ if ($e_res) {
         $l_res = mysqli_query($conn, "SELECT artist_id FROM event_lineup WHERE event_id = {$r['event_id']}");
         $r['lineup'] = [];
         if ($l_res) while($lr = mysqli_fetch_assoc($l_res)) $r['lineup'][] = $lr['artist_id'];
+        $p_res = mysqli_query($conn, "SELECT section_id, price FROM event_section_prices WHERE event_id = {$r['event_id']}");
+        $r['section_prices'] = [];
+        if ($p_res) while($pr = mysqli_fetch_assoc($p_res)) $r['section_prices'][$pr['section_id']] = $pr['price'];
         $events[] = $r;
     }
 }
@@ -235,6 +278,14 @@ if ($e_res) {
                                     <?php endforeach; ?>
                                 </div>
                             <?php endif; ?>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col gap-2 mt-4">
+                        <label class="font-bold text-zinc-300 ml-2">Section Pricing</label>
+                        <div class="bg-zinc-800 p-4 rounded-2xl border border-zinc-700">
+                            <p id="section-pricing-placeholder" class="text-zinc-500 italic p-2">Select a venue to set section prices.</p>
+                            <div id="section-pricing-list" class="grid grid-cols-1 gap-2"></div>
                         </div>
                     </div>
 
@@ -433,6 +484,41 @@ if ($e_res) {
             document.getElementById(id).classList.add('hidden');
         }
 
+        const sectionsByVenue = <?= json_encode($sections_by_venue) ?>;
+
+        function populateSectionPricing(venueId, existingPrices) {
+            const placeholder = document.getElementById('section-pricing-placeholder');
+            const list = document.getElementById('section-pricing-list');
+            if (!list) return;
+            list.innerHTML = '';
+            if (!venueId || !sectionsByVenue[venueId] || sectionsByVenue[venueId].length === 0) {
+                if (placeholder) placeholder.classList.remove('hidden');
+                return;
+            }
+            if (placeholder) placeholder.classList.add('hidden');
+            sectionsByVenue[venueId].forEach(section => {
+                const row = document.createElement('div');
+                row.className = 'flex items-center justify-between gap-3 p-3 rounded-xl hover:bg-zinc-800 transition border border-transparent hover:border-zinc-700';
+
+                const left = document.createElement('div');
+                left.innerHTML = `<div class="text-white font-bold">${section.section_name}</div><div class="text-xs text-zinc-500">Capacity: ${section.capacity}</div>`;
+
+                const input = document.createElement('input');
+                input.type = 'number';
+                input.step = '0.01';
+                input.min = '0';
+                input.name = 'section_price[' + section.section_id + ']';
+                input.className = 'px-4 py-2 rounded-xl bg-zinc-900 border border-zinc-700 text-white font-bold w-32 text-right';
+                if (existingPrices && existingPrices[section.section_id] !== undefined) {
+                    input.value = existingPrices[section.section_id];
+                }
+
+                row.appendChild(left);
+                row.appendChild(input);
+                list.appendChild(row);
+            });
+        }
+
 
         function openEventForm() {
             document.getElementById('form-event-container').classList.remove('hidden');
@@ -449,6 +535,14 @@ if ($e_res) {
             
 
             document.querySelectorAll('input[name="artists[]"]').forEach(cb => cb.checked = false);
+            populateSectionPricing(document.getElementById('event_venue_id').value, {});
+        }
+
+        const _venueSelect = document.getElementById('event_venue_id');
+        if (_venueSelect) {
+            _venueSelect.addEventListener('change', function(e) {
+                populateSectionPricing(e.target.value, {});
+            });
         }
 
         function editEvent(data) {
@@ -475,7 +569,7 @@ if ($e_res) {
                     if (cb) cb.checked = true;
                 });
             }
-            
+            populateSectionPricing(data.venue_id, data.section_prices || {});
 
             document.getElementById('form-event-container').scrollIntoView({behavior: "smooth"});
         }

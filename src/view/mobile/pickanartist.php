@@ -6,6 +6,17 @@ require_once (__DIR__ . '/../../ticket_db/connectdb.php');
 
 $user_id = $_SESSION['user_id'] ?? 1;
 
+$user_is_new = true;
+if ($stmt = mysqli_prepare($conn, "SELECT 1 FROM user_artist_likes WHERE user_id = ? LIMIT 1")) {
+    mysqli_stmt_bind_param($stmt, "i", $user_id);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+    if (mysqli_fetch_assoc($result)) {
+        $user_is_new = false;
+    }
+    mysqli_stmt_close($stmt);
+}
+
 $error_msg = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_artists'])) {
@@ -29,8 +40,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_artists'])) {
     }
 }
 
+
+$query = $user_is_new ? "SELECT artist_id, name, image_url, genre FROM artists ORDER BY genre ASC, RAND()" : "SELECT artist_id, name, image_url, genre FROM artists ORDER BY RAND()";
 $all_artists = [];
-$res = mysqli_query($conn, "SELECT artist_id, name, image_url, genre FROM artists ORDER BY RAND()");
+$res = mysqli_query($conn, $query);
 if ($res) {
     while ($row = mysqli_fetch_assoc($res)) {
         $all_artists[] = $row;
@@ -47,7 +60,7 @@ $pool_artists = array_slice($all_artists, 15);
     <form method="POST" action="?page=pickanarena" class="w-full flex flex-col h-full relative">
         
         <div class="h-[15vh] w-full sticky top-0 flex flex-col items-center justify-center bg-black z-30 shrink-0">
-            <p class="font-ballmer text-2xl p-4 text-white text-center">pick three or more artist that you listen to</p>
+            <p class="font-ballmer text-2xl p-4 text-white text-center"><?php echo $user_is_new ? 'Recommended artists for you - pick three or more that you listen to' : 'pick three or more artist that you listen to'; ?></p>
 
             <?php if(!empty($error_msg)): ?>
                 <p class="text-primary font-bold animate-pulse text-sm -mt-2 pb-2"><?= htmlspecialchars($error_msg) ?></p>

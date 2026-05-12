@@ -1,6 +1,8 @@
 <?php
 require_once (__DIR__ . '/../../ticket_db/connectdb.php');
 
+$isAjax = isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
+
 if (isset($_POST['email']) && isset($_POST['password'])) {
     $email = mysqli_real_escape_string($conn, $_POST['email']);
     $password = $_POST['password'];
@@ -14,18 +16,28 @@ if (isset($_POST['email']) && isset($_POST['password'])) {
 
     if ($user && password_verify($password, $user['password_hash'])) {
         $_SESSION['user_id'] = $user['user_id'];
-        header('Location: ?page=pickanartist');
-        exit();
+        if ($isAjax) {
+            echo json_encode(['success' => true]);
+            exit();
+        } else {
+            header('Location: ?page=pickanartist');
+            exit();
+        }
     } else {
-        echo "<script>alert('Invalid email or password!');</script>";
-        echo "<script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const passwordInput = document.getElementById('password');
-            if (passwordInput) {
-                passwordInput.style.outline = '2px solid #ef4444';
-            }
-        });
-        </script>";
+        if ($isAjax) {
+            echo json_encode(['error' => 'Invalid email or password']);
+            exit();
+        } else {
+            echo "<script>alert('Invalid email or password!');</script>";
+            echo "<script>
+            document.addEventListener('DOMContentLoaded', () => {
+                const passwordInput = document.getElementById('password');
+                if (passwordInput) {
+                    passwordInput.style.outline = '2px solid #ef4444';
+                }
+            });
+            </script>";
+        }
     }
 }
 ?>
@@ -59,6 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (form && emailInput && passwordInput) {
         form.addEventListener('submit', function(e) {
+            e.preventDefault();
             let isValid = true;
 
             if (!emailInput.value.trim()) {
@@ -76,10 +89,28 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             if (!isValid) {
-                e.preventDefault();
-                e.stopImmediatePropagation();
+                return;
             }
-        }, true);
+
+            const formData = new FormData(form);
+            fetch('', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.href = '?page=pickanartist';
+                } else {
+                    emailInput.style.outline = '2px solid #ef4444';
+                    passwordInput.style.outline = '2px solid #ef4444';
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
 
         emailInput.addEventListener('input', function() {
             if (this.value.trim()) {

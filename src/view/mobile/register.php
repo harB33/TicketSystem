@@ -1,6 +1,8 @@
 <?php
 require_once (__DIR__ . '/../../ticket_db/connectdb.php');
 
+$isAjax = isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
+
 $passwordStrength = 0;
 $strengthMessage = '';
 $showStrengthBars = false;
@@ -50,19 +52,39 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm
             mysqli_stmt_bind_param($stmt, "ss", $email, $hashed_password);
 
             if (mysqli_stmt_execute($stmt)) {
-                echo "<script>
-                    alert('Registration successful! Please log in.');
-                    window.location.href = '?page=login';
-                </script>";
-                exit();
+                if ($isAjax) {
+                    echo json_encode(['success' => true]);
+                    exit();
+                } else {
+                    echo "<script>
+                        alert('Registration successful! Please log in.');
+                        window.location.href = '?page=login';
+                    </script>";
+                    exit();
+                }
             } else {
-                echo "Error: " . mysqli_error($conn);
+                if ($isAjax) {
+                    echo json_encode(['error' => 'Database error']);
+                    exit();
+                } else {
+                    echo "Error: " . mysqli_error($conn);
+                }
             }
         } else {
-            echo "<script>alert('Password is too weak. Please use at least 3 complexity requirements.');</script>";
+            if ($isAjax) {
+                echo json_encode(['error' => 'Password too weak']);
+                exit();
+            } else {
+                echo "<script>alert('Password is too weak. Please use at least 3 complexity requirements.');</script>";
+            }
         }
     } else {
-        echo "<script>alert('Passwords do not match!');</script>";
+        if ($isAjax) {
+            echo json_encode(['error' => 'Passwords do not match']);
+            exit();
+        } else {
+            echo "<script>alert('Passwords do not match!');</script>";
+        }
     }
 }
 ?>

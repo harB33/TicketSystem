@@ -57,7 +57,7 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm
     } else if ($password !== $confirm_password) {
         $error = 'Passwords do not match';
         $field = 'confirm_password';
-    } else if ($passwordStrength < 3) {
+    } else if ($desktop_passwordStrength < 3) {
         $error = 'Password is too weak';
         $field = 'password';
     }

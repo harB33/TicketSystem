@@ -55,7 +55,7 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm
             exit();
         }
     } else if ($password === $confirm_password) {
-        if ($passwordStrength >= 3) {
+        if ($mobile_passwordStrength >= 3) {
             $hashed_password = password_hash($password, PASSWORD_DEFAULT);
             $sql = "INSERT INTO users (email, password_hash) VALUES (?, ?)";
             $stmt = mysqli_prepare($conn, $sql);

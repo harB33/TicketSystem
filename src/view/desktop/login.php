@@ -72,7 +72,7 @@ if (isset($_POST['email']) && isset($_POST['password'])) {
                         </div>
                         <span class="ml-3 text-sm font-medium text-zinc-400 group-hover:text-zinc-200 transition-colors">Remember me</span>
                     </label>
-                    <button type="submit" class="px-8 py-3 bg-primary text-white rounded-full font-bold text-lg">
+                    <button type="submit" id="desktop_loginBtn" class="px-8 py-3 bg-primary text-white rounded-full font-bold text-lg">
                         <span class="font-ballmer translate-y-0.5 inline-block">Sign in</span>
                     </button>
                 </div>
@@ -90,10 +90,23 @@ document.addEventListener('DOMContentLoaded', () => {
     const emailInput = document.getElementById('desktop_email');
     const passwordInput = document.getElementById('desktop_password');
 
+    const shakeEl = (el) => {
+        el.animate([
+            { transform: 'translateX(0)' },
+            { transform: 'translateX(-7px)' },
+            { transform: 'translateX(7px)' },
+            { transform: 'translateX(-5px)' },
+            { transform: 'translateX(5px)' },
+            { transform: 'translateX(0)' }
+        ], { duration: 400, easing: 'ease' });
+    };
+
     if (form && emailInput && passwordInput) {
         form.addEventListener('submit', function(e) {
             e.preventDefault();
             e.stopImmediatePropagation();
+            const submitBtn = document.getElementById('desktop_loginBtn');
+            const shakeBtn = () => shakeEl(submitBtn);
             let isValid = true;
 
             if (!emailInput.value.trim()) {
@@ -136,13 +149,15 @@ document.addEventListener('DOMContentLoaded', () => {
                         passwordInput.style.boxShadow = '0 0 0 1px #ef4444';
                         passwordInput.value = '';
                         passwordInput.blur();
+                        shakeBtn();
                     }
                 })
                 .catch(error => {
                     console.error('Error:', error);
                 });
             }
-        });
+            if (!isValid) shakeBtn();
+            });
 
         emailInput.addEventListener('input', function() {
             if (this.value.trim()) {

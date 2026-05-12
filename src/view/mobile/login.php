@@ -60,7 +60,7 @@ if (isset($_POST['email']) && isset($_POST['password'])) {
                 <input type="checkbox" checked="checked" class="checkbox border checkbox-primary rounded-full" style="border-radius: 100% !important; box-shadow: none !important;" />
                 <span class="ml-2 text-sm opacity-75">Remember me</span>
             </div>
-            <button type="submit" class=" p-2 border border-primary rounded-full w-1/2 bg-primary"><p class="font-ballmer text-lg translate-y-1">sign in</p></button>
+            <button type="submit" id="mobile_loginBtn" class=" p-2 border border-primary rounded-full w-1/2 bg-primary"><p class="font-ballmer text-lg translate-y-1">sign in</p></button>
         </div>
         <p class="opacity-75">Don't have an account? <a href="?page=register" class="text-primary">Sign up</a></p>
     </div>
@@ -72,10 +72,23 @@ document.addEventListener('DOMContentLoaded', () => {
     const emailInput = document.getElementById('email');
     const passwordInput = document.getElementById('password');
 
+    const shakeEl = (el) => {
+        el.animate([
+            { transform: 'translateX(0)' },
+            { transform: 'translateX(-7px)' },
+            { transform: 'translateX(7px)' },
+            { transform: 'translateX(-5px)' },
+            { transform: 'translateX(5px)' },
+            { transform: 'translateX(0)' }
+        ], { duration: 400, easing: 'ease' });
+    };
+
     if (form && emailInput && passwordInput) {
         form.addEventListener('submit', function(e) {
             e.preventDefault();
             e.stopImmediatePropagation();
+            const submitBtn = document.getElementById('mobile_loginBtn');
+            const shakeBtn = () => shakeEl(submitBtn);
             let isValid = true;
 
             if (!emailInput.value.trim()) {
@@ -88,6 +101,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             if (!isValid) {
+                shakeBtn();
                 return;
             }
 
@@ -110,6 +124,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     passwordInput.style.boxShadow = '0 0 0 1px #ef4444';
                     passwordInput.value = '';
                     passwordInput.blur();
+                    shakeBtn();
                 }
             })
             .catch(error => {

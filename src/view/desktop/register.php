@@ -143,7 +143,7 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm
                         </svg>
                             <span class="text-sm font-medium ml-1.5">Back to <span class="text-primary group-hover:underline">sign in</span></span>
                     </a>
-                    <button type="submit" class="px-10 py-3 bg-primary hover:bg-primary/90 text-white rounded-full font-bold text-lg">
+                    <button type="submit" id="desktop_registerBtn" class="px-10 py-3 bg-primary hover:bg-primary/90 text-white rounded-full font-bold text-lg">
                         <span class="font-ballmer translate-y-0.5 inline-block">sign up</span>
                     </button>
                 </div>
@@ -241,7 +241,14 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm
             form.addEventListener('submit', function(e) {
                 e.preventDefault();
                 e.stopImmediatePropagation();
-                let isValid = true;
+            const submitBtn = document.getElementById('desktop_registerBtn');
+            const shakeBtn = () => {
+                submitBtn.classList.remove('desktop-register-shake-anim');
+                void submitBtn.offsetWidth;
+                submitBtn.classList.add('desktop-register-shake-anim');
+                submitBtn.addEventListener('animationend', () => submitBtn.classList.remove('desktop-register-shake-anim'), { once: true });
+            };
+            let isValid = true;
 
                 [emailInput, passwordInput, confirmInput].forEach(input => {
                     if (!input.value.trim()) {
@@ -293,6 +300,7 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm
                                 emailInput.style.borderColor = '#ef4444';
                                 emailInput.style.boxShadow = '0 0 0 1px #ef4444';
                                 emailInput.blur();
+                                shakeBtn();
                             } else if (data.field === 'password' || data.field === 'confirm_password') {
                                 passwordInput.style.borderColor = '#ef4444';
                                 passwordInput.style.boxShadow = '0 0 0 1px #ef4444';
@@ -300,8 +308,10 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm
                                 confirmInput.style.boxShadow = '0 0 0 1px #ef4444';
                                 passwordInput.blur();
                                 confirmInput.blur();
+                                shakeBtn();
                             } else {
                                 alert(data.error || 'Registration failed');
+                                shakeBtn();
                             }
                         }
                     })
@@ -310,6 +320,7 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm
                         alert('An error occurred. Please try again.');
                     });
                 }
+                if (!isValid) shakeBtn();
             });
 
             [emailInput, passwordInput, confirmInput].forEach(input => {

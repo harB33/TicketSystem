@@ -118,7 +118,7 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm
         <p id="strengthMessage" class="text-center text-sm font-bold text-gray-500 absolute hidden"></p>
         <input type="password" id="confirmInput" name="confirm_password" placeholder="confirm password" class="px-6 py-4 rounded-full w-full text-lg font-bold text-[#525252] bg-[#919191]">
         <div class="flex items-center justify-end w-full">
-            <button type="submit" class=" p-2 border border-primary rounded-full w-1/2 bg-primary"><p class="font-ballmer text-lg translate-y-1">sign up</p></button>
+            <button type="submit" id="mobile_registerBtn" class=" p-2 border border-primary rounded-full w-1/2 bg-primary"><p class="font-ballmer text-lg translate-y-1">sign up</p></button>
         </div>
         <p class="opacity-75">Already have an account? <a href="?page=login" class="text-primary">Sign in</a></p>
         </div>
@@ -126,6 +126,17 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm
 </form>
 
 <script>
+    const shakeEl = (el) => {
+        el.animate([
+            { transform: 'translateX(0)' },
+            { transform: 'translateX(-7px)' },
+            { transform: 'translateX(7px)' },
+            { transform: 'translateX(-5px)' },
+            { transform: 'translateX(5px)' },
+            { transform: 'translateX(0)' }
+        ], { duration: 400, easing: 'ease' });
+    };
+
     function checkPasswordStrength(password) {
         let strength = 0;
         
@@ -209,6 +220,13 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm
             form.addEventListener('submit', function(e) {
                 e.preventDefault();
                 e.stopImmediatePropagation();
+                const submitBtn = document.getElementById('mobile_registerBtn');
+                const shakeBtn = () => {
+                    submitBtn.classList.remove('mobile-register-shake-anim');
+                    void submitBtn.offsetWidth;
+                    submitBtn.classList.add('mobile-register-shake-anim');
+                    submitBtn.addEventListener('animationend', () => submitBtn.classList.remove('mobile-register-shake-anim'), { once: true });
+                };
                 let isValid = true;
 
                 [emailInput, passwordInput, confirmInput].forEach(input => {
@@ -261,6 +279,7 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm
                                 emailInput.style.borderColor = '#ef4444';
                                 emailInput.style.boxShadow = '0 0 0 1px #ef4444';
                                 emailInput.focus();
+                                shakeBtn();
                             } else if (data.field === 'password' || data.field === 'confirm_password') {
                                 passwordInput.style.borderColor = '#ef4444';
                                 passwordInput.style.boxShadow = '0 0 0 1px #ef4444';
@@ -268,8 +287,10 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm
                                 confirmInput.style.boxShadow = '0 0 0 1px #ef4444';
                                 passwordInput.blur();
                                 confirmInput.blur();
+                                shakeBtn();
                             } else {
                                 alert(data.error || 'Registration failed');
+                                shakeBtn();
                             }
                         }
                     })
@@ -278,6 +299,7 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm
                         alert('An error occurred. Please try again.');
                     });
                 }
+                if (!isValid) shakeBtn();
             });
 
             [emailInput, passwordInput, confirmInput].forEach(input => {

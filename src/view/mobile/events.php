@@ -65,13 +65,12 @@ $formatted_date = $date->format('F d, Y');
 $formatted_time = $date->format('h:i A');
 
 // Fetch seating tiers (sections), prices, and images for this event
-$sections_sql = "SELECT ss.section_id, ss.section_name, ss.section_img, MIN(t.price) as price
+$sections_sql = "SELECT ss.section_id, ss.section_name, ss.section_img, esp.price
                  FROM seating_sections ss
                  JOIN events e ON ss.venue_id = e.venue_id
-                 LEFT JOIN tickets t ON (ss.section_id = t.section_id AND t.event_id = e.event_id)
+                 LEFT JOIN event_section_prices esp ON (ss.section_id = esp.section_id AND esp.event_id = e.event_id)
                  WHERE e.event_id = ?
-                 GROUP BY ss.section_id, ss.section_name, ss.section_img
-                 ORDER BY price DESC, ss.section_name ASC";
+                 ORDER BY esp.price DESC, ss.section_name ASC";
 $stmt_sec = mysqli_prepare($conn, $sections_sql);
 mysqli_stmt_bind_param($stmt_sec, "i", $event_id);
 mysqli_stmt_execute($stmt_sec);

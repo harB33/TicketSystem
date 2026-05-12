@@ -54,7 +54,7 @@ $pool_artists = array_slice($all_artists, 15);
             <?php endif; ?>
         </div>
 
-        <div id="artists-grid" class="grid grid-cols-3 gap-4 p-4 z-10 pb-40 max-w-3xl mx-auto">
+        <div id="artists-grid-desktop" class="grid grid-cols-3 gap-4 p-4 z-10 pb-40 max-w-3xl mx-auto">
             <?php if(empty($initial_artists)): ?>
                 <p class="col-span-3 text-center text-zinc-500 mt-10">No artists available yet. Please add some via the Staff Portal.</p>
             <?php endif; ?>
@@ -74,7 +74,7 @@ $pool_artists = array_slice($all_artists, 15);
                         <span class="text-white text-xs font-bold truncate block"><?= htmlspecialchars($artist['name']) ?></span>
                     </div>
 
-                    <input type="checkbox" name="artists[]" id="chk_<?= $artist['artist_id'] ?>" value="<?= $artist['artist_id'] ?>" class="sr-only peer" onchange="handleArtistClick(<?= $artist['artist_id'] ?>, '<?= htmlspecialchars(addslashes($artist['genre'])) ?>')" <?php echo (isset($_POST['artists']) && in_array($artist['artist_id'], $_POST['artists'])) ? 'checked' : ''; ?>>
+                    <input type="checkbox" name="artists[]" id="chk_desktop_<?= $artist['artist_id'] ?>" value="<?= $artist['artist_id'] ?>" class="sr-only peer" onchange="handleArtistClickDesktop(<?= $artist['artist_id'] ?>, '<?= htmlspecialchars(addslashes($artist['genre'])) ?>')" <?php echo (isset($_POST['artists']) && in_array($artist['artist_id'], $_POST['artists'])) ? 'checked' : ''; ?>>
                     
                     <div class="absolute inset-0 bg-primary opacity-0 peer-checked:opacity-50 transition-opacity duration-200"></div>
                     
@@ -112,10 +112,10 @@ $pool_artists = array_slice($all_artists, 15);
 </style>
 
 <script>
-    const poolArtists = <?php echo json_encode($pool_artists); ?>;
-    const grid = document.getElementById('artists-grid');
+    const poolArtistsDesktop = <?php echo json_encode($pool_artists); ?>;
+    const gridDesktop = document.getElementById('artists-grid-desktop');
 
-    function escapeHtml(unsafe) {
+    function escapeHtmlDesktop(unsafe) {
         return (unsafe || '').toString()
             .replace(/&/g, "&amp;")
             .replace(/</g, "&lt;")
@@ -124,50 +124,52 @@ $pool_artists = array_slice($all_artists, 15);
             .replace(/'/g, "&#039;");
     }
 
-    function handleArtistClick(artistId, genre) {
-        const checkbox = document.getElementById('chk_' + artistId);
+    function handleArtistClickDesktop(artistId, genre) {
+        const checkbox = document.getElementById('chk_desktop_' + artistId);
         if (!checkbox || !checkbox.checked) return;
 
         let matches = [];
         // Support finding similar genres by splitting them (e.g. "Pop/Soul" -> matches "Pop")
         const targetGenres = genre.toLowerCase().split(/[/\s,]+/);
 
-        for (let i = 0; i < poolArtists.length; i++) {
-            const poolGenreStr = (poolArtists[i].genre || '').toLowerCase();
+        for (let i = 0; i < poolArtistsDesktop.length; i++) {
+            const poolGenreStr = (poolArtistsDesktop[i].genre || '').toLowerCase();
             const isMatch = targetGenres.some(g => poolGenreStr.includes(g));
 
             if (isMatch) {
-                matches.push(poolArtists[i]);
-                poolArtists.splice(i, 1);
+                matches.push(poolArtistsDesktop[i]);
+                poolArtistsDesktop.splice(i, 1);
                 i--;
                 if (matches.length === 3) break;
             }
         }
 
         // If we didn't find 3 related artists, just pop random ones so it always gives 3
-        while (matches.length < 3 && poolArtists.length > 0) {
-            matches.push(poolArtists.shift());
+        while (matches.length < 3 && poolArtistsDesktop.length > 0) {
+            matches.push(poolArtistsDesktop.shift());
         }
 
         let insertAfterNode = checkbox.closest('label');
 
         matches.forEach((artist, index) => {
             setTimeout(() => {
+                if (document.getElementById('chk_desktop_' + artist.artist_id)) return;
+
                 const div = document.createElement('label');
                 div.className = "relative border border-white/10 rounded-xl aspect-square overflow-hidden cursor-pointer select-none bg-white/5 block hover:border-primary/50 transition-colors animate-pop-in";
                 
                 const imgHtml = artist.image_url 
-                    ? `<img src="${escapeHtml(artist.image_url)}" class="w-full h-full object-cover">` 
+                    ? `<img src="${escapeHtmlDesktop(artist.image_url)}" class="w-full h-full object-cover">` 
                     : `<div class="w-full h-full flex items-center justify-center bg-zinc-900"><svg class="w-8 h-8 text-zinc-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"></path></svg></div>`;
 
-                const safeGenre = escapeHtml(artist.genre || '');
+                const safeGenre = escapeHtmlDesktop(artist.genre || '');
                 
                 div.innerHTML = `
                     ${imgHtml}
                     <div class="absolute bottom-0 w-full bg-linear-to-t from-black/90 to-transparent p-2 text-center">
-                        <span class="text-white text-xs font-bold truncate block">${escapeHtml(artist.name)}</span>
+                        <span class="text-white text-xs font-bold truncate block">${escapeHtmlDesktop(artist.name)}</span>
                     </div>
-                    <input type="checkbox" name="artists[]" id="chk_${artist.artist_id}" value="${artist.artist_id}" class="sr-only peer" onchange="handleArtistClick(${artist.artist_id}, '${safeGenre.replace(/'/g, "\\'")}')">
+                    <input type="checkbox" name="artists[]" id="chk_desktop_${artist.artist_id}" value="${artist.artist_id}" class="sr-only peer" onchange="handleArtistClickDesktop(${artist.artist_id}, '${safeGenre.replace(/'/g, "\\'")}')">
                     <div class="absolute inset-0 bg-primary opacity-0 peer-checked:opacity-50 transition-opacity duration-200"></div>
                     <div class="absolute inset-0 opacity-0 peer-checked:opacity-100 flex items-center justify-center transition-opacity duration-200">
                         <div class="w-14 h-14 border-4 border-white rounded-full flex items-center justify-center z-10">
@@ -180,7 +182,7 @@ $pool_artists = array_slice($all_artists, 15);
                     insertAfterNode.insertAdjacentElement('afterend', div);
                     insertAfterNode = div; // Update reference so the next one is inserted after this
                 } else {
-                    grid.appendChild(div); // Fallback
+                    gridDesktop.appendChild(div); // Fallback
                 }
             }, index * 150); // Stagger the animation
         });

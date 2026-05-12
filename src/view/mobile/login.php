@@ -1,6 +1,8 @@
 <?php
 require_once (__DIR__ . '/../../ticket_db/connectdb.php');
 
+$isAjax = isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
+
 if (isset($_POST['email']) && isset($_POST['password'])) {
     $email = mysqli_real_escape_string($conn, $_POST['email']);
     $password = $_POST['password'];
@@ -84,41 +86,34 @@ document.addEventListener('DOMContentLoaded', () => {
                 emailInput.style.boxShadow = '';
             }
 
-            if (!passwordInput.value.trim()) {
-                passwordInput.style.borderColor = '#ef4444';
-                passwordInput.style.boxShadow = '0 0 0 1px #ef4444';
-                isValid = false;
-            } else {
-                passwordInput.style.borderColor = '';
-                passwordInput.style.boxShadow = '';
+            if (!isValid) {
+                return;
             }
 
-            if (isValid) {
-                const formData = new FormData(form);
-                formData.append('ajax', 'true');
+            const formData = new FormData(form);
+            formData.append('ajax', 'true');
 
-                fetch(window.location.href + (window.location.href.includes('?') ? '&' : '?') + 'ajax=true', {
-                    method: 'POST',
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest'
-                    },
-                    body: formData
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        window.location.href = data.redirect;
-                    } else {
-                        passwordInput.style.borderColor = '#ef4444';
-                        passwordInput.style.boxShadow = '0 0 0 1px #ef4444';
-                        passwordInput.value = '';
-                        passwordInput.focus();
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-            }
+            fetch(window.location.href + (window.location.href.includes('?') ? '&' : '?') + 'ajax=true', {
+                method: 'POST',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.href = data.redirect;
+                } else {
+                    passwordInput.style.borderColor = '#ef4444';
+                    passwordInput.style.boxShadow = '0 0 0 1px #ef4444';
+                    passwordInput.value = '';
+                    passwordInput.focus();
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
         });
 
         emailInput.addEventListener('input', function() {

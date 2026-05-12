@@ -1,4 +1,7 @@
 <?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 require_once (__DIR__ . '/../../ticket_db/connectdb.php');
 
 if (isset($_POST['email']) && isset($_POST['password'])) {

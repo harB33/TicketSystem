@@ -1,4 +1,7 @@
 <?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 require_once (__DIR__ . '/../../ticket_db/connectdb.php');
 
 $isAjax = isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
@@ -55,20 +58,22 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm
             exit();
         }
     } else if ($password === $confirm_password) {
-        if ($passwordStrength >= 3) {
+        if ($mobile_passwordStrength >= 3) {
             $hashed_password = password_hash($password, PASSWORD_DEFAULT);
             $sql = "INSERT INTO users (email, password_hash) VALUES (?, ?)";
             $stmt = mysqli_prepare($conn, $sql);
             mysqli_stmt_bind_param($stmt, "ss", $email, $hashed_password);
 
             if (mysqli_stmt_execute($stmt)) {
+                $user_id = mysqli_insert_id($conn);
+                $_SESSION['user_id'] = $user_id;
                 if ($isAjax) {
                     echo json_encode(['success' => true]);
                     exit();
                 } else {
                     echo "<script>
-                        alert('Registration successful! Please log in.');
-                        window.location.href = '?page=login';
+                        alert('Registration successful! Please select your favorite artists.');
+                        window.location.href = '?page=pickanartist';
                     </script>";
                     exit();
                 }

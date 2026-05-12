@@ -36,14 +36,22 @@ if (!$event) {
     exit();
 }
 
-$is_phil_arena = (stripos($event['venue_name'], 'Philippine') !== false);
+$venue_name = $event['venue_name'];
+$is_phil_arena = (stripos($venue_name, 'phil.arena') !== false || stripos($venue_name, 'Philippine') !== false);
+$is_moa_arena = (stripos($venue_name, 'moa.arena') !== false || stripos($venue_name, 'Mall of Asia') !== false);
+$is_araneta = (stripos($venue_name, 'araneta') !== false);
+
+$base_image = "./asset/image/venue_placeholder.png";
+if ($is_phil_arena) $base_image = "https://i.imgur.com/Wxh5ymv.png";
+elseif ($is_moa_arena) $base_image = "./asset/image/moaarena.png";
+elseif ($is_araneta) $base_image = "./asset/image/smartaraneta.png";
+
 $date = new DateTime($event['event_start_datetime']);
 $formatted_date = $date->format('F d, Y');
 $formatted_time = $date->format('h:i A');
 
-// Fetch seating tiers (sections) and prices for this event
-// We use a LEFT JOIN on tickets so that sections show up even if no tickets are generated yet
-$sections_sql = "SELECT ss.section_id, ss.section_name, MIN(t.price) as price
+// Fetch seating tiers (sections), prices, and images for this event
+$sections_sql = "SELECT ss.section_id, ss.section_name, ss.section_img, MIN(t.price) as price
                  FROM seating_sections ss
                  JOIN events e ON ss.venue_id = e.venue_id
                  LEFT JOIN tickets t ON (ss.section_id = t.section_id AND t.event_id = e.event_id)
@@ -91,12 +99,14 @@ while ($row = mysqli_fetch_assoc($sections_res)) {
         <!-- Seating Tier Selector (New) -->
         <div class="w-full max-w-xs mb-8 z-20">
             <div class="relative">
-                <select class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 appearance-none font-bold text-white focus:outline-none focus:border-primary transition-all backdrop-blur-xl">
+                <select id="tierSelector" class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 appearance-none font-bold text-white focus:outline-none focus:border-primary transition-all backdrop-blur-xl">
                     <?php if (empty($seating_tiers)): ?>
                         <option value="" disabled selected>No tiers available</option>
                     <?php else: ?>
                         <?php foreach ($seating_tiers as $index => $tier): ?>
-                            <option value="<?= $tier['section_id'] ?>" <?= $index === 0 ? 'selected' : '' ?>>
+                            <option value="<?= $tier['section_id'] ?>" 
+                                    data-img="<?= htmlspecialchars($tier['section_img'] ?? '') ?>"
+                                    <?= $index === 0 ? 'selected' : '' ?>>
                                 <?= htmlspecialchars($tier['section_name']) ?> - 
                                 <?= $tier['price'] ? '₱' . number_format($tier['price']) : 'Price TBA' ?>
                             </option>
@@ -112,11 +122,16 @@ while ($row = mysqli_fetch_assoc($sections_res)) {
         </div>
 
         <div class="w-full max-w-md aspect-square relative group">
-            <?php if ($is_phil_arena): ?>
+            <?php if ($is_phil_arena || $is_moa_arena || $is_araneta): ?>
                 <div class="absolute inset-0 bg-primary/5 rounded-full blur-[80px] opacity-30"></div>
                 
-                <!-- Base Layout (Corrected to single image) -->
-                <img src="https://i.imgur.com/Wxh5ymv.png" alt="Philippine Arena Layout" class="w-full h-full object-contain drop-shadow-[0_0_20px_rgba(0,0,0,0.5)] transition-transform duration-700 group-hover:scale-105">
+                <!-- Base Layout -->
+                <img src="<?= $base_image ?>" alt="Arena Layout" class="w-full h-full object-contain drop-shadow-[0_0_20px_rgba(0,0,0,0.5)] transition-transform duration-700">
+                
+                <!-- Dynamic Section Overlay -->
+                <img id="sectionOverlay" src="<?= htmlspecialchars($seating_tiers[0]['section_img'] ?? '') ?>" 
+                     class="absolute inset-0 w-full h-full object-contain mix-blend-screen transition-opacity duration-300 <?= empty($seating_tiers[0]['section_img']) ? 'opacity-0' : 'opacity-100' ?> pointer-events-none">
+
             <?php else: ?>
                 <div class="w-full h-full border-2 border-dashed border-white/10 rounded-[3rem] flex flex-col items-center justify-center bg-zinc-900/30 backdrop-blur-sm">
                     <svg class="w-20 h-20 text-zinc-700 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -132,14 +147,35 @@ while ($row = mysqli_fetch_assoc($sections_res)) {
         <div class="mt-8 flex gap-4">
             <div class="flex items-center gap-2">
                 <div class="w-3 h-3 rounded-full bg-primary shadow-[0_0_8px_rgba(255,102,153,0.8)]"></div>
-                <span class="text-[10px] uppercase tracking-tighter text-white/60 font-bold">VIP Section</span>
+                <span class="text-[10px] uppercase tracking-tighter text-white/60 font-bold">Selected Section</span>
             </div>
             <div class="flex items-center gap-2">
                 <div class="w-3 h-3 rounded-full bg-zinc-800"></div>
-                <span class="text-[10px] uppercase tracking-tighter text-white/60 font-bold">Reserved</span>
+                <span class="text-[10px] uppercase tracking-tighter text-white/60 font-bold">Unavailable</span>
             </div>
         </div>
     </div>
+
+    <script>
+        const tierSelector = document.getElementById('tierSelector');
+        const sectionOverlay = document.getElementById('sectionOverlay');
+
+        if (tierSelector && sectionOverlay) {
+            tierSelector.addEventListener('change', function() {
+                const selectedOption = this.options[this.selectedIndex];
+                const imgUrl = selectedOption.getAttribute('data-img');
+                
+                if (imgUrl && imgUrl.trim() !== '') {
+                    sectionOverlay.src = imgUrl;
+                    sectionOverlay.classList.remove('opacity-0');
+                    sectionOverlay.classList.add('opacity-100');
+                } else {
+                    sectionOverlay.classList.remove('opacity-100');
+                    sectionOverlay.classList.add('opacity-0');
+                }
+            });
+        }
+    </script>
 
     <!-- Event Details Panel (Floating Glassmorphism) -->
     <div class="p-6 pb-12 bg-gradient-to-t from-black via-black/90 to-transparent pt-20">

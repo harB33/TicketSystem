@@ -97,11 +97,6 @@ while ($row = mysqli_fetch_assoc($sections_res)) {
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
             </svg>
         </a>
-        <div class="p-3 bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20 pointer-events-auto">
-            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path>
-            </svg>
-        </div>
     </div>
 
     <!-- Arena Layout Section -->
@@ -148,7 +143,7 @@ while ($row = mysqli_fetch_assoc($sections_res)) {
         <div class="w-full mb-4 z-20">
             <div class="relative custom-dropdown group" id="mobileTierDropdown">
                 <!-- Dropdown Trigger -->
-                <div id="mobileDropdownTrigger" class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 flex items-center justify-between cursor-pointer active:scale-[0.98] transition-all backdrop-blur-xl hover:border-primary/50">
+                <div id="mobileDropdownTrigger" class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 flex items-center justify-between cursor-pointer active:scale-[0.98] transition-all backdrop-blur-3xl hover:border-primary/50">
                     <span id="mobileSelectedTierText" class="font-bold text-white">
                         <?= !empty($seating_tiers) ? htmlspecialchars($seating_tiers[0]['section_name']) . ' - ' . ($seating_tiers[0]['price'] ? '₱' . number_format($seating_tiers[0]['price']) : 'Price TBA') : 'No tiers available' ?>
                     </span>
@@ -158,13 +153,13 @@ while ($row = mysqli_fetch_assoc($sections_res)) {
                 </div>
 
                 <!-- Dropdown Menu -->
-                <div id="mobileDropdownMenu" class="absolute left-0 right-0 top-full mt-3 bg-zinc-900/90 backdrop-blur-2xl border border-white/10 rounded-2xl overflow-hidden opacity-0 pointer-events-none scale-95 origin-top transition-all duration-300 z-[100] shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
+                <div id="mobileDropdownMenu" class="absolute left-0 right-0 top-full mt-3 bg-zinc-900/90 backdrop-blur-3xl border border-white/10 rounded-2xl overflow-hidden opacity-0 pointer-events-none scale-95 origin-top transition-all duration-300 z-[100] shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
                     <div class="max-h-60 overflow-y-auto custom-scrollbar">
                         <?php if (empty($seating_tiers)): ?>
                             <div class="px-6 py-4 text-white/40 italic">No tiers available</div>
                         <?php else: ?>
                             <?php foreach ($seating_tiers as $index => $tier): ?>
-                                <div class="mobile-tier-option px-6 py-4 hover:bg-primary/20 cursor-pointer transition-colors border-b border-white/5 last:border-0 flex items-center justify-between group/opt"
+                                <div class="mobile-tier-option px-6 py-4 hover:bg-primary/20 cursor-pointer transition-colors backdrop-blur-3xl border-b border-white/5 last:border-0 flex items-center justify-between group/opt"
                                      data-value="<?= $tier['section_id'] ?>" 
                                      data-img="<?= htmlspecialchars($tier['section_img'] ?? '') ?>"
                                      data-text="<?= htmlspecialchars($tier['section_name']) ?> - <?= $tier['price'] ? '₱' . number_format($tier['price']) : 'Price TBA' ?>">

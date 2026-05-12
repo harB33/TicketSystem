@@ -19,7 +19,6 @@ $sql = "SELECT
             ss.section_name,
             s.row_number,
             s.seat_number,
-            a.image_url AS headliner_image,
             a.name AS headliner_name
         FROM orders o
         JOIN order_items oi ON o.order_id = oi.order_id
@@ -86,11 +85,6 @@ while ($row = mysqli_fetch_assoc($result)) {
 
                     <!-- Top half: Image & Event info -->
                     <div class="h-[175px] w-full relative">
-                        <?php if (!empty($ticket['headliner_image'])): ?>
-                            <img src="<?= htmlspecialchars($ticket['headliner_image']) ?>" class="absolute inset-0 w-full h-full object-cover opacity-60">
-                        <?php else: ?>
-                            <div class="absolute inset-0 w-full h-full bg-linear-to-br from-primary/40 to-zinc-900"></div>
-                        <?php endif; ?>
                         <div class="absolute inset-0 bg-linear-to-t from-zinc-900 via-zinc-900/40 to-transparent"></div>
                         
                         <div class="absolute bottom-4 left-6 right-6">

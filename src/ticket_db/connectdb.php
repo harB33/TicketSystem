@@ -63,9 +63,11 @@ $conn = connectToDatabase();
 
 if ($conn === null) {
     // We don't use die() here to ensure the rest of the page (including scripts) can still load
-    echo "<div style='position: fixed; top: 0; left: 0; width: 100%; z-index: 9999; background: #ef4444; color: white; padding: 1rem; text-align: center; font-weight: bold;'>
-            Database Connection Failed. Please check your .env credentials and server status.
-          </div>";
+    if (!isset($isAjax) || !$isAjax) {
+        echo "<div style='position: fixed; top: 0; left: 0; width: 100%; z-index: 9999; background: #ef4444; color: white; padding: 1rem; text-align: center; font-weight: bold;'>
+                Database Connection Failed. Please check your .env credentials and server status.
+              </div>";
+    }
 }
 
 ?>

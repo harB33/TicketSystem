@@ -36,15 +36,27 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm
     $passwordStrength = checkPasswordStrength($password);
     $showStrengthBars = true;
     
-    if ($passwordStrength <= 2) {
-        $strengthMessage = 'Weak Password';
-    } elseif ($passwordStrength <= 4) {
-        $strengthMessage = 'Medium Password';
-    } else {
-        $strengthMessage = 'Strong Password';
-    }
+    $isAjax = isset($_POST['ajax']) && $_POST['ajax'] === 'true';
 
-    if ($password === $confirm_password) {
+    // Check if email already exists
+    $checkEmailSql = "SELECT user_id FROM users WHERE email = ?";
+    $checkStmt = mysqli_prepare($conn, $checkEmailSql);
+    mysqli_stmt_bind_param($checkStmt, "s", $email);
+    mysqli_stmt_execute($checkStmt);
+    mysqli_stmt_store_result($checkStmt);
+    $emailExists = mysqli_stmt_num_rows($checkStmt) > 0;
+    mysqli_stmt_close($checkStmt);
+
+    if ($emailExists) {
+        if ($isAjax) {
+            ob_clean();
+            header('Content-Type: application/json');
+            echo json_encode(['success' => false, 'error' => 'Email already registered', 'field' => 'email']);
+            exit();
+        }
+        // Fallback for non-ajax
+        echo "<script>alert('Email already registered!');</script>";
+    } else if ($password === $confirm_password) {
         if ($passwordStrength >= 3) {
             $hashed_password = password_hash($password, PASSWORD_DEFAULT);
             $sql = "INSERT INTO users (email, password_hash) VALUES (?, ?)";
@@ -52,19 +64,27 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm
             mysqli_stmt_bind_param($stmt, "ss", $email, $hashed_password);
 
             if (mysqli_stmt_execute($stmt)) {
+                if ($isAjax) {
+                    ob_clean();
+                    header('Content-Type: application/json');
+                    echo json_encode(['success' => true, 'message' => 'Registration successful!', 'redirect' => '?page=login']);
+                    exit();
+                }
                 echo "<script>
                     alert('Registration successful! Please log in.');
                     window.location.href = '?page=login';
                 </script>";
                 exit();
             } else {
+                if ($isAjax) {
+                    ob_clean();
+                    header('Content-Type: application/json');
+                    echo json_encode(['success' => false, 'error' => 'Database error: ' . mysqli_error($conn)]);
+                    exit();
+                }
                 echo "Error: " . mysqli_error($conn);
             }
-        } else {
-            echo "<script>alert('Password is too weak. Please use at least 3 complexity requirements.');</script>";
         }
-    } else {
-        echo "<script>alert('Passwords do not match!');</script>";
     }
 }
 ?>
@@ -167,20 +187,28 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm
                 message.textContent = 'Strong Password';
                 message.style.color = '#7ed957';
                 target1 = '100%'; target2 = '100%'; target3 = '100%';
+                passwordInput.style.borderColor = '';
+                passwordInput.style.boxShadow = '';
             } else if (strength > 2) {
                 message.textContent = 'Medium Password';
                 message.style.color = '#ffde59';
                 target1 = '100%'; target2 = '100%'; target3 = '0%';
+                passwordInput.style.borderColor = '';
+                passwordInput.style.boxShadow = '';
             } else {
                 message.textContent = 'Weak Password';
                 message.style.color = '#ff6b9d';
                 target1 = '100%'; target2 = '0%'; target3 = '0%';
+                passwordInput.style.borderColor = '#ef4444';
+                passwordInput.style.boxShadow = '0 0 0 1px #ef4444';
             }
         } else {
             message.classList.add('opacity-0');
             message.classList.remove('opacity-100');
             message.textContent = '';
             target1 = '0%'; target2 = '0%'; target3 = '0%';
+            passwordInput.style.borderColor = '';
+            passwordInput.style.boxShadow = '';
         }
         
         const afterCount = (target1 === '100%' ? 1 : 0) + (target2 === '100%' ? 1 : 0) + (target3 === '100%' ? 1 : 0);
@@ -212,27 +240,72 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm
 
         if (form && emailInput && passwordInput && confirmInput) {
             form.addEventListener('submit', function(e) {
+                e.preventDefault();
                 let isValid = true;
 
                 [emailInput, passwordInput, confirmInput].forEach(input => {
                     if (!input.value.trim()) {
-                        input.style.outline = '2px solid #ef4444';
+                        input.style.borderColor = '#ef4444';
+                        input.style.boxShadow = '0 0 0 1px #ef4444';
                         isValid = false;
                     } else {
-                        input.style.outline = 'none';
+                        input.style.borderColor = '';
+                        input.style.boxShadow = '';
                     }
                 });
 
-                if (!isValid) {
-                    e.preventDefault();
-                    e.stopImmediatePropagation();
+                // Check password strength (minimum 3)
+                if (isValid && desktop_checkPasswordStrength(passwordInput.value) < 3) {
+                    passwordInput.style.borderColor = '#ef4444';
+                    passwordInput.style.boxShadow = '0 0 0 1px #ef4444';
+                    isValid = false;
                 }
-            }, true);
+
+                // Check confirm password
+                if (isValid && passwordInput.value !== confirmInput.value) {
+                    confirmInput.style.borderColor = '#ef4444';
+                    confirmInput.style.boxShadow = '0 0 0 1px #ef4444';
+                    isValid = false;
+                }
+
+                if (isValid) {
+                    const formData = new FormData(form);
+                    formData.append('ajax', 'true');
+
+                    fetch(window.location.href + (window.location.href.includes('?') ? '&' : '?') + 'ajax=true', {
+                        method: 'POST',
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest'
+                        },
+                        body: formData
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert(data.message);
+                            window.location.href = data.redirect;
+                        } else {
+                            if (data.field === 'email') {
+                                emailInput.style.borderColor = '#ef4444';
+                                emailInput.style.boxShadow = '0 0 0 1px #ef4444';
+                                emailInput.focus();
+                            } else {
+                                alert(data.error || 'Registration failed');
+                            }
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('An error occurred. Please try again.');
+                    });
+                }
+            });
 
             [emailInput, passwordInput, confirmInput].forEach(input => {
                 input.addEventListener('input', function() {
                     if (this.value.trim()) {
-                        this.style.outline = 'none';
+                        this.style.borderColor = '';
+                        this.style.boxShadow = '';
                     }
                 });
             });

@@ -1,6 +1,16 @@
 <?php 
 ob_start(); 
 session_start();
+
+$isAjax = (isset($_POST['ajax']) && $_POST['ajax'] === 'true') || 
+          (isset($_GET['ajax']) && $_GET['ajax'] === 'true') ||
+          (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest');
+
+if ($isAjax) {
+    ob_clean();
+    include __DIR__ . '/view/view.php';
+    exit();
+}
 ?>
 <!DOCTYPE html>
 <html lang="en" class="min-h-screen" data-theme="mytheme" >
@@ -257,8 +267,9 @@ session_start();
             // Intercept form submissions to trigger the loading screen before navigating
             let formSubmitted = false;
             document.addEventListener('submit', (e) => {
-                if (formSubmitted) return;
+                if (formSubmitted || e.defaultPrevented || e.target.closest('[data-ajax-form="true"]')) return;
                 e.preventDefault();
+                e.stopImmediatePropagation();
                 const form = e.target;
                 
                 showLoaderAndThen(() => {

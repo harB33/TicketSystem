@@ -4,6 +4,7 @@ require_once (__DIR__ . '/../../ticket_db/connectdb.php');
 if (isset($_POST['email']) && isset($_POST['password'])) {
     $email = mysqli_real_escape_string($conn, $_POST['email']);
     $password = $_POST['password'];
+    $isAjax = isset($_POST['ajax']) && $_POST['ajax'] === 'true';
 
     $sql = "SELECT user_id, password_hash FROM users WHERE email = ?";
     $stmt = mysqli_prepare($conn, $sql);
@@ -14,15 +15,27 @@ if (isset($_POST['email']) && isset($_POST['password'])) {
 
     if ($user && password_verify($password, $user['password_hash'])) {
         $_SESSION['user_id'] = $user['user_id'];
+        if ($isAjax) {
+            ob_clean();
+            header('Content-Type: application/json');
+            echo json_encode(['success' => true, 'redirect' => '?page=pickanartist']);
+            exit();
+        }
         header('Location: ?page=pickanartist');
         exit();
     } else {
-        echo "<script>alert('Invalid email or password!');</script>";
+        if ($isAjax) {
+            ob_clean();
+            header('Content-Type: application/json');
+            echo json_encode(['success' => false, 'error' => 'Invalid email or password']);
+            exit();
+        }
         echo "<script>
         document.addEventListener('DOMContentLoaded', () => {
-            const passwordInput = document.getElementById('password');
+            const passwordInput = document.getElementById('desktop_password');
             if (passwordInput) {
-                passwordInput.style.outline = '2px solid #ef4444';
+                passwordInput.style.borderColor = '#ef4444';
+                passwordInput.style.boxShadow = '0 0 0 1px #ef4444';
             }
         });
         </script>";
@@ -38,7 +51,7 @@ if (isset($_POST['email']) && isset($_POST['password'])) {
         <logo class="h-[45%] w-full flex flex-col items-center justify-center p-12 pb-24">
             <img src="./asset/logo/logo.png" alt="Logo" class="min-w-48 max-w-48">
         </logo>
-        <form action="" method="post" id="desktop_loginForm" class="flex flex-col w-full h-[55%] justify-start items-center px-12">
+        <form action="" method="post" id="desktop_loginForm" data-ajax-form="true" class="flex flex-col w-full h-[55%] justify-start items-center px-12">
             <div class="flex flex-col items-center justify-start w-[85%] gap-4">
                 <div class="w-full space-y-2">
                     <!-- <label for="email" class="text-xs font-bold uppercase tracking-widest text-zinc-400 ml-4">Email Address</label> -->
@@ -79,37 +92,69 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (form && emailInput && passwordInput) {
         form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
             let isValid = true;
 
             if (!emailInput.value.trim()) {
-                emailInput.style.outline = '2px solid #ef4444';
+                emailInput.style.borderColor = '#ef4444';
+                emailInput.style.boxShadow = '0 0 0 1px #ef4444';
                 isValid = false;
             } else {
-                emailInput.style.outline = 'none';
+                emailInput.style.borderColor = '';
+                emailInput.style.boxShadow = '';
             }
 
             if (!passwordInput.value.trim()) {
-                passwordInput.style.outline = '2px solid #ef4444';
+                passwordInput.style.borderColor = '#ef4444';
+                passwordInput.style.boxShadow = '0 0 0 1px #ef4444';
                 isValid = false;
             } else {
-                passwordInput.style.outline = 'none';
+                passwordInput.style.borderColor = '';
+                passwordInput.style.boxShadow = '';
             }
 
-            if (!isValid) {
-                e.preventDefault();
-                e.stopImmediatePropagation();
+            if (isValid) {
+                const formData = new FormData(form);
+                formData.append('ajax', 'true');
+
+                fetch(window.location.href + (window.location.href.includes('?') ? '&' : '?') + 'ajax=true', {
+                    method: 'POST',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        window.location.href = data.redirect;
+                    } else {
+                        emailInput.style.borderColor = '#ef4444';
+                        emailInput.style.boxShadow = '0 0 0 1px #ef4444';
+                        passwordInput.style.borderColor = '#ef4444';
+                        passwordInput.style.boxShadow = '0 0 0 1px #ef4444';
+                        passwordInput.value = '';
+                        passwordInput.focus();
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
             }
-        }, true);
+        });
 
         emailInput.addEventListener('input', function() {
             if (this.value.trim()) {
-                this.style.outline = 'none';
+                this.style.borderColor = '';
+                this.style.boxShadow = '';
             }
         });
 
         passwordInput.addEventListener('input', function() {
             if (this.value.trim()) {
-                this.style.outline = 'none';
+                this.style.borderColor = '';
+                this.style.boxShadow = '';
             }
         });
     }

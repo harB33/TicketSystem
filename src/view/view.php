@@ -1,8 +1,22 @@
 <?php
 // Get the current page from GET parameter, default to 'login'
 $page = isset($_GET['page']) ? $_GET['page'] : 'login';
+
+if (isset($isAjax) && $isAjax) {
+    switch($page) {
+        case 'register':
+            include __DIR__ . '/desktop/register.php';
+            break;
+        case 'login':
+        default:
+            include __DIR__ . '/desktop/login.php';
+            break;
+    }
+    exit();
+}
 ?>
 
+<?php if (!$isAjax): ?>
 <mobile-view class="relative z-10 block lg:hidden w-full h-screen bg-transparent">
     <div class="w-full h-screen flex flex-col relative overflow-hidden">
         <?php
@@ -40,7 +54,9 @@ $page = isset($_GET['page']) ? $_GET['page'] : 'login';
         ?>
     </div>
 </mobile-view>
+<?php endif; ?>
 
+<?php if (!$isAjax): ?>
 <desktop-view class="relative z-10 hidden lg:block w-full h-screen bg-transparent">
 <div class="w-full h-screen flex flex-col relative overflow-hidden">
         <?php
@@ -78,3 +94,4 @@ $page = isset($_GET['page']) ? $_GET['page'] : 'login';
         ?>
     </div>
 </desktop-view>
+<?php endif; ?>

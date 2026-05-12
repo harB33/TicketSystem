@@ -4,10 +4,14 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 require_once (__DIR__ . '/../../ticket_db/connectdb.php');
 
+$savedEmail = isset($_COOKIE['remembered_email']) ? $_COOKIE['remembered_email'] : '';
+$isRemembered = isset($_COOKIE['remembered_email']);
+
 if (isset($_POST['email']) && isset($_POST['password'])) {
     $email = mysqli_real_escape_string($conn, $_POST['email']);
     $password = $_POST['password'];
     $isAjax = isset($_POST['ajax']) && $_POST['ajax'] === 'true';
+    $rememberMe = isset($_POST['remember_me']);
 
     $sql = "SELECT user_id, password_hash FROM users WHERE email = ?";
     $stmt = mysqli_prepare($conn, $sql);
@@ -18,6 +22,13 @@ if (isset($_POST['email']) && isset($_POST['password'])) {
 
     if ($user && password_verify($password, $user['password_hash'])) {
         $_SESSION['user_id'] = $user['user_id'];
+
+        if ($rememberMe) {
+            setcookie('remembered_email', $email, time() + (30 * 24 * 60 * 60), "/");
+        } else {
+            setcookie('remembered_email', '', time() - 3600, "/");
+        }
+
         if ($isAjax) {
             ob_clean();
             header('Content-Type: application/json');
@@ -58,7 +69,7 @@ if (isset($_POST['email']) && isset($_POST['password'])) {
             <div class="flex flex-col items-center justify-start w-[85%] gap-4">
                 <div class="w-full space-y-2">
                     <!-- <label for="email" class="text-xs font-bold uppercase tracking-widest text-zinc-400 ml-4">Email Address</label> -->
-                    <input type="text" id="desktop_email" name="email" placeholder="email" 
+                    <input type="text" id="desktop_email" name="email" placeholder="email" value="<?php echo htmlspecialchars($savedEmail); ?>" 
                         class="px-6 py-4 rounded-full w-full text-lg text-white font-medium bg-white/5 border border-white/10 focus:bg-white/10 focus:border-primary/50 focus:ring-1 focus:ring-primary/50 outline-none placeholder:text-zinc-600">
                 </div>
                 <div class="w-full space-y-2">
@@ -69,7 +80,7 @@ if (isset($_POST['email']) && isset($_POST['password'])) {
                 <div class="flex items-center justify-between w-full">
                     <label class="flex items-center cursor-pointer group translate-x-6">
                         <div class="relative">
-                            <input type="checkbox" checked="checked" class="peer hidden" />
+                            <input type="checkbox" name="remember_me" <?php echo $isRemembered ? 'checked="checked"' : ''; ?> class="peer hidden" />
                             <div class="w-5 h-5 border-2 border-white/20 rounded-full peer-checked:bg-primary peer-checked:border-primary transition-all duration-300"></div>
                             <svg class="absolute inset-0 w-5 h-5 text-black scale-0 peer-checked:scale-100 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
                         </div>

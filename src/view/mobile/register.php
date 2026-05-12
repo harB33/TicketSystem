@@ -57,6 +57,13 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm
             echo json_encode(['success' => false, 'error' => 'Email already registered', 'field' => 'email']);
             exit();
         }
+    } else if (!preg_match('/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/', $email)) {
+        if ($isAjax) {
+            ob_clean();
+            header('Content-Type: application/json');
+            echo json_encode(['success' => false, 'error' => 'Please enter a valid email address', 'field' => 'email']);
+            exit();
+        }
     } else if ($password === $confirm_password) {
         if ($mobile_passwordStrength >= 3) {
             $hashed_password = password_hash($password, PASSWORD_DEFAULT);

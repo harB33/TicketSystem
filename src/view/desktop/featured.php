@@ -159,7 +159,7 @@ if ($res) {
                                             <p class="font-tschichold text-white/40 text-2xl font-bold lowercase tracking-widest"><?= htmlspecialchars($venue_name) ?></p>
                                             <div class="h-[1px] flex-1 bg-white/10 ml-8"></div>
                                         </div>
-                                        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 px-6 z-10 w-full">
+                                        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-6 px-6 z-10 w-full">
                                             <?php foreach ($events as $event): ?>
                             <?php 
                                 $date = new DateTime($event['event_start_datetime']);
@@ -169,7 +169,7 @@ if ($res) {
                             <a href="?page=event&id=<?= $event['event_id'] ?>" class="group bg-zinc-900 rounded-[2.5rem] h-80 w-full relative overflow-hidden border border-white/5 block transition-all hover:scale-[1.02] hover:border-primary/30 active:scale-[0.98]">
                                 <div class="absolute inset-0 p-6 flex flex-col justify-between z-10 bg-gradient-to-t from-black via-black/40 to-transparent">
                                     <div class="flex justify-between items-start">
-                                        <p class="text-white drop-shadow-2xl text-[12px] font-bold uppercase tracking-widest"><?= htmlspecialchars($event['event_name'] ?? 'TBA') ?></p>
+                                        <p class="text-white drop-shadow-2xl text-xl text-shadow-lg/50 font-bold uppercase tracking-widest"><?= htmlspecialchars($event['event_name'] ?? 'TBA') ?></p>
                                     </div>
                                     
                                     <div>

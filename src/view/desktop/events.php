@@ -97,13 +97,6 @@ while ($row = mysqli_fetch_assoc($sections_res)) {
             </div>
             <span class="text-white/40 group-hover:text-white transition-colors font-bold uppercase tracking-[0.3em] text-xs">Back to Featured</span>
         </a>
-        <div class="flex gap-4">
-            <div class="p-4 bg-white/5 backdrop-blur-2xl rounded-2xl border border-white/10 hover:bg-white/10 transition-all cursor-pointer">
-                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path>
-                </svg>
-            </div>
-        </div>
     </div>
 
     <div class="flex-1 flex flex-row items-stretch pt-24 z-10 px-12 pb-12 gap-12">
@@ -167,7 +160,7 @@ while ($row = mysqli_fetch_assoc($sections_res)) {
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                                 </svg>
                             </div>
-                            <span class="font-bold text-sm"><?= $formatted_date ?> • <?= $formatted_time ?></span>
+                            <span class="font-bold text-sm tracking-wide"><?= $formatted_date ?> • <?= $formatted_time ?></span>
                         </div>
                     </div>
                 </div>
@@ -176,7 +169,7 @@ while ($row = mysqli_fetch_assoc($sections_res)) {
                 <div class="relative z-20">
                     <label class="block text-white/40 uppercase tracking-[0.3em] text-[10px] font-bold mb-4 ml-4">Choose Seating Tier</label>
                     <div class="relative custom-dropdown group w-full" id="desktopTierDropdown">
-                        <div id="desktopDropdownTrigger" class="w-full bg-white/5 border border-white/10 rounded-[2rem] px-10 py-7 flex items-center justify-between cursor-pointer active:scale-[0.98] transition-all backdrop-blur-xl hover:border-primary/50 hover:bg-white/10">
+                        <div id="desktopDropdownTrigger" class="w-full bg-white/5 border border-white/10 rounded-[2rem] px-10 py-7 flex items-center justify-between cursor-pointer active:scale-[0.98] transition-all backdrop-blur-3xl hover:border-primary/50 hover:bg-white/10">
                             <span id="desktopSelectedTierText" class="font-bold text-2xl text-white">
                                 <?= !empty($seating_tiers) ? htmlspecialchars($seating_tiers[0]['section_name']) . ' - ' . ($seating_tiers[0]['price'] ? '₱' . number_format($seating_tiers[0]['price']) : 'Price TBA') : 'No tiers available' ?>
                             </span>
@@ -188,12 +181,12 @@ while ($row = mysqli_fetch_assoc($sections_res)) {
                         </div>
 
                         <div id="desktopDropdownMenu" class="absolute left-0 right-0 top-full mt-4 bg-[#0a0a0a]/95 backdrop-blur-3xl border border-white/10 rounded-[2rem] overflow-hidden opacity-0 pointer-events-none scale-95 origin-top transition-all duration-300 z-[100] shadow-[0_30px_100px_rgba(0,0,0,0.8)]">
-                            <div class="max-h-[400px] overflow-y-auto custom-scrollbar">
+                            <div class="max-h-[288px] overflow-y-auto custom-scrollbar">
                                 <?php if (empty($seating_tiers)): ?>
                                     <div class="px-10 py-6 text-white/40 italic">No tiers available</div>
                                 <?php else: ?>
                                     <?php foreach ($seating_tiers as $tier): ?>
-                                        <div class="desktop-tier-option px-10 py-6 hover:bg-primary/20 cursor-pointer transition-all border-b border-white/5 last:border-0 flex items-center justify-between group/opt"
+                                        <div class="desktop-tier-option px-10 py-6 hover:bg-primary/20 cursor-pointer transition-all backdrop-blur-3xl border-b border-white/5 last:border-0 flex items-center justify-between group/opt"
                                              data-value="<?= $tier['section_id'] ?>" 
                                              data-img="<?= htmlspecialchars($tier['section_img'] ?? '') ?>"
                                              data-text="<?= htmlspecialchars($tier['section_name']) ?> - <?= $tier['price'] ? '₱' . number_format($tier['price']) : 'Price TBA' ?>">

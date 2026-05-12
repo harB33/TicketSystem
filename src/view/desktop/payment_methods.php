@@ -188,18 +188,18 @@ while ($row = mysqli_fetch_assoc($result)) {
 
                         <div class="flex flex-col gap-2">
                             <label class="text-white/40 text-[10px] font-bold uppercase tracking-widest px-2">Account / Card Number</label>
-                            <input type="text" name="account_number" required placeholder="•••• •••• •••• 1234" class="w-full bg-black/50 border border-white/10 rounded-2xl px-6 py-4 text-white font-mono placeholder-white/20 focus:outline-none focus:border-primary transition-colors">
+                            <input type="text" name="account_number" id="desktop-accountNumber" required placeholder="•••• •••• •••• 1234" class="w-full bg-black/50 border border-white/10 rounded-2xl px-6 py-4 text-white font-mono placeholder-white/20 focus:outline-none focus:border-primary transition-colors">
                         </div>
                     </div>
 
                     <div id="desktop-cardExtraFields" class="hidden grid grid-cols-2 gap-5">
                         <div class="flex flex-col gap-2">
                             <label class="text-white/40 text-[10px] font-bold uppercase tracking-widest px-2">Expires On</label>
-                            <input type="text" name="expiry_date" placeholder="MM/YY" class="w-full bg-black/50 border border-white/10 rounded-2xl px-6 py-4 text-white placeholder-white/20 focus:outline-none focus:border-primary transition-colors">
+                            <input type="text" name="expiry_date" id="desktop-expiry" placeholder="MM/YY" maxlength="5" pattern="\d{2}/\d{2}" class="w-full bg-black/50 border border-white/10 rounded-2xl px-6 py-4 text-white placeholder-white/20 focus:outline-none focus:border-primary transition-colors">
                         </div>
                         <div class="flex flex-col gap-2">
                             <label class="text-white/40 text-[10px] font-bold uppercase tracking-widest px-2">CVV</label>
-                            <input type="password" name="cvv" placeholder="•••" class="w-full bg-black/50 border border-white/10 rounded-2xl px-6 py-4 text-white placeholder-white/20 focus:outline-none focus:border-primary transition-colors">
+                            <input type="text" name="cvv" id="desktop-cvv" placeholder="•••" minlength="3" maxlength="3" pattern="\d{3}" class="w-full bg-black/50 border border-white/10 rounded-2xl px-6 py-4 text-white placeholder-white/20 focus:outline-none focus:border-primary transition-colors">
                         </div>
                     </div>
 
@@ -207,7 +207,7 @@ while ($row = mysqli_fetch_assoc($result)) {
                         <label class="text-white/40 text-[10px] font-bold uppercase tracking-widest px-2">Account Name</label>
                         <input type="text" name="account_name" required placeholder="Name on account" class="w-full bg-black/50 border border-white/10 rounded-2xl px-6 py-4 text-white placeholder-white/20 focus:outline-none focus:border-primary transition-colors">
                     </div>
-                    <button type="submit" class="mt-2 w-full py-5 bg-primary hover:bg-primary-dark text-white rounded-2xl font-bold text-lg shadow-xl shadow-primary/20 transition-all active:scale-[0.98]">
+                    <button type="submit" class="mt-2 w-full py-5 bg-primary hover:bg-primary-dark text-white rounded-2xl font-bold text-lg transition-all active:scale-[0.98]">
                         Save Payment Method
                     </button>
                 </form>
@@ -225,6 +225,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const hiddenInput = document.getElementById('desktop-providerHiddenInput');
     const options = document.querySelectorAll('.desktop-provider-option');
     const cardFields = document.getElementById('desktop-cardExtraFields');
+    const accountInput = document.getElementById('desktop-accountNumber');
+    const cvvInput = document.getElementById('desktop-cvv');
+    const expiryInput = document.getElementById('desktop-expiry');
 
     // Toggle dropdown
     if (trigger) {
@@ -233,6 +236,49 @@ document.addEventListener('DOMContentLoaded', function() {
             dropdown.classList.toggle('hidden');
         });
     }
+
+    // Format account/card number
+    accountInput.addEventListener('input', function(e) {
+        const provider = hiddenInput.value;
+        let value = this.value.replace(/\D/g, '');
+        
+        if (provider === 'Visa' || provider === 'Mastercard') {
+            if (value.length > 16) value = value.slice(0, 16);
+            const parts = value.match(/.{1,4}/g) || [];
+            this.value = parts.join('-');
+        } else if (provider === 'GCash' || provider === 'Maya') {
+            if (value.length > 11) value = value.slice(0, 11);
+            
+            let formatted = '';
+            if (value.length > 0) {
+                formatted = value.slice(0, 4);
+                if (value.length > 4) {
+                    formatted += '-' + value.slice(4, 7);
+                    if (value.length > 7) {
+                        formatted += '-' + value.slice(7, 11);
+                    }
+                }
+            }
+            this.value = formatted;
+        }
+    });
+
+    // Format expiry date (MM/YY)
+    expiryInput.addEventListener('input', function(e) {
+        let value = this.value.replace(/\D/g, '');
+        if (value.length > 4) value = value.slice(0, 4);
+        
+        if (value.length > 2) {
+            this.value = value.slice(0, 2) + '/' + value.slice(2);
+        } else {
+            this.value = value;
+        }
+    });
+
+    // Ensure CVV is numeric only
+    cvvInput.addEventListener('input', function(e) {
+        this.value = this.value.replace(/\D/g, '');
+    });
 
     // Selection logic
     options.forEach(option => {
@@ -244,13 +290,28 @@ document.addEventListener('DOMContentLoaded', function() {
             hiddenInput.value = value;
             dropdown.classList.add('hidden');
 
-            // Show/hide card details based on selection
+            // Reset input and formatting based on selection
+            accountInput.value = '';
             if (value === 'Visa' || value === 'Mastercard') {
+                accountInput.placeholder = '••••-••••-••••-1234';
+                accountInput.maxLength = 19;
+                accountInput.minLength = 19;
                 cardFields.classList.remove('hidden');
                 cardFields.querySelectorAll('input').forEach(input => {
                     input.required = true;
                 });
+            } else if (value === 'GCash' || value === 'Maya') {
+                accountInput.placeholder = '09•• ••• ••••';
+                accountInput.maxLength = 13;
+                accountInput.minLength = 13;
+                cardFields.classList.add('hidden');
+                cardFields.querySelectorAll('input').forEach(input => {
+                    input.required = false;
+                });
             } else {
+                accountInput.placeholder = '•••• •••• •••• 1234';
+                accountInput.removeAttribute('maxLength');
+                accountInput.removeAttribute('minLength');
                 cardFields.classList.add('hidden');
                 cardFields.querySelectorAll('input').forEach(input => {
                     input.required = false;

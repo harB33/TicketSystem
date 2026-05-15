@@ -1,5 +1,14 @@
 # HJJC Ticket System 🎫
 
+<div align="center">
+
+![Status](https://img.shields.io/badge/STATUS-DEVELOPMENT-FA7343?style=for-the-badge)
+![PHP](https://img.shields.io/badge/PHP-8.2%2B-777BB4?style=for-the-badge&logo=php&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/TAILWIND%20CSS-V4-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)
+![MySQL](https://img.shields.io/badge/MYSQL-00758F?style=for-the-badge&logo=mysql&logoColor=white)
+
+</div>
+
 A high-fidelity, modern ticketing platform designed for seamless event discovery and ticket management. This system features a premium **glassmorphic UI**, responsive platform-specific views, and a robust PHP-based architecture.
 
 ## ✨ Features

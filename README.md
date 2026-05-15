@@ -95,4 +95,4 @@ The HJJC Ticket System prioritizes **Visual Excellence** and **Interactive Desig
 - **[jomariwamil1012-ai](https://github.com/jomariwamil1012-ai)** - Back-End Development
 
 ---
-*Built with ❤️ by the Us*
+*Built with ❤️ by Us.*

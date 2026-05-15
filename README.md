@@ -1,4 +1,4 @@
-# HJJC Ticket System 🎫
+# Staged a Ticket System 🎫
 
 <div align="center">
 
@@ -99,9 +99,9 @@ The HJJC Ticket System prioritizes **Visual Excellence** and **Interactive Desig
 
 ## 👥 Development Team
 
-- **[harB33](https://github.com/harB33)** - Front-End Development
-- **[adielaide-adi](https://github.com/adielaide-adi)** - Front-End & Back-End Development
-- **[jomariwamil1012-ai](https://github.com/jomariwamil1012-ai)** - Back-End Development
+- **[harB33](https://github.com/harB33)** - Front-End Developer
+- **[adielaide-adi](https://github.com/adielaide-adi)** - Front-End & Back-End Developer
+- **[jomariwamil1012-ai](https://github.com/jomariwamil1012-ai)** - Back-End Developer
 
 ---
 *Built with ❤️ by Us.*

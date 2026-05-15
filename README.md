@@ -1,4 +1,4 @@
-# HJJC Ticket System 🎫
+# Staged a Ticket System 🎫
 
 A high-fidelity, modern ticketing platform designed for seamless event discovery and ticket management. This system features a premium **glassmorphic UI**, responsive platform-specific views, and a robust PHP-based architecture.
 
